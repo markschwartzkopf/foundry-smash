@@ -1,0 +1,47 @@
+{
+  "name": "foundry-smash",
+  "version": "1.0.0",
+  "description": "NodeCG bundle for Foundry Smash tournaments",
+  "author": "Mark Schwartzkopf",
+  "license": "GPL-3.0-or-later",
+  "files": [
+    "dashboard",
+    "graphics",
+    "extension.js",
+    "extension"
+  ],
+  "nodecg": {
+    "compatibleRange": "^1.1.1",
+    "dashboardPanels": [
+      {
+        "name": "player-id",
+        "title": "Player ID",
+        "width": 2,
+        "file": "player-id.html",
+        "headerColor": "#525F78"
+      }
+    ],
+    "graphics": [
+      {
+        "file": "index.html",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  "scripts": {
+    "watch": "npm-run-all -p watch:*",
+    "watch:extension": "node ./node_modules/typescript/bin/tsc -p ./src/extension --diagnostics --watch",
+    "watch:dashboard": "node ./node_modules/typescript/bin/tsc -p ./src/dashboard --diagnostics --watch",
+    "watch:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics --watch",
+    "build": "npm-run-all -s build:*",
+    "build:extension": "node ./node_modules/typescript/bin/tsc -p ./src/extension --diagnostics",
+    "build:dashboard": "node ./node_modules/typescript/bin/tsc -p ./src/dashboard --diagnostics",
+    "build:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.1",
+    "typescript": "^4.3.2"
+  }
+}
