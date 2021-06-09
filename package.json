@@ -16,7 +16,7 @@
       {
         "name": "player-id",
         "title": "Player ID",
-        "width": 2,
+        "width": 3,
         "file": "player-id.html",
         "headerColor": "#525F78"
       }

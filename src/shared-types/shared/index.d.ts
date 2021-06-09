@@ -1,12 +1,7 @@
-type serverMsg =
-  | { type: 'error'; data: string }
-  | { type: 'info'; data: string }
-  | {
-      type: 'controlView';
-      data: string;
-    }
-  | {
-      type: 'controlViewUpdate';
-      data: string;
-    }
-  | { type: 'userNavButtons'; data: string };
+type players = [
+	{ name: string; color: number },
+	{ name: string; color: number },
+	{ name: string; color: number },
+	{ name: string; color: number }
+];
+type playType = 'doubles' | 'singles'

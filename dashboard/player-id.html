@@ -1,20 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../graphics/smashcolors.css" />
+		<style>
+			.boxes {
+				position: relative;
+				transform: translate(-50%);
+				left: 50%;
+				border: 1px solid white;
+				margin: -1px;
+			}
+			#players {
+				display: flex;
+				justify-content: space-between;
+			}
+			.player {
+			}
+			.color-checkbox {
+				appearance: none;
+				width: 1rem;
+				height: 1rem;
+        opacity: .5;
+			}
+      .color-checkbox:checked {
+        opacity: 1;
+        border: 1px solid white;
+      }
+      .color-checkbox
+		</style>
+	</head>
 
-<head>
-	<meta charset="UTF-8">
-	<style>
-		.monospace {
-			font-family: monospace;
-		}
-	</style>
-</head>
-
-<body>
-	<input id="replicant"></input>
-	<button id='submit'>Submit</button>
-
+	<body>
+		<div style="width: 50%; margin: auto; max-width: 30rem">
+			<div class="boxes" style="width: 100%; aspect-ratio: 16/9">
+				<div
+					class="boxes"
+					style="
+						width: 90%;
+						aspect-ratio: 16/9;
+						transform: translate(-50%, -50%);
+						top: 50%;
+					"
+				>
+					<img
+						src="logo.png"
+						style="
+							width: 100%;
+							transform: translateY(-50%);
+							top: 50%;
+							position: relative;
+							filter: invert();
+						"
+					/>
+				</div>
+			</div>
+			<div class="boxes" style="width: 14%; aspect-ratio: 1/4"></div>
+			<div class="boxes" style="width: 80%; aspect-ratio: 15/1"></div>
+		</div>
+		<div id="input-area"></div>
+	</body>
 	<script src="player-id.js"></script>
-</body>
-
 </html>

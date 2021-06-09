@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -22,5 +22,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const nodecgApiContext = __importStar(require("./nodecg-api-context"));
 module.exports = function (nodecg) {
     nodecgApiContext.set(nodecg);
-    nodecg.log.info('Code me');
+    require('./init');
 };
