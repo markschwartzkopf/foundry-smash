@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
+    <link rel="stylesheet" type="text/css" href="shootingstars.css" />
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+				font-family: Arial, Helvetica, sans-serif;
+				font-weight: 700;
+			}
+			#gradient {
+        z-index: -2;
+				height: 100%;
+				width: 100%;
+				position: absolute;
+				background-image: linear-gradient(
+					to right top,
+					#6a4690,
+					#402b94,
+					#59cfed,
+					#fff5e5
+				);
+				clip-path: polygon(
+					0px 1080px,
+					0px 0px,
+					1920px 0px,
+					1920px 1080px,
+					1902px 1080px,
+					1902px 18px,
+					1039px 18px,
+					966px 91px,
+					966px 1080px,
+					954px 1080px,
+					954px 18px,
+					92px 18px,
+					17px 93px,
+					17px 1080px
+				);
+			}
+			#player-border1,
+			#player-border2 {
+				position: absolute;
+				height: 1064px;
+				width: 939px;
+				top: 16px;
+				/* transform: translateY(676px); */
+			}
+			#player-border1 {
+				left: 16px;
+			}
+			#player-border2 {
+				left: 965px;
+			}
+			.player-name {
+				border: 4px solid black;
+				width: 356px;
+				height: 56px;
+				position: absolute;
+				background-color: var(--smash-light-gray);
+				overflow: hidden;
+				text-align: center;
+				line-height: 56px;
+				font-size: 41px;
+			}
+			#player-name1 {
+				left: 90px;
+				/* top: 926px; */
+				bottom: 74px;
+			}
+			#player-name2 {
+				right: 90px;
+				/* top: 926px; */
+				bottom: 74px;
+			}
+			#switch-border {
+				border: 5px solid black;
+				background-color: var(--smash-light-gray);
+        width: 768px;
+				height: 432px;
+				position: absolute;
+				transform: translateX(-50%);
+				left: 50%;
+				bottom: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="gradient"></div>
+		<img id="player-border1" src="player-border.svg" />
+		<img id="player-border2" src="player-border.svg" />
+		<div id="player-name1" class="player-name"></div>
+		<div id="player-name2" class="player-name"></div>
+		<div id="switch-border">
+			<img
+				src="../dashboard/logo.png"
+				style="
+          object-fit: cover;
+					width: 100%;
+					transform: translateY(-50%);
+					top: 50%;
+					position: absolute;
+					filter: invert();
+				"
+			/>
+		</div>
+	</body>
+	<script src="pregame.js"></script>
+</html>

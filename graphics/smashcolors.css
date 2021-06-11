@@ -1,7 +1,12 @@
 :root {
-    --smash_blue: #0000FF;
-    --smash_red: #FF0000;
-    --smash_green: #00FF00;
-    --smash_yellow: #FFFF00;
-    --smash_gray: #888888;
+    --smash-blue: #248BFF;
+    --smash-red: #FF3232;
+    --smash-green: #00FF00;
+    --smash-yellow: #FFFF00;
+    --smash-gray: #ACACAC;
+    --smash-light-blue: #9EBFFA;
+    --smash-light-red: #FA9F9F;
+    --smash-light-green: #00FF00;
+    --smash-light-yellow: #FFFF00;
+    --smash-light-gray: #ACACAC;
 }

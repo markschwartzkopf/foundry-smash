@@ -1,0 +1,31 @@
+.shooting-star {
+  position: absolute;
+  left: -400px;
+  top: 50%; /* change me */
+  height: 3px; /* 2-4px */
+  width: 400px;
+  background: linear-gradient(-45deg, #ffffff, rgba(255, 255, 255, 0));
+  border-radius: 999px;
+  filter: drop-shadow(0 0 2px #ffffff);
+  animation: shooting 3000ms forwards; /* change duration, 1500-4000 */
+}
+
+.sky {
+  position: absolute;
+  /* background-color: rgba(0, 0, 255, .5); */
+  width: 2222px;
+  height: 2222px;
+  transform: translate(-50%, -50%) rotate(5deg);  /* change me, but preserve -50, -50 */
+  left: 50%;
+  top: 540px;
+  z-index: -1;
+}
+
+@keyframes shooting {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(2622px);
+  }
+}

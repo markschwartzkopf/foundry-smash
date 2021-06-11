@@ -15,48 +15,79 @@
 				display: flex;
 				justify-content: space-between;
 			}
-			.player {
+			.player-div {
+				margin: 0.3rem;
+			}
+			.center-player {
+				margin-top: 3vw !important;
+			}
+			.player-input {
+				font-family: Arial, Helvetica, sans-serif;
+				font-weight: 700;
+				text-align: center;
+				color: white;
+				appearance: none;
+				border: none;
+				border-top: 0.15rem solid var(--smash-gray);
+				background-color: #00000070;
+				width: 100%;
+				/* max-width: 20vw; */
+			}
+			.player-input:focus {
+				outline: none;
 			}
 			.color-checkbox {
 				appearance: none;
+				-webkit-appearance: none;
+				-moz-appearance: none;
 				width: 1rem;
 				height: 1rem;
-        opacity: .5;
+				opacity: 0.5;
+				max-width: 3vw;
 			}
-      .color-checkbox:checked {
-        opacity: 1;
-        border: 1px solid white;
-      }
-      .color-checkbox
+			.color-checkbox:checked {
+				opacity: 1;
+				border: 1px solid white;
+			}
+			.color-select {
+				display: flex;
+				justify-content: center;
+			}
+			.type-toggle {
+				transform: translateX(-50%);
+				position: relative;
+				left: 50%;
+			}
 		</style>
 	</head>
 
 	<body>
-		<div style="width: 50%; margin: auto; max-width: 30rem">
-			<div class="boxes" style="width: 100%; aspect-ratio: 16/9">
+		<div
+			style="width: 50%; margin: auto; max-width: 30rem; margin-bottom: 1rem"
+		>
+			<div class="boxes" style="width: 100%; height: 0; padding-bottom: 56.25%">
 				<div
 					class="boxes"
 					style="
 						width: 90%;
-						aspect-ratio: 16/9;
-						transform: translate(-50%, -50%);
-						top: 50%;
+						height: 0;
+						transform: translate(-50%, 5%);
+						padding-bottom: 50.625%;
 					"
 				>
 					<img
 						src="logo.png"
 						style="
 							width: 100%;
-							transform: translateY(-50%);
-							top: 50%;
+							transform: translateY(20%);
 							position: relative;
 							filter: invert();
 						"
 					/>
 				</div>
 			</div>
-			<div class="boxes" style="width: 14%; aspect-ratio: 1/4"></div>
-			<div class="boxes" style="width: 80%; aspect-ratio: 15/1"></div>
+			<div class="boxes" style="width: 14%; padding-bottom: 55%"></div>
+			<div class="boxes" style="width: 80%; padding-bottom: 5%"></div>
 		</div>
 		<div id="input-area"></div>
 	</body>
