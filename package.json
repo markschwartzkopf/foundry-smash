@@ -19,6 +19,20 @@
         "width": 3,
         "file": "player-id.html",
         "headerColor": "#525F78"
+      },
+      {
+        "name": "show-control",
+        "title": "Show Control",
+        "width": 2,
+        "file": "show-control.html",
+        "headerColor": "#525F78"
+      },
+      {
+        "name": "obs-info",
+        "title": "OBS Item Info",
+        "fullbleed": true,
+        "file": "obs-info.html",
+        "headerColor": "#525F78"
       }
     ],
     "graphics": [
@@ -26,6 +40,12 @@
         "file": "pregame.html",
         "width": 1920,
         "height": 1080
+      },
+      {
+        "file": "switch.html",
+        "width": 1920,
+        "height": 1080,
+        "singleInstance": true
       }
     ]
   },
@@ -37,11 +57,15 @@
     "build": "npm-run-all -s build:*",
     "build:extension": "node ./node_modules/typescript/bin/tsc -p ./src/extension --diagnostics",
     "build:dashboard": "node ./node_modules/typescript/bin/tsc -p ./src/dashboard --diagnostics",
-    "build:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics"
+    "build:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics",
+    "start:NodeCG": "node ../../index.js"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.1",
     "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "obs-websocket-js": "^4.0.2"
   }
 }
