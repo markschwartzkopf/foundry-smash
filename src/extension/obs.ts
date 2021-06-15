@@ -4,9 +4,11 @@ const nodecg: NodeCG = require('./nodecg-api-context').get();
 const obsStatusRep = nodecg.Replicant<obsStatus>('obs-status');
 const switchAnimTriggerRep =
 	nodecg.Replicant<switchAnimTrigger>('switch-trigger');
-obsStatusRep.value = { status: 'disconnected' };
+obsStatusRep.value = { status: 'disconnected', preview: null, program: null };
 const OBSWebSocket = require('obs-websocket-js');
 const obs = new OBSWebSocket();
+let i = 0;
+
 connectObs();
 
 obs.on('error', (err: any) => {
@@ -25,7 +27,58 @@ function connectObs() {
 				.connect({ address: 'localhost:4444', password: 'pbmax' })
 				.then(() => {
 					obsStatusRep.value.status = 'connected';
-					nodecg.log.info('OBS connected');
+          resetAll();
+          nodecg.sendMessage('resetAll');
+					obs.send('GetCurrentScene').then((currentSceneRes: obj) => {
+						let program = currentSceneRes.name as string;
+						obsStatusRep.value.program = program;
+						obs.send('GetStudioModeStatus').then((res: obj) => {
+							if (res.studioMode) {
+								obs.send('GetPreviewScene').then((previewSceneRes: obj) => {
+									let preview = previewSceneRes.name as string;
+									obsStatusRep.value.preview = preview;
+									nodecg.log.info(
+										'OBS connected. Program: "' +
+											program +
+											'" Preview: "' +
+											preview +
+											'"'
+									);
+								});
+							} else {
+								obsStatusRep.value.preview = null;
+								nodecg.log.info(
+									'OBS connected. Program: "' +
+										program +
+										'" (Studio Mode is off)'
+								);
+							}
+						});
+					});
+
+					obs.on('SwitchScenes', (res: obj) => {
+						obs.send('GetStudioModeStatus').then((res2: obj) => {
+							if (!res2.studioMode && obsStatusRep.value.preview) {
+								//console.log('rejecting pgm change to ' + res.sceneName)
+								obsStatusRep.value.preview = null;
+							} else {
+								obsStatusRep.value.program = res.sceneName;
+							}
+						});
+					});
+					obs.on('PreviewSceneChanged', (res: obj) => {
+						obsStatusRep.value.preview = res.sceneName;
+					});
+					obs.on('StudioModeSwitched', (res: obj) => {
+						if (res.newState) {
+							obs.send('GetPreviewScene').then((previewSceneRes: obj) => {
+								obsStatusRep.value.preview = previewSceneRes.name;
+								console.log(i + JSON.stringify(obsStatusRep.value));
+							});
+						} else {
+              obsStatusRep.value.preview = null
+            }
+					});
 				})
 				.catch((err: any) => {});
 		} else clearInterval(obsConnect);
@@ -42,10 +95,12 @@ obs.on('ConnectionClosed', () => {
 nodecg.listenFor('connect', () => {
 	if (obsStatusRep.value.status == 'disconnected') connectObs();
 });
+
 nodecg.listenFor('disconnect', () => {
 	obsStatusRep.value.status = 'disconnected';
 	obs.disconnect();
 });
+
 nodecg.listenFor('getOBSprops', (itemName: string, ack) => {
 	if (obsStatusRep.value.status == 'connected') {
 		obs
@@ -77,13 +132,11 @@ nodecg.listenFor('toGame', () => {
 			nodecg.log.error(err);
 		});
 });
-
 nodecg.listenFor('bumpSwitch', () => {
 	if (obsStatusRep.value.status == 'connected') {
 		move('Switch', Date.now(), 70, bump);
 	} else nodecg.log.error('Cannot send commands to OBS unless connected');
 });
-
 nodecg.listenFor('zoomToFullscreen', () => {
 	getCurrentProps('Switch')
 		.then((props) => {
@@ -102,14 +155,25 @@ nodecg.listenFor('zoomToFullscreen', () => {
 			nodecg.log.error(err);
 		});
 });
+nodecg.listenFor('resetPregame', () => {
+	resetPregame();
+});
+nodecg.listenFor('resetAll', () => {
+	resetAll();
+});
 
-nodecg.listenFor('resetToPregame', () => {
-	let props: any = switchPregame;
+function resetAll() {
+  resetPregame();
+}
+
+function resetPregame() {
+  let props: any = switchPregame;
 	props.item = 'Switch';
+  props.sceneName = 'Pregame'
 	obs.send('SetSceneItemProperties', props).catch((err: any) => {
 		nodecg.log.error(JSON.stringify(err));
 	});
-});
+}
 
 function move(
 	itemName: string,
@@ -248,22 +312,9 @@ let switchInCenter = {
 	},
 };
 
-let slideUp: seObject = {
-	position: {
-		y: { start: 834, end: 540 },
-	},
-};
-
 let bump: seObject = {
 	position: {
 		y: { start: 547, end: 540 },
-	},
-};
-
-let zoomToFullscreen: seObject = {
-	scale: {
-		x: { start: 1, end: 2.456481456756592 },
-		y: { start: 1, end: 2.456481456756592 },
 	},
 };
 

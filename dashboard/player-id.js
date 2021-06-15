@@ -63,8 +63,9 @@ function drawInputArea(players, type) {
         playersDiv.appendChild(playerDiv);
     }
     inputArea.appendChild(playersDiv);
+    let buttonDiv = document.createElement('div');
+    buttonDiv.id = 'button-div';
     let typeToggle = document.createElement('button');
-    typeToggle.className = 'type-toggle';
     let otherType = 'Singles';
     if (type == 'singles')
         otherType = 'Doubles';
@@ -76,7 +77,18 @@ function drawInputArea(players, type) {
         else
             playTypeRep.value = 'singles';
     };
-    inputArea.appendChild(typeToggle);
+    buttonDiv.appendChild(typeToggle);
+    let resetPlayers = document.createElement('button');
+    resetPlayers.innerHTML = 'Reset Players';
+    resetPlayers.onclick = () => {
+        playersRep.value = [{ name: '', color: 0 }, { name: '', color: 0 }, { name: '', color: 0 }, { name: '', color: 0 }];
+    };
+    resetPlayers.oncontextmenu = (e) => {
+        e.preventDefault();
+        playersRep.value = [{ name: 'Player 1', color: 1 }, { name: 'Player 2', color: 2 }, { name: 'Player 3', color: 3 }, { name: 'Player 4', color: 4 }];
+    };
+    buttonDiv.appendChild(resetPlayers);
+    inputArea.appendChild(buttonDiv);
 }
 playTypeRep.on('change', (newVal) => {
     NodeCG.waitForReplicants(playersRep).then(() => {

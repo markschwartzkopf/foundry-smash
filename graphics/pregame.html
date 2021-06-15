@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
-    <link rel="stylesheet" type="text/css" href="shootingstars.css" />
+		<link rel="stylesheet" type="text/css" href="shootingstars.css" />
 		<style>
 			body {
 				margin: 0;
@@ -12,7 +12,7 @@
 				font-weight: 700;
 			}
 			#gradient {
-        z-index: -2;
+				z-index: -2;
 				height: 100%;
 				width: 100%;
 				position: absolute;
@@ -23,6 +23,8 @@
 					#59cfed,
 					#fff5e5
 				);
+			}
+			#gradient.singles {
 				clip-path: polygon(
 					0px 1080px,
 					0px 0px,
@@ -40,21 +42,63 @@
 					17px 1080px
 				);
 			}
-			#player-border1,
-			#player-border2 {
-				position: absolute;
-				height: 1064px;
-				width: 939px;
-				top: 16px;
-				/* transform: translateY(676px); */
+      #gradient.doubles {
+				clip-path: polygon(
+					0px 1080px,
+					0px 0px,
+					1920px 0px,
+					1920px 1080px,
+          17px 1080px,
+          17px 1018px,
+					1902px 1018px,
+					1902px 466px,
+					1039px 466px,
+					966px 539px,
+					966px 1080px,
+					954px 1080px,
+					954px 466px,
+					92px 466px,
+					17px 541px,
+					17px 1080px
+				);
 			}
-			#player-border1 {
+			#player-border-left-singles,
+			#player-border-right-singles,
+			#player-border-left-doubles,
+			#player-border-right-doubles {
+				position: absolute;
+				width: 939px;
+			}
+			#player-border-left-singles,
+			#player-border-right-singles {
+				height: 1064px;
+				top: 16px;
+			}
+			#player-border-left-doubles,
+			#player-border-right-doubles {
+				height: 1064px;
+				top: 465px;
+			}
+			#player-border-left-singles,
+			#player-border-left-doubles {
 				left: 16px;
 			}
-			#player-border2 {
+			#player-border-right-singles,
+			#player-border-right-doubles {
 				left: 965px;
 			}
-			.player-name {
+			#player-border-left-singles.doubles,
+			#player-border-right-singles.doubles {
+				opacity: 0;
+			}
+			#player-border-left-doubles.singles,
+			#player-border-right-doubles.singles {
+				opacity: 0;
+			}
+			#player-name1,
+			#player-name2,
+			#player-name3,
+			#player-name4 {
 				border: 4px solid black;
 				width: 356px;
 				height: 56px;
@@ -64,50 +108,91 @@
 				text-align: center;
 				line-height: 56px;
 				font-size: 41px;
+				opacity: 0;
 			}
-			#player-name1 {
+			#player-name1.singles {
 				left: 90px;
-				/* top: 926px; */
 				bottom: 74px;
 			}
-			#player-name2 {
+			#player-name2.singles {
 				right: 90px;
-				/* top: 926px; */
 				bottom: 74px;
 			}
-			#switch-border {
-				border: 5px solid black;
-				background-color: var(--smash-light-gray);
-        width: 784px;
-				height: 441px;
-				position: absolute;
-				transform: translateX(-50%);
-				left: 50%;
-				bottom: 20px;
+      #player-name3.singles {
+				right: 520px;
+				top: -80px;
+			}
+			#player-name4.singles {
+				right: 84px;
+				top: -80px;
+			}
+			#player-name1.doubles {
+				left: 84px;
+				bottom: 10px;
+			}
+			#player-name2.doubles {
+				left: 520px;
+				bottom: 10px;
+			}
+      #player-name3.doubles {
+				right: 520px;
+				bottom: 10px;
+			}
+			#player-name4.doubles {
+				right: 84px;
+				bottom: 10px;
+			}
+			.fade-in {
+				animation: fade-in 1000ms forwards;
+			}
+			.fade-out {
+				animation: fade-out 1000ms forwards;
+			}
+			@keyframes fade-in {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fade-out {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
 			}
 		</style>
 	</head>
 
 	<body>
-		<div id="gradient"></div>
-		<img id="player-border1" src="player-border.svg" />
-		<img id="player-border2" src="player-border.svg" />
-		<div id="player-name1" class="player-name"></div>
-		<div id="player-name2" class="player-name"></div>
-    <!-- Switch border is now handled by switch.html. Still here for reference -->
-		<!-- <div id="switch-border">
-			<img
-				src="../dashboard/logo.png"
-				style="
-          object-fit: cover;
-					width: 100%;
-					transform: translateY(-50%);
-					top: 50%;
-					position: absolute;
-					filter: invert();
-				"
-			/>
-		</div> -->
+		<div id="gradient" class="singles"></div>
+		<img
+			id="player-border-left-singles"
+			src="player-border-singles.svg"
+			class="singles"
+		/>
+		<img
+			id="player-border-right-singles"
+			src="player-border-singles.svg"
+			class="singles"
+		/>
+		<img
+			id="player-border-left-doubles"
+			src="player-border-doubles.svg"
+			class="singles"
+		/>
+		<img
+			id="player-border-right-doubles"
+			src="player-border-doubles.svg"
+			class="singles"
+		/>
+		<div id="player-name1" class="singles"></div>
+		<div id="player-name2" class="singles"></div>
+		<div id="player-name3" class="singles"></div>
+		<div id="player-name4" class="singles"></div>
 	</body>
 	<script src="pregame.js"></script>
 </html>

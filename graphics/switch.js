@@ -9,7 +9,13 @@ nodecg.listenFor('toGame', () => {
     switchBody.id = 'switch-body';
     document.body.appendChild(switchBody);
 });
-nodecg.listenFor('resetToPregame', () => {
+nodecg.listenFor('resetPregame', () => {
+    resetPage();
+});
+nodecg.listenFor('resetAll', () => {
+    resetPage();
+});
+function resetPage() {
     let switchBody = document.getElementById('switch-body');
     let leftJoycon = document.getElementById('left-joycon');
     let rightJoycon = document.getElementById('right-joycon');
@@ -19,7 +25,7 @@ nodecg.listenFor('resetToPregame', () => {
         document.body.removeChild(leftJoycon);
     if (rightJoycon)
         document.body.removeChild(rightJoycon);
-});
+}
 switchAnimTriggerRep.on('change', (newVal) => {
     switch (newVal) {
         case 'joyconsIn':

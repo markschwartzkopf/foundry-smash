@@ -5,7 +5,7 @@ type players = [
 	{ name: string; color: number }
 ];
 type playType = 'doubles' | 'singles';
-type obsStatus = { status: 'connecting' | 'connected' | 'disconnected' };
+type obsStatus = { status: 'connecting' | 'connected' | 'disconnected'; preview: string | null, program: string | null };
 // se object is an object that describes the starting and ending of OBS scene item properties to be animated
 type se = { start: number; end: number };
 type seObject = {
@@ -17,3 +17,4 @@ type animProp = {
 };
 type switchAnimTrigger = '' | 'joyconsIn';
 type gameInDurations = {up: number; joyconsIn: number; }
+type obj = {[key: string]: any}

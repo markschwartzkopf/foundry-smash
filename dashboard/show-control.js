@@ -5,7 +5,8 @@ const obsStatusRep = nodecg.Replicant('obs-status');
 let toGame = document.getElementById('to-game');
 let connect = document.getElementById('connect');
 let disconnect = document.getElementById('disconnect');
-let resetToPregame = document.getElementById('reset-to-pregame');
+let resetPregame = document.getElementById('reset-pregame');
+let obsStatusDiv = document.getElementById('obs-status');
 nodecg.sendMessage('connect');
 toGame.onclick = () => {
     nodecg.sendMessage('toGame');
@@ -16,8 +17,8 @@ connect.onclick = () => {
 disconnect.onclick = () => {
     nodecg.sendMessage('disconnect');
 };
-resetToPregame.onclick = () => {
-    nodecg.sendMessage('resetToPregame');
+resetPregame.onclick = () => {
+    nodecg.sendMessage('resetPregame');
 };
 obsStatusRep.on('change', (newVal) => {
     if (newVal.status == 'connected') {
@@ -26,4 +27,5 @@ obsStatusRep.on('change', (newVal) => {
     else {
         document.body.style.backgroundColor = 'red';
     }
+    obsStatusDiv.innerHTML = 'status:' + newVal.status + ' PVW:"' + newVal.preview + '" PGM:"' + newVal.program + '"';
 });

@@ -23,7 +23,7 @@ function drawInputArea(players: players, type: playType) {
 	playersDiv.id = 'players';
 	for (let x = 0; x < inputNumber; x++) {
 		let playerDiv = document.createElement('div');
-    playerDiv.className = 'player-div';
+		playerDiv.className = 'player-div';
 		if (type == 'doubles' && (x == 1 || x == 2))
 			playerDiv.classList.add('center-player');
 		let playerInput = document.createElement('input');
@@ -61,8 +61,9 @@ function drawInputArea(players: players, type: playType) {
 		playersDiv.appendChild(playerDiv);
 	}
 	inputArea.appendChild(playersDiv);
+	let buttonDiv = document.createElement('div');
+	buttonDiv.id = 'button-div';
 	let typeToggle = document.createElement('button');
-	typeToggle.className = 'type-toggle';
 	let otherType = 'Singles';
 	if (type == 'singles') otherType = 'Doubles';
 	typeToggle.innerHTML = 'Switch to ' + otherType;
@@ -71,7 +72,18 @@ function drawInputArea(players: players, type: playType) {
 			playTypeRep.value = 'doubles';
 		} else playTypeRep.value = 'singles';
 	};
-	inputArea.appendChild(typeToggle);
+	buttonDiv.appendChild(typeToggle);
+	let resetPlayers = document.createElement('button');
+  resetPlayers.innerHTML = 'Reset Players'
+  resetPlayers.onclick = () => {
+    playersRep.value = [{name: '', color: 0}, {name: '', color: 0}, {name: '', color: 0}, {name: '', color: 0}]
+  }
+  resetPlayers.oncontextmenu = (e) => {
+    e.preventDefault();
+    playersRep.value = [{name: 'Player 1', color: 1}, {name: 'Player 2', color: 2}, {name: 'Player 3', color: 3}, {name: 'Player 4', color: 4}]
+  }
+  buttonDiv.appendChild(resetPlayers);
+	inputArea.appendChild(buttonDiv);
 }
 
 playTypeRep.on('change', (newVal) => {
@@ -91,10 +103,12 @@ playersRep.on('change', (newVal) => {
 					checkbox.checked = true;
 				} else checkbox.checked = false;
 			}
-			let playerInput = document.getElementById('player-' + x) as HTMLInputElement;
+			let playerInput = document.getElementById(
+				'player-' + x
+			) as HTMLInputElement;
 			if (playerInput) {
 				playerInput.style.borderColor = sColor(newVal[x].color);
-        playerInput.value = newVal[x].name
+				playerInput.value = newVal[x].name;
 			}
 		}
 	}

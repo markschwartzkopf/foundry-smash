@@ -3,9 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const nodecg = require('./nodecg-api-context').get();
 const obsStatusRep = nodecg.Replicant('obs-status');
 const switchAnimTriggerRep = nodecg.Replicant('switch-trigger');
-obsStatusRep.value = { status: 'disconnected' };
+obsStatusRep.value = { status: 'disconnected', preview: null, program: null };
 const OBSWebSocket = require('obs-websocket-js');
 const obs = new OBSWebSocket();
+let i = 0;
 connectObs();
 obs.on('error', (err) => {
     nodecg.log.error('OBS websocket error:' + JSON.stringify(err));
@@ -23,7 +24,56 @@ function connectObs() {
                 .connect({ address: 'localhost:4444', password: 'pbmax' })
                 .then(() => {
                 obsStatusRep.value.status = 'connected';
-                nodecg.log.info('OBS connected');
+                resetAll();
+                nodecg.sendMessage('resetAll');
+                obs.send('GetCurrentScene').then((currentSceneRes) => {
+                    let program = currentSceneRes.name;
+                    obsStatusRep.value.program = program;
+                    obs.send('GetStudioModeStatus').then((res) => {
+                        if (res.studioMode) {
+                            obs.send('GetPreviewScene').then((previewSceneRes) => {
+                                let preview = previewSceneRes.name;
+                                obsStatusRep.value.preview = preview;
+                                nodecg.log.info('OBS connected. Program: "' +
+                                    program +
+                                    '" Preview: "' +
+                                    preview +
+                                    '"');
+                            });
+                        }
+                        else {
+                            obsStatusRep.value.preview = null;
+                            nodecg.log.info('OBS connected. Program: "' +
+                                program +
+                                '" (Studio Mode is off)');
+                        }
+                    });
+                });
+                obs.on('SwitchScenes', (res) => {
+                    obs.send('GetStudioModeStatus').then((res2) => {
+                        if (!res2.studioMode && obsStatusRep.value.preview) {
+                            //console.log('rejecting pgm change to ' + res.sceneName)
+                            obsStatusRep.value.preview = null;
+                        }
+                        else {
+                            obsStatusRep.value.program = res.sceneName;
+                        }
+                    });
+                });
+                obs.on('PreviewSceneChanged', (res) => {
+                    obsStatusRep.value.preview = res.sceneName;
+                });
+                obs.on('StudioModeSwitched', (res) => {
+                    if (res.newState) {
+                        obs.send('GetPreviewScene').then((previewSceneRes) => {
+                            obsStatusRep.value.preview = previewSceneRes.name;
+                            console.log(i + JSON.stringify(obsStatusRep.value));
+                        });
+                    }
+                    else {
+                        obsStatusRep.value.preview = null;
+                    }
+                });
             })
                 .catch((err) => { });
         }
@@ -91,13 +141,23 @@ nodecg.listenFor('zoomToFullscreen', () => {
         nodecg.log.error(err);
     });
 });
-nodecg.listenFor('resetToPregame', () => {
+nodecg.listenFor('resetPregame', () => {
+    resetPregame();
+});
+nodecg.listenFor('resetAll', () => {
+    resetAll();
+});
+function resetAll() {
+    resetPregame();
+}
+function resetPregame() {
     let props = switchPregame;
     props.item = 'Switch';
+    props.sceneName = 'Pregame';
     obs.send('SetSceneItemProperties', props).catch((err) => {
         nodecg.log.error(JSON.stringify(err));
     });
-});
+}
 function move(itemName, start, duration, transform, callback, ease) {
     let done = false;
     let progress = (Date.now() - start) / duration;
@@ -229,20 +289,9 @@ let switchInCenter = {
         y: 540,
     },
 };
-let slideUp = {
-    position: {
-        y: { start: 834, end: 540 },
-    },
-};
 let bump = {
     position: {
         y: { start: 547, end: 540 },
-    },
-};
-let zoomToFullscreen = {
-    scale: {
-        x: { start: 1, end: 2.456481456756592 },
-        y: { start: 1, end: 2.456481456756592 },
     },
 };
 let switchFullScreen = {
