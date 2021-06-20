@@ -2,8 +2,14 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<title>Player ID</title>
 		<link rel="stylesheet" type="text/css" href="../graphics/smashcolors.css" />
 		<style>
+      body{
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+      }
 			.boxes {
 				position: relative;
 				transform: translate(-50%);
@@ -57,8 +63,55 @@
 				transform: translateX(-50%);
 				position: relative;
 				left: 50%;
-        display: flex;
-        justify-content: space-around;
+				display: flex;
+				justify-content: space-around;
+			}
+			#switch-players {
+				position: absolute;
+				width: 100%;
+				height: 1.5em;
+				bottom: 0;
+			}
+			#double-switch-swap {
+				position: absolute;
+				left: 12.5%;
+				width: 75%;
+				height: 100%;
+				display: flex;
+			}
+			#single-switch-swap {
+				position: absolute;
+				left: 25%;
+				width: 50%;
+				height: 100%;
+			}
+			.switch-swap,
+			.switch-player {
+				flex-grow: 1;
+			}
+			.switch-player {
+				text-align: center;
+				font-family: Arial, Helvetica, sans-serif;
+				font-weight: 700;
+				text-align: center;
+				color: white;
+        font-size: 2.4vw;
+        font-size: min(2.3vw, 1rem);
+				line-height: 155%;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 0;
+			}
+			#switch-labels {
+				width: 100%;
+				height: 100%;
+				display: flex;
+			}
+			.player-swap {
+				height: min-content;
+				font-size: 3vw;
+        cursor: default;
+        transform: translateY(1rem);
 			}
 		</style>
 	</head>
@@ -81,11 +134,20 @@
 						src="logo.png"
 						style="
 							width: 100%;
-							transform: translateY(20%);
+							transform: translateY(calc(20% - .75em));
 							position: relative;
 							filter: invert();
 						"
 					/>
+					<div id="switch-players">
+						<div id="switch-labels"></div>
+						<div id="single-switch-swap"></div>
+						<div id="double-switch-swap">
+							<div id="switch-1-2" class="switch-swap"></div>
+							<div id="switch-2-3" class="switch-swap"></div>
+							<div id="switch-3-4" class="switch-swap"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="boxes" style="width: 14%; padding-bottom: 55%"></div>

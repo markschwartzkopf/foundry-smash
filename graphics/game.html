@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+    <title>Game</title>
+		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+				font-weight: 700;
+			}
+      #player-name1,
+			#player-name2,
+			#player-name3,
+			#player-name4 {
+				width: 269px;
+				height: 24px;
+				position: absolute;
+        color: white;
+				background-color: black;
+				overflow: hidden;
+				text-align: center;
+				line-height: 23px;
+				font-size: 21px;
+				opacity: 0;
+        clip-path: polygon(
+					0px 24px,
+					48px 0px,
+					235px 0px,
+					235px 24px
+				);
+			}
+			#player-name1.singles {
+				left: 477px;
+				bottom: 51px;
+			}
+      #player-name2.singles {
+				left: 1217px;
+				bottom: 51px;
+			}
+      #player-name3.singles {
+				top: -50px;
+			}
+      #player-name4.singles {
+        top: -50px;
+			}
+      #player-name1.doubles {
+				left: 257px;
+				bottom: 51px;
+			}
+      #player-name2.doubles {
+				left: 665px;
+				bottom: 51px;
+			}
+      #player-name3.doubles {
+				left: 1073px;
+				bottom: 51px;
+			}
+      #player-name4.doubles {
+        left: 1481px;
+				bottom: 51px;
+			}
+      .fade-in {
+				animation: fade-in 1000ms forwards;
+			}
+			.fade-out {
+				animation: fade-out 1000ms forwards;
+			}
+      @keyframes fade-in {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fade-out {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+    <div id="player-name1" class="singles"></div>
+		<div id="player-name2" class="singles"></div>
+		<div id="player-name3" class="singles"></div>
+		<div id="player-name4" class="singles"></div>
+  </body>
+	<script src="game.js"></script>
+</html>

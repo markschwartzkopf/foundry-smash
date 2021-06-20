@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Cam Crop/Zoom</title>
+		<link rel="stylesheet" type="text/css" href="slider.css" />
+		<style>
+			body {
+				max-width: 20em;
+			}
+			button {
+				position: relative;
+				height: 100%;
+				width: 100%;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+			#controls td {
+				width: 2em;
+				max-width: 2em;
+				height: 2em;
+				max-height: 2em;
+			}
+      div {
+        display: table;
+        margin: auto;
+      }
+		</style>
+	</head>
+
+	<body>
+		<table id="controls" style="margin: auto">
+			<tr>
+				<td></td>
+				<td>
+					<button id="up">&#8593;</button>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>
+					<button id="left">&#8592;</button>
+				</td>
+				<td></td>
+				<td>
+					<button id="right">&#8594;</button>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<button id="down">&#8595;</button>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align: center">
+					Speed
+					<input
+						type="range"
+						min="0.5"
+						max="5"
+						value="2.75"
+						id="speed"
+						step=".1"
+						style="max-width: 100%"
+					/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button id="zoomadd">+</button>
+				</td>
+				<td style="text-align: center">
+					<span style="font-size: larger">&#128269;</span>
+				</td>
+				<td>
+					<button id="zoomdec">-</button>
+				</td>
+			</tr>
+		</table>
+    <div>
+      Standard
+      <label class="switch">
+        <input id="mirrored" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+      Mirrored
+    </div>
+    <div>
+      Cam 1
+      <label class="switch">
+        <input id="num" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+      Cam 2
+    </div>
+    <div>
+      Game
+      <label class="switch">
+        <input id="scene" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+      Pregame
+    </div>
+		<button id="update-cameras">Update info from OBS</button>
+	</body>
+	<script src="camera-control.js"></script>
+</html>

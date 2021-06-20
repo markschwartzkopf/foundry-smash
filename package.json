@@ -28,6 +28,13 @@
         "headerColor": "#525F78"
       },
       {
+        "name": "camera-control",
+        "title": "Camera Control",
+        "width": 2,
+        "file": "camera-control.html",
+        "headerColor": "#525F78"
+      },
+      {
         "name": "obs-info",
         "title": "OBS Item Info",
         "fullbleed": true,
@@ -46,6 +53,16 @@
         "width": 1920,
         "height": 1080,
         "singleInstance": true
+      },
+      {
+        "file": "game.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "player-cams.html",
+        "width": 1920,
+        "height": 1080
       }
     ]
   },

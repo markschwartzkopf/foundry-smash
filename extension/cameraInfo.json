@@ -1,0 +1,86 @@
+{
+  "game": {
+    "player1": {
+      "target": {
+        "item": "Player1Reference",
+        "sceneName": "GameCams"
+      },
+      "source": {
+        "item": "Player1",
+        "sceneName": "GameCams"
+      }
+    },
+    "player2": {
+      "target": {
+        "item": "Player2Reference",
+        "sceneName": "GameCams"
+      },
+      "source": {
+        "item": "Player2",
+        "sceneName": "GameCams"
+      }
+    },
+    "team1": {
+      "target": {
+        "item": "Team1Reference",
+        "sceneName": "GameCams"
+      },
+      "source": {
+        "item": "Team1",
+        "sceneName": "GameCams"
+      }
+    },
+    "team2": {
+      "target": {
+        "item": "Team2Reference",
+        "sceneName": "GameCams"
+      },
+      "source": {
+        "item": "Team2",
+        "sceneName": "GameCams"
+      }
+    }
+  },
+  "preGame": {
+    "player1": {
+      "target": {
+        "item": "Player1Reference",
+        "sceneName": "Pregame"
+      },
+      "source": {
+        "item": "Player1",
+        "sceneName": "Pregame"
+      }
+    },
+    "player2": {
+      "target": {
+        "item": "Player2Reference",
+        "sceneName": "Pregame"
+      },
+      "source": {
+        "item": "Player2",
+        "sceneName": "Pregame"
+      }
+    },
+    "team1": {
+      "target": {
+        "item": "Team1Reference",
+        "sceneName": "Pregame"
+      },
+      "source": {
+        "item": "Team1",
+        "sceneName": "Pregame"
+      }
+    },
+    "team2": {
+      "target": {
+        "item": "Team2Reference",
+        "sceneName": "Pregame"
+      },
+      "source": {
+        "item": "Team2",
+        "sceneName": "Pregame"
+      }
+    }
+  }
+}

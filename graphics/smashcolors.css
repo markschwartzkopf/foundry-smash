@@ -1,12 +1,20 @@
 :root {
     --smash-blue: #248BFF;
     --smash-red: #FF3232;
-    --smash-green: #00FF00;
-    --smash-yellow: #FFFF00;
+    --smash-green: #1ab844;
+    --smash-yellow: #fbbd04;
     --smash-gray: #ACACAC;
     --smash-light-blue: #9EBFFA;
     --smash-light-red: #FA9F9F;
-    --smash-light-green: #00FF00;
-    --smash-light-yellow: #FFFF00;
+    --smash-light-green: #a8eea9;
+    --smash-light-yellow: #f4db91;
     --smash-light-gray: #ACACAC;
+    --player1: #ACACAC;
+    --player1-light: #ACACAC;
+    --player2: #ACACAC;
+    --player2-light: #ACACAC;
+    --player3: #ACACAC;
+    --player3-light: #ACACAC;
+    --player4: #ACACAC;
+    --player4-light: #ACACAC;
 }
