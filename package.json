@@ -57,12 +57,8 @@
       {
         "file": "game.html",
         "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "player-cams.html",
-        "width": 1920,
-        "height": 1080
+        "height": 1080,
+        "singleInstance": true
       }
     ]
   },

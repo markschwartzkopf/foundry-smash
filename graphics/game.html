@@ -2,73 +2,210 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-    <title>Game</title>
+		<title>Game</title>
 		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
 		<style>
+			:root {
+				--top: 20px;
+				--banner-width: 390px;
+				--banner-height: calc(var(--banner-width) * 0.15);
+				--banner-over: 431px;
+				--banner1: var(--smash-gray);
+				--banner2: var(--smash-gray);
+			}
+			@font-face {
+				font-family: Fallingsky;
+				src: url('./fallingsky.otf') format('opentype');
+			}
 			body {
 				margin: 0;
 				overflow: hidden;
-        font-family: Arial, Helvetica, sans-serif;
+				width: 1920px;
+				height: 1080px;
+				font-family: Arial, Helvetica, sans-serif;
 				font-weight: 700;
 			}
-      #player-name1,
+			#banner1,
+			#banner2 {
+				position: absolute;
+				top: calc(var(--top) + (var(--banner-width) * 0.335));
+				width: var(--banner-width);
+				height: var(--banner-height);
+				clip-path: polygon(0% 100%, 18.5% 0%, 100% 25%, 71% 44%, 86% 49%);
+			}
+			#banner1 {
+				left: var(--banner-over);
+				transform: scaleX(-1);
+				background-color: var(--banner1);
+			}
+			#banner2 {
+				right: var(--banner-over);
+				background-color: var(--banner2);
+			}
+			#banner-shadow-hide {
+				filter: drop-shadow(
+					0px calc(var(--banner-width) * 0.019)
+						calc(var(--banner-width) * 0.009) rgba(0, 0, 0, 0.7)
+				);
+				/* background-color: rgba(0, 0, 0, 0.4); */
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				width: 1920px;
+				height: 1080px;
+				clip-path: polygon(
+					calc(var(--banner-over) + var(--banner-width)) 0%,
+					calc(1920px - var(--banner-over) - var(--banner-width)) 0%,
+					calc(1920px - var(--banner-over) - var(--banner-width)) 100%,
+					calc(var(--banner-over) + var(--banner-width)) 100%
+				);
+				animation: banner-in 500ms forwards;
+			}
+			#cam1-reference,
+			#cam2-reference {
+				position: absolute;
+				top: var(--top);
+				background-color: red;
+				width: calc(var(--banner-width) * 0.367);
+				height: calc(var(--banner-width) * 0.397);
+			}
+			#cam1-reference {
+				left: calc(var(--banner-over) + var(--banner-width) * 0.522);
+			}
+			#cam2-reference {
+				right: calc(var(--banner-over) + var(--banner-width) * 0.522);
+			}
+			#name1,
+			#name2 {
+				position: absolute;
+				top: 0px;
+				font-size: calc(var(--banner-width) * 0.101); /* 32px; */
+				font-weight: 700;
+				text-shadow: 0px calc(var(--banner-width) * 0.003)
+					calc(var(--banner-width) * 0.028) rgba(0, 0, 0, 1);
+				white-space: nowrap;
+				color: white;
+			}
+			#name1 {
+				right: calc(
+					1920px - var(--banner-over) - calc(var(--banner-width) * 0.876)
+				);
+			}
+			#name2 {
+				left: calc(
+					1920px - var(--banner-over) - calc(var(--banner-width) * 0.876)
+				);
+			}
+			#name-hide {
+				position: absolute;
+				left: 0;
+				top: calc(var(--top) + calc(var(--banner-width) * 0.345));
+				width: 1920px;
+				transform: scaleY(0);
+				animation: name-in 500ms forwards;
+			}
+			#score1,
+			#score2 {
+				position: absolute;
+				transform: translateY(
+					calc(
+						var(--banner-width) * -0.014 - var(--top) - var(--banner-width) *
+							0.38
+					)
+				);
+				top: calc(var(--top) + var(--banner-width) * 0.014);
+				font-size: calc(var(--banner-width) * 0.38);
+				line-height: calc(var(--banner-width) * 0.38);
+				font-weight: 700;
+				font-family: Fallingsky;
+				/* text-shadow: 0px 1px 9px rgba(0, 0, 0, 1); */
+				white-space: nowrap;
+				color: white;
+				text-shadow: calc(var(--banner-width) * -0.009)
+						calc(var(--banner-width) * -0.009) 0 #000,
+					calc(var(--banner-width) * 0.009) calc(var(--banner-width) * -0.009) 0
+						#000,
+					calc(var(--banner-width) * -0.009) calc(var(--banner-width) * 0.009) 0
+						#000,
+					calc(var(--banner-width) * 0.009) calc(var(--banner-width) * 0.009) 0
+						#000,
+					calc(var(--banner-width) * 0.025) calc(var(--banner-width) * 0.025)
+						calc(var(--banner-width) * 0.003) #000,
+					calc(var(--banner-width) * 0.022) calc(var(--banner-width) * 0.022)
+						calc(var(--banner-width) * 0.003) #000,
+					calc(var(--banner-width) * 0.019) calc(var(--banner-width) * 0.019)
+						calc(var(--banner-width) * 0.006) #000,
+					calc(var(--banner-width) * 0.016) calc(var(--banner-width) * 0.016)
+						calc(var(--banner-width) * 0.006) #000,
+					calc(var(--banner-width) * 0.013) calc(var(--banner-width) * 0.013)
+						calc(var(--banner-width) * 0.006) #000;
+				animation: score-in 200ms cubic-bezier(0.76, 0.18, 0.96, 1.39) forwards;
+			}
+			#score1.singles {
+				right: calc(1920px - var(--banner-over) - var(--banner-width) * 0.332);
+			}
+			#score2.singles {
+				left: calc(1920px - var(--banner-over) - var(--banner-width) * 0.332);
+			}
+			#score1.doubles {
+				right: calc(1920px - var(--banner-over) - var(--banner-width) * 0.2);
+			}
+			#score2.doubles {
+				left: calc(1920px - var(--banner-over) - var(--banner-width) * 0.2);
+			}
+			#player-name1,
 			#player-name2,
 			#player-name3,
 			#player-name4 {
 				width: 269px;
 				height: 24px;
 				position: absolute;
-        color: white;
+				color: white;
 				background-color: black;
 				overflow: hidden;
 				text-align: center;
 				line-height: 23px;
 				font-size: 21px;
 				opacity: 0;
-        clip-path: polygon(
-					0px 24px,
-					48px 0px,
-					235px 0px,
-					235px 24px
-				);
+				clip-path: polygon(0px 24px, 48px 0px, 235px 0px, 235px 24px);
 			}
 			#player-name1.singles {
 				left: 477px;
 				bottom: 51px;
 			}
-      #player-name2.singles {
+			#player-name2.singles {
 				left: 1217px;
 				bottom: 51px;
 			}
-      #player-name3.singles {
+			#player-name3.singles {
 				top: -50px;
 			}
-      #player-name4.singles {
-        top: -50px;
+			#player-name4.singles {
+				top: -50px;
 			}
-      #player-name1.doubles {
+			#player-name1.doubles {
 				left: 257px;
 				bottom: 51px;
 			}
-      #player-name2.doubles {
+			#player-name2.doubles {
 				left: 665px;
 				bottom: 51px;
 			}
-      #player-name3.doubles {
+			#player-name3.doubles {
 				left: 1073px;
 				bottom: 51px;
 			}
-      #player-name4.doubles {
-        left: 1481px;
+			#player-name4.doubles {
+				left: 1481px;
 				bottom: 51px;
 			}
-      .fade-in {
+			.fade-in {
 				animation: fade-in 1000ms forwards;
 			}
 			.fade-out {
 				animation: fade-out 1000ms forwards;
 			}
-      @keyframes fade-in {
+			@keyframes fade-in {
 				0% {
 					opacity: 0;
 				}
@@ -84,14 +221,66 @@
 					opacity: 0;
 				}
 			}
+			@keyframes banner-in {
+				0% {
+					clip-path: polygon(
+						calc(var(--banner-over) + var(--banner-width)) 0%,
+						calc(1920px - var(--banner-over) - var(--banner-width)) 0%,
+						calc(1920px - var(--banner-over) - var(--banner-width)) 100%,
+						calc(var(--banner-over) + var(--banner-width)) 100%
+					);
+				}
+				100% {
+					clip-path: polygon(
+						var(--banner-over) 0%,
+						calc(1920px - var(--banner-over)) 0%,
+						calc(1920px - var(--banner-over)) 100%,
+						var(--banner-over) 100%
+					);
+				}
+			}
+			@keyframes name-in {
+				0% {
+					transform: scaleY(0);
+				}
+				100% {
+					transform: scaleY(1);
+				}
+			}
+			@keyframes score-in {
+				0% {
+					transform: translateY(
+						calc(
+							var(--banner-width) * -0.014 - var(--top) - var(--banner-width) *
+								0.38
+						)
+					);
+				}
+				100% {
+					transform: translateY(0);
+				}
+			}
 		</style>
 	</head>
 
 	<body>
-    <div id="player-name1" class="singles"></div>
+		<!-- <div id="cam1-reference"></div>
+    <div id="cam2-reference"></div> -->
+		<div id="banner-shadow-hide">
+			<div id="banner1"></div>
+			<div id="banner2"></div>
+		</div>
+		<div id="name-hide">
+			<div id="name1"></div>
+			<div id="name2"></div>
+		</div>
+		<div id="score1" class="singles">2</div>
+		<div id="score2" class="singles">2</div>
+		<div id="player-name1" class="singles"></div>
 		<div id="player-name2" class="singles"></div>
 		<div id="player-name3" class="singles"></div>
 		<div id="player-name4" class="singles"></div>
-  </body>
+	</body>
+  <script>var exports = {};</script>
 	<script src="game.js"></script>
 </html>

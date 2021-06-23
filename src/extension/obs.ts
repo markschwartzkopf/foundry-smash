@@ -106,7 +106,7 @@ function connectObs() {
 											);
 										})
 										.catch((err) => {
-											nodecg.log.error(err);
+											myError(err);
 										});
 								} else {
 									obsStatusRep.value.preview = null;
@@ -121,7 +121,7 @@ function connectObs() {
 								populateCameraRep();
 							})
 							.catch((err) => {
-								nodecg.log.error(err);
+								myError(err);
 							});
 					});
 
@@ -179,19 +179,20 @@ nodecg.listenFor('getOBSprops', (itemName: string, ack) => {
 			.catch((err: any) => {
 				if (ack && !ack.handled) ack(err);
 			});
-	} else nodecg.log.error('Cannot send commands to OBS unless connected');
+	} else myError('Cannot send commands to OBS unless connected');
 });
 
 nodecg.listenFor('toGame', () => {
+	resetGame();
+	clearGame();
 	if (obsStatusRep.value.program != 'Pregame') {
 		resetGame();
 		obs.send('SetCurrentScene', { 'scene-name': 'Game' }).catch((err: any) => {
-			nodecg.log.error(6);
-			nodecg.log.error(err);
+			myError(err);
 		});
 		return;
 	}
-	getCurrentProps('Switch')
+	getCurrentProps('Switch', 'SwitchScene')
 		.then((props) => {
 			move(
 				'Switch',
@@ -200,31 +201,94 @@ nodecg.listenFor('toGame', () => {
 				createSeObject(extractAnimProp(props), switchInCenter),
 				() => {
 					switchAnimTriggerRep.value = 'joyconsIn';
-				}
+				},
+				undefined,
+				'SwitchScene'
 			);
 		})
 		.catch((err) => {
-			nodecg.log.error(2);
-			nodecg.log.error(err);
+			myError(err);
 		});
 });
 nodecg.listenFor('bumpSwitch', () => {
 	if (obsStatusRep.value.status == 'connected') {
-		move('Switch', Date.now(), 70, bump);
-	} else nodecg.log.error('Cannot send commands to OBS unless connected');
+		move('Switch', Date.now(), 70, bump, undefined, undefined, 'SwitchScene');
+	} else myError('Cannot send commands to OBS unless connected');
 });
 nodecg.listenFor('gameStart', () => {
 	if (obsStatusRep.value.status == 'connected') {
-		let mm: 1 | -1 = 1;
-		if (mirrorRep.value.cam1) mm = -1;
-		let growIn: seObject = {
+		let mm1: 1 | -1 = 1;
+		if (mirrorRep.value.cam1) mm1 = -1;
+		let mm2: 1 | -1 = 1;
+		if (mirrorRep.value.cam2) mm2 = -1;
+		let growScale1 = cameraRep.value.game.player1.scale;
+		let growScale2 = cameraRep.value.game.player2.scale;
+		let item1 = 'Player1';
+		let item2 = 'Player2';
+		if (playTypeRep.value == 'doubles') {
+			growScale1 = cameraRep.value.game.team1.scale;
+			growScale2 = cameraRep.value.game.team2.scale;
+			item1 = 'Team1';
+			item2 = 'Team2';
+		}
+		let growIn1: seObject = {
 			scale: {
-				x: { start: 0, end: cameraRep.value.game.player1.scale * mm },
-				y: { start: 0, end: cameraRep.value.game.player1.scale },
+				x: { start: 0, end: growScale1 * mm1 },
+				y: { start: 0, end: growScale1 },
 			},
 		};
-		move('Player1', Date.now(), 300, growIn, () => {}, 'overshoot', 'GameCams');
-	} else nodecg.log.error('Cannot send commands to OBS unless connected');
+		let growIn2: seObject = {
+			scale: {
+				x: { start: 0, end: growScale2 * mm2 },
+				y: { start: 0, end: growScale2 },
+			},
+		};
+		const duration = 300;
+		const delay = 100;
+		obs
+			.send('SetSceneItemProperties', {
+				item: { name: item1 },
+				'scene-name': 'GameCams',
+				visible: true,
+				scale: { x: 0, y: 0 },
+			})
+			.then(() => {
+				return obs.send('SetSceneItemProperties', {
+					item: { name: item2 },
+					'scene-name': 'GameCams',
+					visible: true,
+					scale: { x: 0, y: 0 },
+				});
+			})
+			.then(() => {
+				move(
+					item1,
+					Date.now(),
+					duration,
+					growIn1,
+					() => {},
+					'overshoot',
+					'GameCams'
+				);
+				setTimeout(() => {
+					move(
+						item2,
+						Date.now(),
+						duration,
+						growIn2,
+						() => {},
+						'overshoot',
+						'GameCams'
+					);
+				}, duration + delay);
+        setTimeout(() => {
+          nodecg.sendMessage('gameOverlayIn');
+        }, duration + delay + duration)
+			})
+			.catch((err) => {
+				myError(JSON.stringify(err));
+			});
+	} else myError('Cannot send commands to OBS unless connected');
 });
 nodecg.listenFor('updateCameras', () => {
 	obsDo(() => {
@@ -247,13 +311,12 @@ nodecg.listenFor('cameraChange', (change: cameraChange) => {
 	};
 	obsDo(() => {
 		obs.send('SetSceneItemProperties', args).catch((err) => {
-			nodecg.log.error(err);
+			myError(err);
 		});
 	});
 });
 nodecg.listenFor('zoomToFullscreen', () => {
-	resetGame();
-	getCurrentProps('Switch')
+	getCurrentProps('Switch', 'SwitchScene')
 		.then((props) => {
 			move(
 				'Switch',
@@ -267,16 +330,15 @@ nodecg.listenFor('zoomToFullscreen', () => {
 							nodecg.sendMessage('resetPregame');
 						})
 						.catch((err: any) => {
-							nodecg.log.error(200);
-							nodecg.log.error(err);
+							myError(err);
 						});
 				},
-				'overshoot'
+				'overshoot',
+				'SwitchScene'
 			);
 		})
 		.catch((err) => {
-			nodecg.log.error(3);
-			nodecg.log.error(err);
+			myError(err);
 		});
 });
 nodecg.listenFor('resetPregame', () => {
@@ -287,10 +349,52 @@ nodecg.listenFor('resetAll', () => {
 });
 playTypeRep.on('change', () => {
 	resetPregame();
+	resetGame();
 });
 mirrorRep.on('change', () => {
 	if (obsStatusRep.value.status == 'connected') setMirror();
 });
+
+function clearGame() {
+	return new Promise<void>((res, rej) => {
+		if (obsStatusRep.value.status == 'connected') {
+			obs
+				.send('SetSceneItemProperties', {
+					item: { name: 'Player1' },
+					'scene-name': 'GameCams',
+					visible: false,
+				})
+				.then(() => {
+					return obs.send('SetSceneItemProperties', {
+						item: { name: 'Player2' },
+						'scene-name': 'GameCams',
+						visible: false,
+					});
+				})
+				.then(() => {
+					return obs.send('SetSceneItemProperties', {
+						item: { name: 'Team1' },
+						'scene-name': 'GameCams',
+						visible: false,
+					});
+				})
+				.then(() => {
+					return obs.send('SetSceneItemProperties', {
+						item: { name: 'Team2' },
+						'scene-name': 'GameCams',
+						visible: false,
+					});
+				})
+				.then(() => {
+					res();
+				})
+				.catch((err) => {
+					rej(new Error(err).stack);
+				});
+		} else rej(new Error('OBS not connected').stack);
+		nodecg.sendMessage('zeroGame');
+	});
+}
 
 function resetAll() {
 	if (obsStatusRep.value.status == 'connected') {
@@ -301,7 +405,7 @@ function resetAll() {
 				setMirror();
 			})
 			.catch((err) => {
-				nodecg.log.error(err);
+				myError(err);
 			});
 	}
 }
@@ -310,69 +414,40 @@ function resetPregame() {
 	let props: obsSetItemProperties = JSON.parse(JSON.stringify(switchPregame));
 	if (playTypeRep.value == 'doubles') props.position!.y = 225;
 	props.item = { name: 'Switch' };
-	props['scene-name'] = 'Pregame';
+	props['scene-name'] = 'SwitchScene';
 	obsDo(() => {
 		obs
 			.send('SetSceneItemProperties', props)
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
 					item: { name: 'Player1' },
-					'scene-name': 'Pregame',
+					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'singles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
 					item: { name: 'Player2' },
-					'scene-name': 'Pregame',
+					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'singles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
 					item: { name: 'Team1' },
-					'scene-name': 'Pregame',
+					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'doubles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
 					item: { name: 'Team2' },
-					'scene-name': 'Pregame',
-					visible: playTypeRep.value == 'doubles',
-				});
-			})
-			.then(() => {
-				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Player1' },
-					'scene-name': 'GameCams',
-					visible: playTypeRep.value == 'singles',
-				});
-			})
-			.then(() => {
-				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Player2' },
-					'scene-name': 'GameCams',
-					visible: playTypeRep.value == 'singles',
-				});
-			})
-			.then(() => {
-				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Team1' },
-					'scene-name': 'GameCams',
-					visible: playTypeRep.value == 'doubles',
-				});
-			})
-			.then(() => {
-				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Team2' },
-					'scene-name': 'GameCams',
+					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'doubles',
 				});
 			})
 			.catch((err: any) => {
-				nodecg.log.error(14);
-				nodecg.log.error(JSON.stringify(err));
+				myError(JSON.stringify(err));
 			});
 	});
 }
@@ -434,7 +509,38 @@ function sendMirror(
 }
 
 function resetGame() {
-	//
+	obsDo(() => {
+		obs
+			.send('SetSceneItemProperties', {
+				item: { name: 'Player1' },
+				'scene-name': 'GameCams',
+				visible: playTypeRep.value == 'singles',
+			})
+			.then(() => {
+				return obs.send('SetSceneItemProperties', {
+					item: { name: 'Player2' },
+					'scene-name': 'GameCams',
+					visible: playTypeRep.value == 'singles',
+				});
+			})
+			.then(() => {
+				return obs.send('SetSceneItemProperties', {
+					item: { name: 'Team1' },
+					'scene-name': 'GameCams',
+					visible: playTypeRep.value == 'doubles',
+				});
+			})
+			.then(() => {
+				return obs.send('SetSceneItemProperties', {
+					item: { name: 'Team2' },
+					'scene-name': 'GameCams',
+					visible: playTypeRep.value == 'doubles',
+				});
+			})
+			.catch((err: any) => {
+				myError(JSON.stringify(err));
+			});
+	});
 }
 
 function obsDo(func: () => void) {
@@ -455,11 +561,14 @@ function move(
 	transform: seObject,
 	callback?: () => void,
 	ease?: 'easeIn' | 'overshoot',
-	sceneName?: string
+	sceneName?: string,
+	thisAnimation?: number
 ) {
-	let thisAnimation = obsAnimationQueue.count;
-	obsAnimationQueue.inAnimation = thisAnimation;
-	obsAnimationQueue.count++;
+	if (!thisAnimation && thisAnimation != 0) {
+		thisAnimation = obsAnimationQueue.count;
+		obsAnimationQueue.inAnimation = thisAnimation;
+		obsAnimationQueue.count++;
+	}
 	let done = false;
 	let progress = (Date.now() - start) / duration;
 	if (progress >= 1) {
@@ -490,7 +599,16 @@ function move(
 		.send('SetSceneItemProperties', props)
 		.then(() => {
 			if (!done) {
-				move(itemName, start, duration, transform, callback, ease, sceneName);
+				move(
+					itemName,
+					start,
+					duration,
+					transform,
+					callback,
+					ease,
+					sceneName,
+					thisAnimation
+				);
 			} else {
 				if (callback) callback();
 				if (obsAnimationQueue.inAnimation == thisAnimation) {
@@ -503,8 +621,7 @@ function move(
 			}
 		})
 		.catch((err: any) => {
-			nodecg.log.error(4);
-			nodecg.log.error(JSON.stringify(err));
+			myError(JSON.stringify(err));
 		});
 }
 
@@ -534,23 +651,17 @@ function createSeObject(start: animProp, end: animProp): seObject {
 					let startNum = start[key];
 					if (typeof startNum == 'number') {
 						rtn[key] = { start: startNum, end: value };
-					} else
-						nodecg.log.error(
-							'Starting animProp incompatible with ending (num)'
-						);
+					} else myError('Starting animProp incompatible with ending (num)');
 					break;
 				case 'object':
 					let startObj = start[key];
 					if (typeof startObj == 'object') {
 						rtn[key] = createSeObject(startObj, value);
-					} else
-						nodecg.log.error(
-							'Starting animProp incompatible with ending (obj)'
-						);
+					} else myError('Starting animProp incompatible with ending (obj)');
 					break;
 			}
 		} else {
-			nodecg.log.error('Starting animProp is missing properties');
+			myError('Starting animProp is missing properties');
 		}
 	}
 	return rtn;
@@ -571,11 +682,14 @@ function extractAnimProp(input: object): animProp {
 	return rtn;
 }
 
-function getCurrentProps(itemName: string): Promise<object> {
+function getCurrentProps(itemName: string, sceneName: string): Promise<object> {
 	return new Promise((res, rej) => {
 		if (obsStatusRep.value.status == 'connected') {
 			obs
-				.send('GetSceneItemProperties', { item: { name: itemName } })
+				.send('GetSceneItemProperties', {
+					item: { name: itemName },
+					'scene-name': sceneName,
+				})
 				.then((rtn) => {
 					res(rtn);
 				})
@@ -711,4 +825,8 @@ function getCameraInfo(
 			rej('Must be connected to update camera info');
 		}
 	});
+}
+
+function myError(err: any) {
+	nodecg.log.error(new Error(err).stack);
 }

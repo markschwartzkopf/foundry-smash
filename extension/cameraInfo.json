@@ -45,41 +45,41 @@
     "player1": {
       "target": {
         "item": "Player1Reference",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       },
       "source": {
         "item": "Player1",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       }
     },
     "player2": {
       "target": {
         "item": "Player2Reference",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       },
       "source": {
         "item": "Player2",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       }
     },
     "team1": {
       "target": {
         "item": "Team1Reference",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       },
       "source": {
         "item": "Team1",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       }
     },
     "team2": {
       "target": {
         "item": "Team2Reference",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       },
       "source": {
         "item": "Team2",
-        "sceneName": "Pregame"
+        "sceneName": "PregameCams"
       }
     }
   }
