@@ -33,3 +33,10 @@ const mirrorRep = nodecg.Replicant<camMirrored>('mirror');
 if (mirrorRep.value == undefined) mirrorRep.value = { cam1: true, cam2: true };
 const switchPlayerRep = nodecg.Replicant<switchPlayer>('switchPlayer');
 if (switchPlayerRep.value == undefined) switchPlayerRep.value = [0, 1, 2, 3];
+
+const tournamentRep = nodecg.Replicant<string>('tournamentUrl');
+if (tournamentRep.value == undefined) tournamentRep.value = 'wt15';
+const challongePlayersRep = nodecg.Replicant<challongePlayers>('challongePlayers');
+if (challongePlayersRep.value == undefined) challongePlayersRep.value = {};
+const challongeBracketRep = nodecg.Replicant<bracketMatch>('challongeBracket');
+if (challongeBracketRep.value == undefined) challongeBracketRep.value = {p1name: '', p2name: ''};

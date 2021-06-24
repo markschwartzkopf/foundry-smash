@@ -45,3 +45,13 @@ type switchPlayer = [
 	0 | 1 | 2 | 3,
 	0 | 1 | 2 | 3
 ];
+type challongePlayers = { [id: string]: string }; //id is an integer, always, but js requires string keys
+
+type bracketMatch = {
+	p1name: string;
+	p2name: string;
+	p1match?: bracketMatch;
+	p2match?: bracketMatch;
+  score?: {p1: number, p2: number} 
+	winner?: 'p1' | 'p2';
+};

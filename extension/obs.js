@@ -32,7 +32,7 @@ let switchInCenter = {
 };
 let bump = {
     position: {
-        y: { start: 547, end: 540 },
+        y: { start: 555, end: 540 },
     },
 };
 let switchFullScreen = {

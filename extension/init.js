@@ -36,3 +36,12 @@ if (mirrorRep.value == undefined)
 const switchPlayerRep = nodecg.Replicant('switchPlayer');
 if (switchPlayerRep.value == undefined)
     switchPlayerRep.value = [0, 1, 2, 3];
+const tournamentRep = nodecg.Replicant('tournamentUrl');
+if (tournamentRep.value == undefined)
+    tournamentRep.value = 'wt15';
+const challongePlayersRep = nodecg.Replicant('challongePlayers');
+if (challongePlayersRep.value == undefined)
+    challongePlayersRep.value = {};
+const challongeBracketRep = nodecg.Replicant('challongeBracket');
+if (challongeBracketRep.value == undefined)
+    challongeBracketRep.value = { p1name: '', p2name: '' };

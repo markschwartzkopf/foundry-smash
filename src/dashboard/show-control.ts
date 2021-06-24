@@ -8,6 +8,7 @@ let connect = document.getElementById('connect')!;
 let disconnect = document.getElementById('disconnect')!;
 let resetPregame = document.getElementById('reset-pregame')!;
 let obsStatusDiv = document.getElementById('obs-status')!;
+let updateBracket = document.getElementById('update-bracket')!;
 nodecg.sendMessage('connect');
 
 toGame.onclick = () => {
@@ -25,6 +26,11 @@ disconnect.onclick = () => {
 resetPregame.onclick = () => {
   nodecg.sendMessage('resetPregame');
 }
+
+updateBracket.onclick = () => {
+  nodecg.sendMessage('updateChallongeBracket');
+}
+
 
 obsStatusRep.on('change', (newVal) => {
   if (newVal.status == 'connected') {

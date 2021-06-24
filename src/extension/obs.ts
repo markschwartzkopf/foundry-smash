@@ -39,7 +39,7 @@ let switchInCenter = {
 
 let bump: seObject = {
 	position: {
-		y: { start: 547, end: 540 },
+		y: { start: 555, end: 540 },
 	},
 };
 
