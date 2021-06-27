@@ -79,6 +79,7 @@ function getChallongeMatches() {
                 let matchArray = resp;
                 let highRound = 0;
                 let highRoundMatch;
+                let finalFinalMatch;
                 let matchIndex = {};
                 matchArray.forEach((x) => {
                     let match = {
@@ -135,14 +136,17 @@ function getChallongeMatches() {
                     }
                     else
                         rej('Bad data from Challonge');
+                    if (match.player1_prereq_match_id &&
+                        match.player2_prereq_match_id &&
+                        match.player1_prereq_match_id ==
+                            match.player2_prereq_match_id) {
+                        finalFinalMatch = match;
+                        highRoundMatch = matchIndex[match.player1_prereq_match_id];
+                    }
                 });
                 if (highRoundMatch) {
-                    if (highRoundMatch.player1_prereq_match_id &&
-                        highRoundMatch.player2_prereq_match_id &&
-                        highRoundMatch.player1_prereq_match_id ==
-                            highRoundMatch.player2_prereq_match_id) {
-                        highRoundMatch = matchIndex[highRoundMatch.player1_prereq_match_id];
-                    }
+                    if (finalFinalMatch && finalFinalMatch.winner_id)
+                        highRoundMatch.winner_id = finalFinalMatch?.winner_id;
                     rtn = populateBracket(highRoundMatch, matchIndex);
                     res(rtn);
                 }

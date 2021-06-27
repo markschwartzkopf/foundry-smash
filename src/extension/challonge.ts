@@ -23,8 +23,8 @@ function methodUrl(method: 'matches' | 'participants') {
 }
 pullFromChallonge();
 nodecg.listenFor('updateChallongeBracket', () => {
-  pullFromChallonge();
-})
+	pullFromChallonge();
+});
 
 function pullFromChallonge() {
 	getChallongeParticipants()
@@ -80,6 +80,7 @@ function getChallongeMatches() {
 					let matchArray = resp as any[];
 					let highRound = 0;
 					let highRoundMatch: challongeMatch | undefined;
+					let finalFinalMatch: challongeMatch | undefined;
 					let matchIndex: { [id: string]: challongeMatch } = {};
 					matchArray.forEach((x) => {
 						let match: challongeMatch = {
@@ -139,27 +140,26 @@ function getChallongeMatches() {
 								highRoundMatch = match;
 							}
 						} else rej('Bad data from Challonge');
-					});
-          if (highRoundMatch) {
             if (
-              highRoundMatch.player1_prereq_match_id &&
-              highRoundMatch.player2_prereq_match_id &&
-              highRoundMatch.player1_prereq_match_id ==
-              highRoundMatch.player2_prereq_match_id
-            ) {
-              highRoundMatch = matchIndex[highRoundMatch.player1_prereq_match_id];
-            }
-            rtn = populateBracket(highRoundMatch, matchIndex);
-            res(rtn);
-          } else {
-            rej('Bad data from Challonge');
-          }
+							match.player1_prereq_match_id &&
+							match.player2_prereq_match_id &&
+							match.player1_prereq_match_id ==
+								match.player2_prereq_match_id
+						) {finalFinalMatch = match; highRoundMatch = matchIndex[match.player1_prereq_match_id]}
+					});
+					if (highRoundMatch) {
+						if (finalFinalMatch && finalFinalMatch.winner_id)
+							highRoundMatch.winner_id = finalFinalMatch?.winner_id;
+						rtn = populateBracket(highRoundMatch, matchIndex);
+						res(rtn);
+					} else {
+						rej('Bad data from Challonge');
+					}
 				} else {
 					rej('Bad data from Challonge: Not an array');
 				}
 			})
 			.catch((err) => {
-        
 				rej(err);
 			});
 	});
@@ -181,7 +181,7 @@ function populateBracket(
 	if (match.score) rtn.score = match.score;
 	if (match.winner_id && match.winner_id == match.player1_id) rtn.winner = 'p1';
 	if (match.winner_id && match.winner_id == match.player2_id) rtn.winner = 'p2';
-  if (match.round < 0) rtn.losers = true
+	if (match.round < 0) rtn.losers = true;
 	if (
 		match.player1_prereq_match_id &&
 		matchIndex[match.player1_prereq_match_id] &&

@@ -8,6 +8,7 @@ let losersOnly = document.getElementById('losers-only');
 let rounds = document.getElementById('rounds');
 let url = document.getElementById('url');
 let refresh = document.getElementById('refresh');
+
 losers.oninput = () => {
     NodeCG.waitForReplicants(challongeLosersRep).then(() => {
         if (losers.checked) {
@@ -45,6 +46,7 @@ url.onkeyup = (ev) => {
 };
 refresh.onclick = () => {
     nodecg.sendMessage('updateChallongeBracket');
+    console.log('yep');
 };
 challongeLosersRep.on('change', (newVal) => {
     switch (newVal) {

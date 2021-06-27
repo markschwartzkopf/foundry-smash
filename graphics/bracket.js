@@ -93,8 +93,6 @@ function drawBracket(bracketRep, loserRep, roundsRep) {
     for (let x = rounds; x >= 0; x--) {
         for (let y = 0; y < columns[x].length; y++) {
             let match = columns[x][y];
-            if (x == 0)
-                console.log(match);
             let matchDiv = document.createElement('div');
             matchDiv.className = 'match';
             let p1Div = document.createElement('div');
@@ -155,17 +153,7 @@ function drawBracket(bracketRep, loserRep, roundsRep) {
                             let targetY = (firstY + secondY) / 2;
                             p1Height = targetY - yStart;
                             p1Div.style.height = p1Height + 'px';
-                        } /* else if (x == 0) {
-                            if (match.p1match && match.p1match.htmlRect) {
-                let [firstY, secondY] = [
-                  match.p1match!.htmlRect.getBoundingClientRect().bottom,
-                  bracketDiv.getBoundingClientRect().bottom,
-                ];
-                if (firstY && secondY) {
-                  p1Height = parentY + parentHeight / 2 - yStart;
-                  p1Div.style.height = p1Height + 'px';
-                }
-                        } */
+                        }
                     }
                     if (p1Div.getBoundingClientRect().bottom > 0) {
                         yStart = p1Div.getBoundingClientRect().bottom;
@@ -181,6 +169,18 @@ function drawBracket(bracketRep, loserRep, roundsRep) {
                             let height = parentY + parentHeight / 2 - yStart;
                             yStart = yStart + height;
                             p2Div.style.height = height + 'px';
+                        }
+                    }
+                    else if (x == 0) {
+                        if (match.p1match && match.p1match.htmlRect) {
+                            let [firstY, secondY] = [
+                                match.p1match.htmlRect.getBoundingClientRect().bottom,
+                                bracketDiv.getBoundingClientRect().bottom,
+                            ];
+                            if (firstY && secondY) {
+                                let p2Height = (firstY + secondY) / 2 - yStart;
+                                p2Div.style.height = p2Height + 'px';
+                            }
                         }
                     }
                 };
@@ -234,6 +234,41 @@ function drawBracket(bracketRep, loserRep, roundsRep) {
             }
         }
     }
+    let matchDiv = document.createElement('div');
+    matchDiv.className = 'match';
+    let championDiv = document.createElement('div');
+    championDiv.classList.add('player', 'champ');
+    let championText = document.createElement('div');
+    championText.className = 'player-text';
+    if (columns[0][0].winner) {
+        if (columns[0][0].winner == 'p1') {
+            championText.innerHTML = columns[0][0].p1name;
+        }
+        else {
+            championText.innerHTML = columns[0][0].p2name;
+        }
+    }
+    championDiv.appendChild(championText);
+    matchDiv.appendChild(championDiv);
+    let finalMatch = columns[0][0];
+    let setHeights = () => {
+        let yStart = 0;
+        let champHeight = 0;
+        if (finalMatch && finalMatch.htmlRect) {
+            let [firstY, secondY] = [
+                finalMatch.htmlRect.getBoundingClientRect().y,
+                finalMatch.htmlRect.getBoundingClientRect().bottom,
+            ];
+            if (firstY && secondY) {
+                champHeight = (firstY + secondY) / 2 - yStart;
+                championDiv.style.height = champHeight + 'px';
+            }
+        }
+    };
+    setHeights();
+    losersResize.push(setHeights);
+    winnersResize.push(setHeights);
+    championColumn.appendChild(matchDiv);
 }
 function addToColumns(bracket, columns, index, counts) {
     if (!counts)
