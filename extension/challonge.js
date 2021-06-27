@@ -179,6 +179,8 @@ function populateBracket(match, matchIndex) {
         rtn.winner = 'p1';
     if (match.winner_id && match.winner_id == match.player2_id)
         rtn.winner = 'p2';
+    if (match.round < 0)
+        rtn.losers = true;
     if (match.player1_prereq_match_id &&
         matchIndex[match.player1_prereq_match_id] &&
         match.player1_is_prereq_match_loser == false) {

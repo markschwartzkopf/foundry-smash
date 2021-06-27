@@ -40,3 +40,7 @@ const challongePlayersRep = nodecg.Replicant<challongePlayers>('challongePlayers
 if (challongePlayersRep.value == undefined) challongePlayersRep.value = {};
 const challongeBracketRep = nodecg.Replicant<bracketMatch>('challongeBracket');
 if (challongeBracketRep.value == undefined) challongeBracketRep.value = {p1name: '', p2name: ''};
+const challongeLosersRep = nodecg.Replicant<losersRep>('challongeLosers');
+if (challongeLosersRep.value == undefined) challongeLosersRep.value = 'off';
+const challongeRoundsRep = nodecg.Replicant<number | null>('challongeRounds');
+if (challongeRoundsRep.value == undefined) challongeRoundsRep.value = null;

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Bracket Dashboard</title>
+		<link rel="stylesheet" type="text/css" href="slider.css" />
+		<style>
+			#rounds {
+				width: 1em;
+			}
+      #url {
+        width: 5em;
+      }
+		</style>
+	</head>
+
+	<body>
+		Losers Bracket: Off
+		<label class="switch">
+			<input id="losers" type="checkbox" />
+			<span class="slider"></span>
+		</label>
+		On <br />
+		Losers Bracket Only: Off
+		<label class="switch">
+			<input id="losers-only" type="checkbox" />
+			<span class="slider"></span>
+		</label>
+		On <br />
+		<label for="rounds">Rounds:</label>
+		<input id="rounds" />
+		<br />
+		<label for="url">Bracket URL:</label>
+		<input id="url" />
+    <button id="refresh">Refresh</button>
+	</body>
+	<script>
+		var exports = {};
+	</script>
+	<script src="bracket.js"></script>
+</html>

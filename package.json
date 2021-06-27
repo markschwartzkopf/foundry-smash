@@ -40,6 +40,13 @@
 				"fullbleed": true,
 				"file": "obs-info.html",
 				"headerColor": "#525F78"
+			},
+			{
+				"name": "bracket",
+				"title": "Bracket",
+				"width": 2,
+				"file": "bracket.html",
+				"headerColor": "#525F78"
 			}
 		],
 		"graphics": [

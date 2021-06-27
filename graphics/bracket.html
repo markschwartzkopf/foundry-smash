@@ -2,26 +2,86 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-    <title>Bracket</title>
+		<title>Bracket</title>
 		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
 		<style>
 			body {
 				margin: 0;
 				overflow: hidden;
-        width: 1920px;
-				height: 1080px;
+				/* width: 1920px;
+				height: 1080px; */
+        height: 100vh;
 				font-family: Arial, Helvetica, sans-serif;
 				font-weight: 700;
+        display: flex;
+        flex-direction: column;
 			}
-			
+			span {
+				display: inline-block;
+			}
+			#bracket {
+				display: flex;
+        flex-direction: row-reverse;
+        /* background-color: red; */
+        flex-grow: 1;
+        min-height: 0;
+			}
+      #losers-bracket {
+				display: flex;
+        flex-direction: row-reverse;
+        /* background-color: green; */
+        flex-grow: 1.5;
+        min-height: 0;
+			}
+			.column {
+        flex-grow: 1;
+        flex-basis: 0;
+      }
+      .big-column {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        flex-basis: 0;
+        background-color: yellow;
+      }
+			.match {
+				width: 100%;
+        /* padding: 0.5em; */
+        min-height: 0;
+			}
+      .big-column > .match{
+        display: flex;
+				flex-direction: column;
+				flex-grow: 1;
+      }
+			.player {
+				/* background-color: aquamarine; */
+				/* border: 1px solid black; */
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+			}
+      .player2 {
+        border-top: 1px solid black;
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;
+      }
+			/* .losers.player {
+				background-color: blue;
+			} */
+      .player-text {
+        padding-left: .5em;
+        /* background-color: blueviolet; */
+      }
 		</style>
 	</head>
 
 	<body>
-		<div id="bracket">
-      Empty Div
-		</div>
 	</body>
-  <script>var exports = {};</script>
+	<script>
+		var exports = {};
+	</script>
 	<script src="bracket.js"></script>
 </html>

@@ -52,6 +52,9 @@ type bracketMatch = {
 	p2name: string;
 	p1match?: bracketMatch;
 	p2match?: bracketMatch;
-  score?: {p1: number, p2: number} 
+	score?: { p1: number; p2: number };
 	winner?: 'p1' | 'p2';
+	losers?: true;
 };
+
+type losersRep = 'on' | 'off' | 'only';
