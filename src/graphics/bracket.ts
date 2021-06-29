@@ -1,9 +1,9 @@
 /// <reference path="../../../../types/browser.d.ts" />
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
-const challongeBracketRep = nodecg.Replicant<bracketMatch>('challongeBracket');
-const challongeLosersRep = nodecg.Replicant<losersRep>('challongeLosers');
-const challongeRoundsRep = nodecg.Replicant<number | null>('challongeRounds');
+const bracketRep = nodecg.Replicant<bracketMatch>('bracket');
+const losersRep = nodecg.Replicant<losersRep>('losers');
+const roundsRep = nodecg.Replicant<number | null>('rounds');
 
 let winnersResize: (() => void)[] = [];
 let losersResize: (() => void)[] = [];
@@ -22,21 +22,21 @@ const ro = new ResizeObserver((entries) => {
 	}
 });
 
-challongeBracketRep.on('change', (newVal) => {
-	NodeCG.waitForReplicants(challongeLosersRep, challongeRoundsRep).then(() => {
-		drawBracket(newVal, challongeLosersRep.value!, challongeRoundsRep.value!);
+bracketRep.on('change', (newVal) => {
+	NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
+		drawBracket(newVal, losersRep.value!, roundsRep.value!);
 	});
 });
 
-challongeLosersRep.on('change', (newVal) => {
-	NodeCG.waitForReplicants(challongeLosersRep, challongeRoundsRep).then(() => {
-		drawBracket(challongeBracketRep.value!, newVal, challongeRoundsRep.value!);
+losersRep.on('change', (newVal) => {
+	NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
+		drawBracket(bracketRep.value!, newVal, roundsRep.value!);
 	});
 });
 
-challongeRoundsRep.on('change', (newVal) => {
-	NodeCG.waitForReplicants(challongeLosersRep, challongeRoundsRep).then(() => {
-		drawBracket(challongeBracketRep.value!, challongeLosersRep.value!, newVal);
+roundsRep.on('change', (newVal) => {
+	NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
+		drawBracket(bracketRep.value!, losersRep.value!, newVal);
 	});
 });
 

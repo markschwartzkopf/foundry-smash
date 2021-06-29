@@ -26,7 +26,7 @@ resetPregame.onclick = () => {
     nodecg.sendMessage('resetPregame');
 };
 updateBracket.onclick = () => {
-    nodecg.sendMessage('updateChallongeBracket');
+    nodecg.sendMessage('updateBracket');
 };
 obsStatusRep.on('change', (newVal) => {
     if (newVal.status == 'connected') {

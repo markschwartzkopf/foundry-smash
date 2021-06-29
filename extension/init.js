@@ -39,15 +39,15 @@ if (switchPlayerRep.value == undefined)
 const tournamentRep = nodecg.Replicant('tournamentUrl');
 if (tournamentRep.value == undefined)
     tournamentRep.value = 'wt15';
-const challongePlayersRep = nodecg.Replicant('challongePlayers');
-if (challongePlayersRep.value == undefined)
-    challongePlayersRep.value = {};
-const challongeBracketRep = nodecg.Replicant('challongeBracket');
-if (challongeBracketRep.value == undefined)
-    challongeBracketRep.value = { p1name: '', p2name: '' };
-const challongeLosersRep = nodecg.Replicant('challongeLosers');
-if (challongeLosersRep.value == undefined)
-    challongeLosersRep.value = 'off';
-const challongeRoundsRep = nodecg.Replicant('challongeRounds');
-if (challongeRoundsRep.value == undefined)
-    challongeRoundsRep.value = null;
+const bracketRep = nodecg.Replicant('bracket');
+if (bracketRep.value == undefined)
+    bracketRep.value = { p1name: '', p2name: '' };
+const losersRep = nodecg.Replicant('losers');
+if (losersRep.value == undefined)
+    losersRep.value = 'off';
+const roundsRep = nodecg.Replicant('rounds');
+if (roundsRep.value == undefined)
+    roundsRep.value = null;
+const bracketSourceRep = nodecg.Replicant('bracketSource');
+if (bracketSourceRep.value == undefined)
+    bracketSourceRep.value = 'challonge';

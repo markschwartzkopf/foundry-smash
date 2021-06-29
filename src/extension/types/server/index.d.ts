@@ -114,3 +114,15 @@ type challongeMatch = {
 	round: number /* 0 is valid but Rare. (Third place game) */;
   score?: {p1: number, p2: number} /* retreived from match.score_csv */;
 };
+type smashggMatch = {
+	id: number;
+	player1_id: number | null;
+  player1_name?: string;
+	player2_id: number | null;
+  player2_name?: string;
+	player1_prereq_match_id: number | null;
+	player2_prereq_match_id: number | null;
+	winner_id: number | null;
+	round: number /* 0 is valid but Rare. (Third place game) */;
+  score: {p1: number, p2: number}
+};

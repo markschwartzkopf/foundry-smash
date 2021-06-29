@@ -24,5 +24,5 @@ module.exports = function (nodecg) {
     nodecgApiContext.set(nodecg);
     require('./init');
     require('./obs');
-    require('./challonge');
+    require('./bracket');
 };

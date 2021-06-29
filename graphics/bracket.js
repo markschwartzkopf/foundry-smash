@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const challongeBracketRep = nodecg.Replicant('challongeBracket');
-const challongeLosersRep = nodecg.Replicant('challongeLosers');
-const challongeRoundsRep = nodecg.Replicant('challongeRounds');
+const bracketRep = nodecg.Replicant('bracket');
+const losersRep = nodecg.Replicant('losers');
+const roundsRep = nodecg.Replicant('rounds');
 let winnersResize = [];
 let losersResize = [];
 const ro = new ResizeObserver((entries) => {
@@ -19,19 +19,19 @@ const ro = new ResizeObserver((entries) => {
         }
     }
 });
-challongeBracketRep.on('change', (newVal) => {
-    NodeCG.waitForReplicants(challongeLosersRep, challongeRoundsRep).then(() => {
-        drawBracket(newVal, challongeLosersRep.value, challongeRoundsRep.value);
+bracketRep.on('change', (newVal) => {
+    NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
+        drawBracket(newVal, losersRep.value, roundsRep.value);
     });
 });
-challongeLosersRep.on('change', (newVal) => {
-    NodeCG.waitForReplicants(challongeLosersRep, challongeRoundsRep).then(() => {
-        drawBracket(challongeBracketRep.value, newVal, challongeRoundsRep.value);
+losersRep.on('change', (newVal) => {
+    NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
+        drawBracket(bracketRep.value, newVal, roundsRep.value);
     });
 });
-challongeRoundsRep.on('change', (newVal) => {
-    NodeCG.waitForReplicants(challongeLosersRep, challongeRoundsRep).then(() => {
-        drawBracket(challongeBracketRep.value, challongeLosersRep.value, newVal);
+roundsRep.on('change', (newVal) => {
+    NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
+        drawBracket(bracketRep.value, losersRep.value, newVal);
     });
 });
 function drawBracket(bracketRep, loserRep, roundsRep) {

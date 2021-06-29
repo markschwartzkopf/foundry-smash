@@ -28,7 +28,7 @@ resetPregame.onclick = () => {
 }
 
 updateBracket.onclick = () => {
-  nodecg.sendMessage('updateChallongeBracket');
+  nodecg.sendMessage('updateBracket');
 }
 
 

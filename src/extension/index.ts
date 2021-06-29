@@ -5,5 +5,5 @@ module.exports = function (nodecg: NodeCG) {
 	nodecgApiContext.set(nodecg);
   require('./init');
   require('./obs');
-  require('./challonge');
+  require('./bracket');
 };

@@ -1,31 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const challongeLosersRep = nodecg.Replicant('challongeLosers');
-const challongeRoundsRep = nodecg.Replicant('challongeRounds');
+const losersRep = nodecg.Replicant('losers');
+const roundsRep = nodecg.Replicant('rounds');
 const tournamentRep = nodecg.Replicant('tournamentUrl');
+const bracketSourceRep = nodecg.Replicant('bracketSource');
 let losers = document.getElementById('losers');
 let losersOnly = document.getElementById('losers-only');
 let rounds = document.getElementById('rounds');
 let url = document.getElementById('url');
 let refresh = document.getElementById('refresh');
-
+let source = document.getElementById('source');
+source.oninput = () => {
+    if (source.checked) {
+        bracketSourceRep.value = 'smashgg';
+    }
+    else
+        bracketSourceRep.value = 'challonge';
+};
 losers.oninput = () => {
-    NodeCG.waitForReplicants(challongeLosersRep).then(() => {
+    NodeCG.waitForReplicants(losersRep).then(() => {
         if (losers.checked) {
-            challongeLosersRep.value = 'on';
+            losersRep.value = 'on';
         }
         else {
-            challongeLosersRep.value = 'off';
+            losersRep.value = 'off';
         }
     });
 };
 losersOnly.oninput = () => {
-    NodeCG.waitForReplicants(challongeLosersRep).then(() => {
+    NodeCG.waitForReplicants(losersRep).then(() => {
         if (losersOnly.checked) {
-            challongeLosersRep.value = 'only';
+            losersRep.value = 'only';
         }
         else {
-            challongeLosersRep.value = 'on';
+            losersRep.value = 'on';
         }
     });
 };
@@ -33,10 +41,10 @@ rounds.onkeyup = (ev) => {
     if (ev.key == 'Enter') {
         let num = parseInt(rounds.value);
         if (num == NaN) {
-            challongeRoundsRep.value = null;
+            roundsRep.value = null;
         }
         else
-            challongeRoundsRep.value = num;
+            roundsRep.value = num;
     }
 };
 url.onkeyup = (ev) => {
@@ -45,10 +53,9 @@ url.onkeyup = (ev) => {
     }
 };
 refresh.onclick = () => {
-    nodecg.sendMessage('updateChallongeBracket');
-    console.log('yep');
+    nodecg.sendMessage('updateBracket');
 };
-challongeLosersRep.on('change', (newVal) => {
+losersRep.on('change', (newVal) => {
     switch (newVal) {
         case 'off':
             losers.checked = false;
@@ -64,7 +71,7 @@ challongeLosersRep.on('change', (newVal) => {
             break;
     }
 });
-challongeRoundsRep.on('change', (newVal) => {
+roundsRep.on('change', (newVal) => {
     if (newVal != null) {
         rounds.value = newVal.toString();
     }
@@ -73,4 +80,11 @@ challongeRoundsRep.on('change', (newVal) => {
 });
 tournamentRep.on('change', (newVal) => {
     url.value = newVal;
+});
+bracketSourceRep.on('change', (newVal) => {
+    if (newVal == 'smashgg') {
+        source.checked = true;
+    }
+    else
+        source.checked = false;
 });
