@@ -6,8 +6,8 @@ const tournamentRep = nodecg.Replicant<string>('tournamentUrl'); //ie 'tournamen
 const bracketRep = nodecg.Replicant<bracketMatch>('bracket');
 const bracketSourceRep = nodecg.Replicant<bracketSource>('bracketSource');
 let playerIds: playerIds = {};
-const challongeApiKey = require('../../../api-keys.json').challongeKey;
-const smashggApiKey = require('../../../api-keys.json').smashggKey;
+const challongeApiKey = require('../../../keys.json').challongeKey;
+const smashggApiKey = require('../../../keys.json').smashggKey;
 const challongeApiUrl = 'https://api.challonge.com/v1/';
 const smashggApiUrl = 'https://api.smash.gg/gql/alpha';
 

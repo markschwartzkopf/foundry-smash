@@ -11,7 +11,7 @@
 		"extension"
 	],
 	"nodecg": {
-		"compatibleRange": "^1.1.1",
+		"compatibleRange": "^1.8.1",
 		"dashboardPanels": [
 			{
 				"name": "player-id",

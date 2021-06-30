@@ -2,7 +2,7 @@ import { NodeCG } from '../../../../types/server';
 import obsWebsocketJs from 'obs-websocket-js';
 type obsSetItemProperties = obsWebsocketJs.SceneItemTransform & {
 	'scene-name'?: string;
-	item: { name?: string; id?: number };
+	item: string;
 };
 const nodecg: NodeCG = require('./nodecg-api-context').get();
 
@@ -13,6 +13,7 @@ obsStatusRep.value = { status: 'disconnected', preview: null, program: null };
 const playTypeRep = nodecg.Replicant<playType>('playType');
 const cameraRep = nodecg.Replicant<cameras>('camera');
 const mirrorRep = nodecg.Replicant<camMirrored>('mirror');
+const obsPassword = require('../../../keys.json').obsPassword;
 const obs = new obsWebsocketJs();
 let obsAnimationQueue: {
 	count: number;
@@ -73,8 +74,9 @@ function connectObs() {
 	let obsConnect = setInterval(() => {
 		if (obsStatusRep.value.status == 'connecting') {
 			obs
-				.connect({ address: 'localhost:4444', password: 'pbmax' })
+				.connect({ address: 'localhost:4444', password: obsPassword })
 				.then(() => {
+					nodecg.log.info('obs connected');
 					obsStatusRep.value.status = 'connected';
 					if (obsAnimationQueue.count == 0) {
 						obsAnimationQueue.inAnimation = null;
@@ -118,7 +120,7 @@ function connectObs() {
 								}
 							})
 							.then(() => {
-								populateCameraRep();
+								return populateCameraRep();
 							})
 							.catch((err) => {
 								myError(err);
@@ -148,7 +150,9 @@ function connectObs() {
 						}
 					});
 				})
-				.catch((err: any) => {});
+				.catch((err) => {
+					myError(err);
+				});
 		} else clearInterval(obsConnect);
 	}, 5000);
 }
@@ -172,7 +176,7 @@ nodecg.listenFor('disconnect', () => {
 nodecg.listenFor('getOBSprops', (itemName: string, ack) => {
 	if (obsStatusRep.value.status == 'connected') {
 		obs
-			.send('GetSceneItemProperties', { item: { name: itemName } })
+			.send('GetSceneItemProperties', { item: itemName  })
 			.then((ret: any) => {
 				if (ack && !ack.handled) ack(null, ret);
 			})
@@ -247,14 +251,14 @@ nodecg.listenFor('gameStart', () => {
 		const delay = 100;
 		obs
 			.send('SetSceneItemProperties', {
-				item: { name: item1 },
+				item: item1,
 				'scene-name': 'GameCams',
 				visible: true,
 				scale: { x: 0, y: 0 },
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: item2 },
+					item: item2,
 					'scene-name': 'GameCams',
 					visible: true,
 					scale: { x: 0, y: 0 },
@@ -304,7 +308,7 @@ nodecg.listenFor('cameraChange', (change: cameraChange) => {
 	let xscale = scale;
 	if (mirrorRep.value[num]) xscale *= -1;
 	let args = {
-		item: { name: itemName },
+		item: itemName,
 		'scene-name': sceneName,
 		crop: change.camera.crop,
 		scale: { x: xscale, y: scale },
@@ -360,27 +364,27 @@ function clearGame() {
 		if (obsStatusRep.value.status == 'connected') {
 			obs
 				.send('SetSceneItemProperties', {
-					item: { name: 'Player1' },
+					item: 'Player1',
 					'scene-name': 'GameCams',
 					visible: false,
 				})
 				.then(() => {
 					return obs.send('SetSceneItemProperties', {
-						item: { name: 'Player2' },
+						item: 'Player2',
 						'scene-name': 'GameCams',
 						visible: false,
 					});
 				})
 				.then(() => {
 					return obs.send('SetSceneItemProperties', {
-						item: { name: 'Team1' },
+						item: 'Team1',
 						'scene-name': 'GameCams',
 						visible: false,
 					});
 				})
 				.then(() => {
 					return obs.send('SetSceneItemProperties', {
-						item: { name: 'Team2' },
+						item: 'Team2',
 						'scene-name': 'GameCams',
 						visible: false,
 					});
@@ -413,35 +417,35 @@ function resetAll() {
 function resetPregame() {
 	let props: obsSetItemProperties = JSON.parse(JSON.stringify(switchPregame));
 	if (playTypeRep.value == 'doubles') props.position!.y = 225;
-	props.item = { name: 'Switch' };
+	props.item = 'Switch';
 	props['scene-name'] = 'SwitchScene';
 	obsDo(() => {
 		obs
 			.send('SetSceneItemProperties', props)
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Player1' },
+					item: 'Player1',
 					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'singles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Player2' },
+					item: 'Player2' ,
 					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'singles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Team1' },
+					item: 'Team1' ,
 					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'doubles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Team2' },
+					item: 'Team2',
 					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'doubles',
 				});
@@ -498,7 +502,7 @@ function sendMirror(
 	if (item) {
 		obs
 			.send('SetSceneItemProperties', {
-				item: { name: item.item },
+				item: item.item,
 				'scene-name': item.sceneName,
 				scale: { x: item.scaleX, y: item.scaleY },
 			})
@@ -512,27 +516,27 @@ function resetGame() {
 	obsDo(() => {
 		obs
 			.send('SetSceneItemProperties', {
-				item: { name: 'Player1' },
+				item: 'Player1',
 				'scene-name': 'GameCams',
 				visible: playTypeRep.value == 'singles',
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Player2' },
+					item: 'Player2',
 					'scene-name': 'GameCams',
 					visible: playTypeRep.value == 'singles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Team1' },
+					item: 'Team1',
 					'scene-name': 'GameCams',
 					visible: playTypeRep.value == 'doubles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: { name: 'Team2' },
+					item: 'Team2',
 					'scene-name': 'GameCams',
 					visible: playTypeRep.value == 'doubles',
 				});
@@ -687,7 +691,7 @@ function getCurrentProps(itemName: string, sceneName: string): Promise<object> {
 		if (obsStatusRep.value.status == 'connected') {
 			obs
 				.send('GetSceneItemProperties', {
-					item: { name: itemName },
+					item: itemName,
 					'scene-name': sceneName,
 				})
 				.then((rtn) => {
@@ -800,13 +804,13 @@ function getCameraInfo(
 		if (obsStatusRep.value.status == 'connected') {
 			obs
 				.send('GetSceneItemProperties', {
-					item: { name: reference.item },
+					item: reference.item,
 					'scene-name': reference.sceneName,
 				})
 				.then((ref) => {
 					rtn.target = { x: ref.width, y: ref.height };
 					return obs.send('GetSceneItemProperties', {
-						item: { name: source.item },
+						item: source.item,
 						'scene-name': source.sceneName,
 					});
 				})
