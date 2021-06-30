@@ -4,6 +4,7 @@ const playersRep = nodecg.Replicant('players');
 const playTypeRep = nodecg.Replicant('playType');
 const mirrorRep = nodecg.Replicant('mirror');
 const switchPlayerRep = nodecg.Replicant('switchPlayer');
+const scoreRep = nodecg.Replicant('score');
 let oldSwitchArray = [
     { name: '', color: 0 },
     { name: '', color: 0 },

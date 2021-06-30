@@ -65,9 +65,11 @@ function pullFromSmashgg() {
 	getSmashggParticipants()
 		.then((resp) => {
 			playerIds = resp;
+      nodecg.log.info('Players pulled from smash.gg')
 			return getSmashggMatches();
 		})
 		.then((resp) => {
+      nodecg.log.info('Bracket info pulled from smash.gg')
 			bracketRep.value = resp;
 		})
 		.catch((err) => {
@@ -92,7 +94,7 @@ function getSmashggParticipants() {
 	return new Promise<playerIds>((res, rej) => {
 		let rtn: playerIds = {};
 		let smashParticipantQuery =
-			'{entrants(query: {perPage: 500}){nodes{id name}}}';
+			'{entrants(query: {perPage: 500}){nodes{id name participants{gamerTag}}}}';
 		smashggFetch(smashParticipantQuery, tournamentRep.value)
 			.then((resp) => {
 				if (
@@ -106,6 +108,16 @@ function getSmashggParticipants() {
 					playerArray.forEach((x) => {
 						let id = x.id;
 						let name = x.name;
+						if (
+							x.participants &&
+							x.participants[0] &&
+							x.participants[0].gamerTag
+						) {
+							name = x.participants[0].gamerTag;
+							if (x.participants[1] && x.participants[1].gamerTag) {
+								name = name + ' & ' + x.participants[1].gamerTag;
+							}
+						}
 						if (typeof id == 'number' && typeof name == 'string') {
 							rtn[id.toString()] = name;
 						} else rej('Bad data from Challonge');
@@ -281,28 +293,36 @@ function getSmashggMatches(existingArray?: any[], nextPage?: number) {
 						let finalFinalMatch: smashggMatch | undefined;
 						let matchIndex: { [id: string]: smashggMatch } = {};
 						matchArray.forEach((x) => {
-							let match: smashggMatch = {
-								id: x.id,
-								player1_id: x.slots[0].entrant.id,
-								player2_id: x.slots[1].entrant.id,
-								player1_prereq_match_id: parseInt(x.slots[0].prereqId),
-								player2_prereq_match_id: parseInt(x.slots[1].prereqId),
-								winner_id: x.winnerId,
-								round: x.round,
-								score: {
-									p1: x.slots[0].standing.stats.score.value,
-									p2: x.slots[1].standing.stats.score.value,
-								},
-							};
-							if (
-								typeof match.id == 'number' &&
-								(typeof match.player1_id == 'number' || !match.player1_id) &&
-								(typeof match.player2_id == 'number' || !match.player2_id) &&
-								(typeof match.winner_id == 'number' || !match.winner_id) &&
-								typeof match.round == 'number' &&
-								(typeof match.score.p1 == 'number' || !match.score.p1) &&
-								(typeof match.score.p2 == 'number' || !match.score.p2)
-							) {
+							if (isSmashggApiMatch(x)) {
+								let score1 = 0;
+								let score2 = 0;
+								if (
+									x.slots[0].standing &&
+									x.slots[0].standing.stats &&
+									x.slots[0].standing.stats.score &&
+									x.slots[0].standing.stats.score.value
+								)
+									score1 = x.slots[0].standing.stats.score.value;
+								if (
+									x.slots[1].standing &&
+									x.slots[1].standing.stats &&
+									x.slots[1].standing.stats.score &&
+									x.slots[1].standing.stats.score.value
+								)
+									score2 = x.slots[1].standing.stats.score.value;
+								let match: smashggMatch = {
+									id: x.id,
+									player1_id: x.slots[0].entrant.id,
+									player2_id: x.slots[1].entrant.id,
+									player1_prereq_match_id: x.slots[0].prereqId,
+									player2_prereq_match_id: x.slots[1].prereqId,
+									winner_id: x.winnerId,
+									round: x.round,
+									score: {
+										p1: score1,
+										p2: score2,
+									},
+								};
 								if (match.player1_id && playerIds[match.player1_id.toString()])
 									match.player1_name = playerIds[match.player1_id.toString()];
 								if (match.player2_id && playerIds[match.player2_id.toString()])
@@ -313,24 +333,23 @@ function getSmashggMatches(existingArray?: any[], nextPage?: number) {
 									highRound = match.round;
 									highRoundMatch = match;
 								}
+								if (
+									match.player1_prereq_match_id &&
+									match.player2_prereq_match_id &&
+									match.player1_prereq_match_id == match.player2_prereq_match_id
+								) {
+									finalFinalMatch = match;
+									highRoundMatch = matchIndex[match.player1_prereq_match_id];
+								}
 							} else rej('Bad data from smash.gg');
-							if (
-								match.player1_prereq_match_id &&
-								match.player2_prereq_match_id &&
-								match.player1_prereq_match_id == match.player2_prereq_match_id
-							) {
-								finalFinalMatch = match;
-								highRoundMatch = matchIndex[match.player1_prereq_match_id];
-							}
 						});
 						if (highRoundMatch) {
-							if (finalFinalMatch && finalFinalMatch.winner_id)
-								highRoundMatch.winner_id = finalFinalMatch?.winner_id;
+							if (finalFinalMatch)
+								highRoundMatch.winner_id = finalFinalMatch.winner_id;
 							rtn = populateBracket(highRoundMatch, matchIndex);
 							res(rtn);
-							rej('poop');
 						} else {
-							rej('Bad data from Challonge');
+							rej('Bad data from smash.gg');
 						}
 					}
 				}
@@ -385,5 +404,44 @@ function populateBracket(
 
 function myError(err: any) {
 	nodecg.log.error(new Error(err).stack);
-  nodecg.log.error(JSON.stringify(err));
+	nodecg.log.error(JSON.stringify(err));
+}
+
+function isSmashggApiMatch(x: unknown): x is smashggApiMatch {
+	if (
+		!!x &&
+		typeof (x as smashggApiMatch).id == 'number' &&
+		typeof (x as smashggApiMatch).round == 'number' &&
+		(typeof (x as smashggApiMatch).winnerId == 'number' ||
+			(x as smashggApiMatch).winnerId == null) &&
+		(x as smashggApiMatch).slots
+	) {
+		let rtn = true;
+		let slots = (x as smashggApiMatch).slots as unknown;
+		if (Array.isArray(slots)) {
+			slots.forEach((y: any) => {
+				if (y.prereqId && (!y.entrant || typeof y.entrant.id == 'number')) {
+					if (
+						y.standing &&
+						y.standing.stats &&
+						y.standing.stats.score &&
+						y.standing.stats.score.value &&
+						typeof y.standing.stats.score.value != 'number'
+					) {
+						rtn = false;
+						console.log('standing error');
+					}
+				} else {
+					rtn = false;
+					console.log('slot error');
+				}
+			});
+		}
+
+		return rtn;
+	} else {
+		console.log('basic error');
+    console.log(x)
+		return false;
+	}
 }

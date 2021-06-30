@@ -122,7 +122,14 @@ type smashggMatch = {
   player2_name?: string;
 	player1_prereq_match_id: number | null;
 	player2_prereq_match_id: number | null;
-	winner_id: number | null;
+	winner_id?: number | null;
 	round: number /* 0 is valid but Rare. (Third place game) */;
   score: {p1: number, p2: number}
 };
+type smashggApiMatch = {
+  id: number,
+  round: number,
+  winnerId: number | null,
+  slots: 
+    { prereqId: number, entrant: {id: number}, standing?: {stats?: {score?: {value?: number}}} }[]
+}

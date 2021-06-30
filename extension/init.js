@@ -51,3 +51,6 @@ if (roundsRep.value == undefined)
 const bracketSourceRep = nodecg.Replicant('bracketSource');
 if (bracketSourceRep.value == undefined)
     bracketSourceRep.value = 'challonge';
+const scoreRep = nodecg.Replicant('score');
+if (scoreRep.value == undefined)
+    scoreRep.value = [0, 0];

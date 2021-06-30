@@ -58,5 +58,5 @@ type bracketMatch = {
 };
 
 type losersRep = 'on' | 'off' | 'only';
-
 type bracketSource = 'challonge' | 'smashgg'
+type scoreRep = [number, number];
