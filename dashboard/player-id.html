@@ -5,11 +5,15 @@
 		<title>Player ID</title>
 		<link rel="stylesheet" type="text/css" href="../graphics/smashcolors.css" />
 		<style>
-      body{
-        margin-left: 0;
-        margin-right: 0;
-        margin-bottom: 0;
-      }
+			@font-face {
+				font-family: Fallingsky;
+				src: url('../graphics/fallingsky.otf') format('opentype');
+			}
+			body {
+				margin-left: 0;
+				margin-right: 0;
+				margin-bottom: 0;
+			}
 			.boxes {
 				position: relative;
 				transform: translate(-50%);
@@ -95,12 +99,12 @@
 				font-weight: 700;
 				text-align: center;
 				color: white;
-        font-size: 2.4vw;
-        font-size: min(2.3vw, 1rem);
+				font-size: 2.4vw;
+				font-size: min(2.3vw, 1rem);
 				line-height: 155%;
-        white-space: nowrap;
-        overflow: hidden;
-        width: 0;
+				white-space: nowrap;
+				overflow: hidden;
+				width: 0;
 			}
 			#switch-labels {
 				width: 100%;
@@ -110,8 +114,48 @@
 			.player-swap {
 				height: min-content;
 				font-size: 3vw;
-        cursor: default;
-        transform: translateY(1rem);
+				cursor: default;
+				transform: translateY(1rem);
+			}
+			#score-container-1,
+			#score-container-2 {
+				position: absolute;
+				height: 1em;
+				width: 1em;
+				bottom: 3em;
+				min-width: fit-content;
+				border-collapse: collapse;
+			}
+			#score-container-1 {
+				left: -3em;
+			}
+			#score-container-2 {
+				right: -3em;
+			}
+			#score1,
+			#score2 {
+				font-weight: 700;
+				font-family: Fallingsky;
+				text-shadow: 0.05em 0.05em 0.02em black;
+				font-size: 3em;
+				width: 0.7em;
+				vertical-align: top;
+				line-height: 0.9em;
+			}
+			#inc1,
+			#inc2,
+			#dec1,
+			#dec2 {
+				width: 100%;
+				height: 100%;
+				padding: 0;
+			}
+			td {
+				padding: 0;
+				border: 0;
+				width: 1em;
+				height: 1em;
+				line-height: 1em;
 			}
 		</style>
 	</head>
@@ -134,7 +178,7 @@
 						src="logo.png"
 						style="
 							width: 100%;
-							transform: translateY(calc(20% - .75em));
+							transform: translateY(calc(20% - 0.75em));
 							position: relative;
 							filter: invert();
 						"
@@ -152,6 +196,30 @@
 			</div>
 			<div class="boxes" style="width: 14%; padding-bottom: 55%"></div>
 			<div class="boxes" style="width: 80%; padding-bottom: 5%"></div>
+			<div style="position: relative">
+				<table id="score-container-1">
+					<tr>
+						<td id="score1" rowspan="2">0</td>
+						<td><button id="inc1">+</button></td>
+					</tr>
+					<tr>
+						<td>
+							<button id="dec1">-</button>
+						</td>
+					</tr>
+				</table>
+				<table id="score-container-2">
+					<tr>
+						<td id="score2" rowspan="2">0</td>
+						<td><button id="inc2">+</button></td>
+					</tr>
+					<tr>
+						<td>
+							<button id="dec2">-</button>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 		<div id="input-area"></div>
 	</body>

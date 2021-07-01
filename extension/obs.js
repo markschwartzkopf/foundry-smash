@@ -753,4 +753,5 @@ function getCameraInfo(reference, source) {
 }
 function myError(err) {
     nodecg.log.error(new Error(err).stack);
+    console.log(JSON.stringify(err));
 }

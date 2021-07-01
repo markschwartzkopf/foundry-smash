@@ -3,6 +3,13 @@
 const playersRep = nodecg.Replicant('players');
 const playTypeRep = nodecg.Replicant('playType');
 const switchPlayerRep = nodecg.Replicant('switchPlayer');
+const scoreRep = nodecg.Replicant('score');
+const score1 = document.getElementById('score1');
+const score2 = document.getElementById('score2');
+const inc1 = document.getElementById('inc1');
+const inc2 = document.getElementById('inc2');
+const dec1 = document.getElementById('dec1');
+const dec2 = document.getElementById('dec2');
 const swapChar = '&#x1F504';
 const smashColors = [
     '--smash-gray',
@@ -142,6 +149,7 @@ function drawInputArea(players, type) {
             { name: '', color: 0 },
         ];
         switchPlayerRep.value = [0, 1, 2, 3];
+        scoreRep.value = [0, 0];
     };
     resetPlayers.oncontextmenu = (e) => {
         e.preventDefault();
@@ -152,6 +160,7 @@ function drawInputArea(players, type) {
             { name: 'Player 4', color: 4 },
         ];
         switchPlayerRep.value = [0, 1, 2, 3];
+        scoreRep.value = [0, 0];
     };
     buttonDiv.appendChild(resetPlayers);
     inputArea.appendChild(buttonDiv);
@@ -191,6 +200,34 @@ switchPlayerRep.on('change', (newVal) => {
         drawSwitchPlayers(playersRep.value, playTypeRep.value, newVal);
     });
 });
+scoreRep.on('change', (newVal) => {
+    score1.innerHTML = newVal[0].toString();
+    score2.innerHTML = newVal[1].toString();
+});
+inc1.onclick = () => {
+    NodeCG.waitForReplicants(scoreRep).then(() => {
+        if (scoreRep.value)
+            scoreRep.value[0]++;
+    });
+};
+inc2.onclick = () => {
+    NodeCG.waitForReplicants(scoreRep).then(() => {
+        if (scoreRep.value)
+            scoreRep.value[1]++;
+    });
+};
+dec1.onclick = () => {
+    NodeCG.waitForReplicants(scoreRep).then(() => {
+        if (scoreRep.value && scoreRep.value[0] > 0)
+            scoreRep.value[0]--;
+    });
+};
+dec2.onclick = () => {
+    NodeCG.waitForReplicants(scoreRep).then(() => {
+        if (scoreRep.value && scoreRep.value[1] > 0)
+            scoreRep.value[1]--;
+    });
+};
 document.getElementById('switch-1-2').onclick = () => {
     NodeCG.waitForReplicants(switchPlayerRep).then(() => {
         let newArray = JSON.parse(JSON.stringify(switchPlayerRep.value));

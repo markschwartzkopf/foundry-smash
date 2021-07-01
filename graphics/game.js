@@ -30,6 +30,10 @@ let player4 = document.getElementById('player-name4');
 function sColor(num) {
     return 'var(' + smashColors[num] + ')';
 }
+scoreRep.on('change', (newVal) => {
+    score1.innerHTML = newVal[0].toString();
+    score2.innerHTML = newVal[1].toString();
+});
 mirrorRep.on('change', (newVal, oldVal) => {
     NodeCG.waitForReplicants(playersRep, switchPlayerRep, playTypeRep, mirrorRep).then(() => {
         setNamesAndColors(playersRep.value, switchPlayerRep.value, playTypeRep.value, newVal);
