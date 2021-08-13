@@ -151,7 +151,7 @@ function connectObs() {
 					});
 				})
 				.catch((err) => {
-					myError(err);
+          if (err.code != 'CONNECTION_ERROR') myError(err);
 				});
 		} else clearInterval(obsConnect);
 	}, 5000);
@@ -176,7 +176,7 @@ nodecg.listenFor('disconnect', () => {
 nodecg.listenFor('getOBSprops', (itemName: string, ack) => {
 	if (obsStatusRep.value.status == 'connected') {
 		obs
-			.send('GetSceneItemProperties', { item: itemName  })
+			.send('GetSceneItemProperties', { item: itemName })
 			.then((ret: any) => {
 				if (ack && !ack.handled) ack(null, ret);
 			})
@@ -285,9 +285,9 @@ nodecg.listenFor('gameStart', () => {
 						'GameCams'
 					);
 				}, duration + delay);
-        setTimeout(() => {
-          nodecg.sendMessage('gameOverlayIn');
-        }, duration + delay + duration)
+				setTimeout(() => {
+					nodecg.sendMessage('gameOverlayIn');
+				}, duration + delay + duration);
 			})
 			.catch((err) => {
 				myError(JSON.stringify(err));
@@ -431,14 +431,14 @@ function resetPregame() {
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: 'Player2' ,
+					item: 'Player2',
 					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'singles',
 				});
 			})
 			.then(() => {
 				return obs.send('SetSceneItemProperties', {
-					item: 'Team1' ,
+					item: 'Team1',
 					'scene-name': 'PregameCams',
 					visible: playTypeRep.value == 'doubles',
 				});
@@ -801,6 +801,10 @@ function getCameraInfo(
 ): Promise<camera & { width?: number }> {
 	return new Promise((res, rej) => {
 		let rtn: preCamera = {};
+		let position: { ref: [number, number]; src: [number, number] } = {
+			ref: [0, 0],
+			src: [0, 0],
+		};
 		if (obsStatusRep.value.status == 'connected') {
 			obs
 				.send('GetSceneItemProperties', {
@@ -809,6 +813,7 @@ function getCameraInfo(
 				})
 				.then((ref) => {
 					rtn.target = { x: ref.width, y: ref.height };
+					position.ref = [ref.position.x, ref.position.y];
 					return obs.send('GetSceneItemProperties', {
 						item: source.item,
 						'scene-name': source.sceneName,
@@ -820,6 +825,21 @@ function getCameraInfo(
 					rtn.scale = src.scale.y;
 					rtn.width = src.width;
 					let retrn = rtn as camera;
+					position.src = [src.position.x, src.position.y];
+					if (
+						position.ref[0] != position.src[0] ||
+						position.ref[1] != position.src[1]
+					) {
+						obs
+							.send('SetSceneItemProperties', {
+								'scene-name': source.sceneName,
+								item: source.item,
+								position: { x: position.ref[0], y: position.ref[1] },
+							})
+							.catch((err) => {
+								myError(err);
+							});
+					}
 					res(retrn);
 				})
 				.catch((err) => {
@@ -833,5 +853,5 @@ function getCameraInfo(
 
 function myError(err: any) {
 	nodecg.log.error(new Error(err).stack);
-  console.log(JSON.stringify(err));
+	console.log(JSON.stringify(err));
 }

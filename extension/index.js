@@ -25,4 +25,5 @@ module.exports = function (nodecg) {
     require('./init');
     require('./obs');
     require('./bracket');
+    require('./x32');
 };

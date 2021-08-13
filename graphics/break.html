@@ -94,17 +94,97 @@
 				top: 6px;
 				filter: drop-shadow(5px 4px 2px rgba(0, 0, 0, 0.6));
 			}
+      #block-div {
+        position: absolute;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+      #block-ground {
+        position: absolute;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+      #block-grid {
+        position: absolute;
+        overflow: hidden;
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      .block-ground-banners {
+        position: absolute;
+        background-color: rgb(168, 2, 2);
+        width: 100%;
+        height: 20%;
+      }
+      td {
+        text-align: center;
+        vertical-align: middle;
+        color: lime;
+        font-size: 3vw;
+      }
+      #smashcrew {
+        position: absolute;
+        width: 100%;
+        transform: translateY(-50%);
+        top: 50%
+      }
+      #smashball {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 70%;
+      }
+      #block-ground-bottom {
+        bottom: 0;
+        color: white;
+				font-size: 42px;
+				text-align: center;
+        line-height: 60px;
+      }
+      @keyframes fade-in {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: .5;
+				}
+			}
+			@keyframes fade-out {
+				0% {
+					opacity: .5;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
 		</style>
 	</head>
 
 	<body>
-		<div id="header">
+    <div id="block-div">
+      <div id="block-ground">
+        <div id="smashcrew">
+          <img src="./break-assets/smashcrew.jpg" style="width: 100%; opacity: 0">
+          <div style="width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0"></div>
+          <div id="block-grid"></div>
+          <img src="./break-assets/smashfire2.gif" id="smashball">
+        </div>
+        <!-- <div id="block-ground-top" class="block-ground-banners" style="top: 0"></div> -->
+        <!-- <div id="block-ground-bottom" class="block-ground-banners" style="bottom: 0">smash.gg/wt16</div> -->
+      </div>
+    </div>
+		<!-- <div id="header">
 			<div id="header-main-text">East Texas Smash Bros.</div>
 			<div id="dark-left"></div>
 			<div id="category">Singles</div>
 		</div>
 		<div id="corner-logo"></div>
-		<img id="corner-svg" src="foundry-logo.svg" />
+		<img id="corner-svg" src="foundry-logo.svg" /> -->
 		<!-- <div id="footer">
 			<div class="footer-text">Up Next: Kayak vs Dr. Pawnch</div>
 		</div> -->

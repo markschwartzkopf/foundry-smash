@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Commentary Dashboard</title>
+		<link rel="stylesheet" type="text/css" href="slider.css" />
+		<link rel="stylesheet" type="text/css" href="fader.css" />
+		<style>
+			body {
+				color: white;
+				margin: 0;
+			}
+			#main {
+				position: absolute;
+				display: flex;
+				width: 100%;
+				height: 100%;
+			}
+			#comm1,
+			#comm2 {
+				display: flex;
+				flex-direction: column;
+				text-align: center;
+				width: 10vw;
+				height: 100%;
+				font-size: 2.5vh;
+				/* background-color: lime; */
+			}
+			#twitch-chat {
+				flex-grow: 1;
+				display: flex;
+				flex-direction: column;
+			}
+			#twitch-chat-embed {
+				/* flex-grow: 1; */
+        height: 90vh;
+				width: 80vw;
+			}
+			.mic-control {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				height: 10vh;
+				width: 100%;
+				/* background-color: red; */
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="main">
+			<div id="comm1">
+				<div class="mic-control">
+					mic<br />
+					<div>
+						off
+						<label class="switch">
+							<input id="comm1-on" type="checkbox" />
+							<span class="slider"></span>
+						</label>
+						on
+					</div>
+				</div>
+				<div style="height: 90vh">
+					<br />
+					Headphone<br />
+					volume<br />
+					<input id="comm1-level" type="range" />
+				</div>
+			</div>
+			<div id="twitch-chat">
+				<h1 style="text-align: center; height: 10vh;">Twitch Chat:</h1>
+				<iframe
+					id="twitch-chat-embed"
+					src="https://nightdev.com/hosted/obschat?theme=&channel=nickmercs&fade=300&bot_activity=false&prevent_clipping=false"
+				>
+				</iframe>
+			</div>
+			<!-- <div id="twitch-chat"></div> -->
+			<div id="comm2">
+				<div class="mic-control">
+					mic<br />
+					<div>
+						off
+						<label class="switch">
+							<input id="comm2-on" type="checkbox" />
+							<span class="slider"></span>
+						</label>
+						on
+					</div>
+				</div>
+				<div style="height: 90vh">
+					<br />
+					Headphone<br />
+					volume<br />
+					<input id="comm2-level" type="range" />
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		var exports = {};
+	</script>
+	<script src="commentary.js"></script>
+</html>

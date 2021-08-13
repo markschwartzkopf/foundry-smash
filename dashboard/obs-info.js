@@ -1,5 +1,5 @@
 "use strict";
-/// <reference path="../../../../types/browser.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 document.body.style.backgroundColor = 'red';
 const obsStatusRep2 = nodecg.Replicant('obs-status');
 let itemName = document.getElementById('item-name');

@@ -138,7 +138,8 @@ function connectObs() {
                 });
             })
                 .catch((err) => {
-                myError(err);
+                if (err.code != 'CONNECTION_ERROR')
+                    myError(err);
             });
         }
         else
@@ -721,6 +722,10 @@ function populateCameraRep() {
 function getCameraInfo(reference, source) {
     return new Promise((res, rej) => {
         let rtn = {};
+        let position = {
+            ref: [0, 0],
+            src: [0, 0],
+        };
         if (obsStatusRep.value.status == 'connected') {
             obs
                 .send('GetSceneItemProperties', {
@@ -729,6 +734,7 @@ function getCameraInfo(reference, source) {
             })
                 .then((ref) => {
                 rtn.target = { x: ref.width, y: ref.height };
+                position.ref = [ref.position.x, ref.position.y];
                 return obs.send('GetSceneItemProperties', {
                     item: source.item,
                     'scene-name': source.sceneName,
@@ -740,6 +746,19 @@ function getCameraInfo(reference, source) {
                 rtn.scale = src.scale.y;
                 rtn.width = src.width;
                 let retrn = rtn;
+                position.src = [src.position.x, src.position.y];
+                if (position.ref[0] != position.src[0] ||
+                    position.ref[1] != position.src[1]) {
+                    obs
+                        .send('SetSceneItemProperties', {
+                        'scene-name': source.sceneName,
+                        item: source.item,
+                        position: { x: position.ref[0], y: position.ref[1] },
+                    })
+                        .catch((err) => {
+                        myError(err);
+                    });
+                }
                 res(retrn);
             })
                 .catch((err) => {

@@ -54,3 +54,6 @@ if (bracketSourceRep.value == undefined)
 const scoreRep = nodecg.Replicant('score');
 if (scoreRep.value == undefined)
     scoreRep.value = [0, 0];
+const x32replicant = nodecg.Replicant('x32');
+if (x32replicant.value == undefined)
+    x32replicant.value = { commentary: [{ on: false, level: 0 }, { on: false, level: 0 }] };

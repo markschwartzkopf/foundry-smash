@@ -60,3 +60,6 @@ type bracketMatch = {
 type losersRep = 'on' | 'off' | 'only';
 type bracketSource = 'challonge' | 'smashgg'
 type scoreRep = [number, number];
+type x32settings = {
+  commentary: {on: boolean, level: number}[]
+}

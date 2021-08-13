@@ -1,0 +1,100 @@
+/* modified from http://danielstern.ca/range.css/?ref=css-tricks#/ */
+/* calc((var(--thumb-height) - var(--thumb-height)) / 2) */
+
+input {
+  --track: black;
+  --track-border: #202020;
+  --track-height: 5px;
+  --thumb: #c8c8c8;
+  --thumb-border: black;
+  --thumb-width: 5vh;
+  --thumb-height: 5vw;
+  --margin-top: calc(calc(var(--thumb-height) - var(--track-height)) / -2);
+}
+input[type='range'] {
+  background-color: transparent;
+  -webkit-appearance: none;
+  transform-origin: top left;
+  transform: rotate(270deg) translateX(calc(-100% - 4vh));
+  margin: 0; /* margin breaks this translateX math, as it stands ^*/
+  width: 70vh;
+  height: 10vw;
+}
+input[type='range']:focus {
+  outline: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  background: var(--track);
+  border: 1px solid var(--track-border);
+  width: 100%;
+  height: var(--track-height);
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-thumb {
+  margin-top: var(--margin-top);
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+  background: var(--thumb);
+  border: 1px solid var(--thumb-border);
+  border-radius: 4px;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+input[type='range']:focus::-webkit-slider-runnable-track {
+  background: var(--track);
+}
+input[type='range']::-moz-range-track {
+  background: var(--track);
+  border: 1px solid var(--track-border);
+  width: 100%;
+  height: var(--track-height);
+  cursor: pointer;
+}
+input[type='range']::-moz-range-thumb {
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+  background: var(--thumb);
+  border: 1px solid var(--thumb-border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+input[type='range']::-ms-track {
+  background: transparent;
+  border-color: transparent;
+  border-width: var(--margin-top) 0;
+  color: transparent;
+  width: 100%;
+  height: var(--track-height);
+  cursor: pointer;
+}
+input[type='range']::-ms-fill-lower {
+  background: var(--track);
+  border: 1px solid var(--track-border);
+}
+input[type='range']::-ms-fill-upper {
+  background: var(--track);
+  border: 1px solid var(--track-border);
+}
+input[type='range']::-ms-thumb {
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+  background: var(--thumb);
+  border: 1px solid var(--thumb-border);
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0px;
+  /*Needed to keep the Edge thumb centred*/
+}
+input[type='range']:focus::-ms-fill-lower {
+  background: var(--track);
+}
+input[type='range']:focus::-ms-fill-upper {
+  background: #0d0d0d;
+}
+@supports (-ms-ime-align: auto) {
+  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
+  input[type='range'] {
+    margin: 0;
+    /*Edge starts the margin from the thumb, not the track as other browsers do*/
+  }
+}

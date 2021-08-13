@@ -6,4 +6,5 @@ module.exports = function (nodecg: NodeCG) {
   require('./init');
   require('./obs');
   require('./bracket');
+  require('./x32');
 };
