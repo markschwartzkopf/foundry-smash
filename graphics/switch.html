@@ -2,17 +2,18 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-    <title>Switch</title>
+		<title>Switch</title>
 		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
 		<style>
 			body {
 				margin: 0;
 				overflow: hidden;
+				height: 100vh;
 			}
 			#left-joycon,
 			#right-joycon {
 				position: absolute;
-				top: 537px;
+				top: 49.722%;
 				height: 575px;
 				margin: 0;
 				padding: 0;
@@ -23,14 +24,14 @@
 				background-repeat: no-repeat;
 				width: 198px;
 				transform: translate(0%, -200%);
-				right: 1447px;
+				right: calc(50% + 487px);
 			}
 			#right-joycon {
 				background-image: url('rightJoyCon.png');
 				background-repeat: no-repeat;
 				width: 198px;
 				transform: translate(0%, -200%);
-				left: 1447px;
+				left: calc(50% + 487px);
 				animation-delay: 1000ms;
 			}
 			#switch-body {
@@ -38,14 +39,14 @@
 				background-repeat: no-repeat;
 				background-position: center;
 				width: 731px;
-			  height: 431px;
+				height: 431px;
 				margin: 0;
 				padding: 0;
 				position: absolute;
 				transform: translate(-50%, -50%);
 				/* opacity: 0; */
 				left: 50%;
-				top: 537px;
+				top: 49.722%;
 				animation: switch-in 1100ms forwards ease-out;
 			}
 			#switch-border {

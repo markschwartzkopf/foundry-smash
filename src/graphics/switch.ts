@@ -1,5 +1,7 @@
 /// <reference path="../../../../types/browser.d.ts" />
 
+console.log(window.innerWidth);
+document.body.style.transform = `scale(${window.innerWidth / 1920})`;
 const switchAnimTriggerRep =
 	nodecg.Replicant<switchAnimTrigger>('switch-trigger');
 
@@ -44,9 +46,9 @@ switchAnimTriggerRep.on('change', (newVal) => {
 			});
 			rightJoycon.addEventListener('animationend', () => {
 				nodecg.sendMessage('bumpSwitch');
-        setTimeout(() => {
-          nodecg.sendMessage('zoomToFullscreen');
-        }, 600)
+				setTimeout(() => {
+					nodecg.sendMessage('zoomToFullscreen');
+				}, 600);
 			});
 			document.body.appendChild(leftJoycon);
 			document.body.appendChild(rightJoycon);

@@ -1,5 +1,7 @@
 "use strict";
 /// <reference path="../../../../types/browser.d.ts" />
+console.log(window.innerWidth);
+document.body.style.transform = `scale(${window.innerWidth / 1920})`;
 const switchAnimTriggerRep = nodecg.Replicant('switch-trigger');
 nodecg.listenFor('toGame', () => {
     let switchBody = document.getElementById('switch-body');
