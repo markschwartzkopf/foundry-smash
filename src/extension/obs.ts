@@ -13,7 +13,7 @@ obsStatusRep.value = { status: 'disconnected', preview: null, program: null };
 const playTypeRep = nodecg.Replicant<playType>('playType');
 const cameraRep = nodecg.Replicant<cameras>('camera');
 const mirrorRep = nodecg.Replicant<camMirrored>('mirror');
-const obsPassword = require('../../../keys.json').obsPassword;
+const obsPassword = nodecg.bundleConfig.obsPassword;
 const obs = new obsWebsocketJs();
 let obsAnimationQueue: {
 	count: number;

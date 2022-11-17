@@ -92,6 +92,7 @@
 		]
 	},
 	"scripts": {
+		"start:NodeCG": "node ../../index.js",
 		"watch": "npm-run-all -p watch:*",
 		"watch:extension": "node ./node_modules/typescript/bin/tsc -p ./src/extension --diagnostics --watch",
 		"watch:dashboard": "node ./node_modules/typescript/bin/tsc -p ./src/dashboard --diagnostics --watch",
@@ -99,8 +100,7 @@
 		"build": "npm-run-all -s build:*",
 		"build:extension": "node ./node_modules/typescript/bin/tsc -p ./src/extension --diagnostics",
 		"build:dashboard": "node ./node_modules/typescript/bin/tsc -p ./src/dashboard --diagnostics",
-		"build:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics",
-		"start:NodeCG": "node ../../index.js"
+		"build:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics"
 	},
 	"devDependencies": {
 		"@types/node-fetch": "^2.5.10",
@@ -109,7 +109,6 @@
 		"typescript": "^4.3.2"
 	},
 	"dependencies": {
-		"dgram": "^1.0.1",
 		"node-fetch": "^2.6.1",
 		"obs-websocket-js": "^4.0.2"
 	}

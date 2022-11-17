@@ -6,10 +6,10 @@ const tournamentRep = nodecg.Replicant<string>('tournamentUrl'); //ie 'tournamen
 const bracketRep = nodecg.Replicant<bracketMatch>('bracket');
 const bracketSourceRep = nodecg.Replicant<bracketSource>('bracketSource');
 let playerIds: playerIds = {};
-const challongeApiKey = require('../../../keys.json').challongeKey;
-const smashggApiKey = require('../../../keys.json').smashggKey;
+const challongeApiKey = nodecg.bundleConfig.keys.challongeKey;
+const smashggApiKey = nodecg.bundleConfig.keys.smashggKey;
 const challongeApiUrl = 'https://api.challonge.com/v1/';
-const smashggApiUrl = 'https://api.smash.gg/gql/alpha';
+const smashggApiUrl = 'https://api.start.gg/gql/alpha';
 
 function ChallongeMethodUrl(method: 'matches' | 'participants') {
 	return (
@@ -65,11 +65,11 @@ function pullFromSmashgg() {
 	getSmashggParticipants()
 		.then((resp) => {
 			playerIds = resp;
-      nodecg.log.info('Players pulled from smash.gg')
+			nodecg.log.info('Players pulled from smash.gg');
 			return getSmashggMatches();
 		})
 		.then((resp) => {
-      nodecg.log.info('Bracket info pulled from smash.gg')
+			nodecg.log.info('Bracket info pulled from smash.gg');
 			bracketRep.value = resp;
 		})
 		.catch((err) => {
@@ -123,7 +123,9 @@ function getSmashggParticipants() {
 						} else rej('Bad data from Challonge');
 					});
 					res(rtn);
-				} else rej('Bad participant data from smash.gg');
+				} else {
+					rej('Bad participant data from smash.gg');
+				}
 			})
 			.catch((err) => {
 				rej(err);
@@ -441,7 +443,7 @@ function isSmashggApiMatch(x: unknown): x is smashggApiMatch {
 		return rtn;
 	} else {
 		console.log('basic error');
-    console.log(x)
+		console.log(x);
 		return false;
 	}
 }

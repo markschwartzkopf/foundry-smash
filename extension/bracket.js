@@ -9,10 +9,10 @@ const tournamentRep = nodecg.Replicant('tournamentUrl'); //ie 'tournament/whos-t
 const bracketRep = nodecg.Replicant('bracket');
 const bracketSourceRep = nodecg.Replicant('bracketSource');
 let playerIds = {};
-const challongeApiKey = require('../../../keys.json').challongeKey;
-const smashggApiKey = require('../../../keys.json').smashggKey;
+const challongeApiKey = nodecg.bundleConfig.keys.challongeKey;
+const smashggApiKey = nodecg.bundleConfig.keys.smashggKey;
 const challongeApiUrl = 'https://api.challonge.com/v1/';
-const smashggApiUrl = 'https://api.smash.gg/gql/alpha';
+const smashggApiUrl = 'https://api.start.gg/gql/alpha';
 function ChallongeMethodUrl(method) {
     return (challongeApiUrl +
         'tournaments/' +
@@ -121,8 +121,9 @@ function getSmashggParticipants() {
                 });
                 res(rtn);
             }
-            else
+            else {
                 rej('Bad participant data from smash.gg');
+            }
         })
             .catch((err) => {
             rej(err);

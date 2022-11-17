@@ -6,10 +6,10 @@
 		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
 		<style>
 			:root {
-				--top: 20px;
-				--banner-width: 390px;
+				--top: 1.85vh;
+				--banner-width: 20.31vw;
 				--banner-height: calc(var(--banner-width) * 0.15);
-				--banner-over: 431px;
+				--banner-over: 22.45vw;
 				--banner1: var(--smash-gray);
 				--banner2: var(--smash-gray);
 			}
@@ -20,8 +20,10 @@
 			body {
 				margin: 0;
 				overflow: hidden;
-				width: 1920px;
-				height: 1080px;
+				/* width: 1920px;
+				height: 1080px; */
+        width: 100vw;
+				height: 100vh;
 				font-family: Arial, Helvetica, sans-serif;
 				font-weight: 700;
 			}
@@ -51,12 +53,12 @@
 				position: absolute;
 				left: 0px;
 				top: 0px;
-				width: 1920px;
-				height: 1080px;
+				width: 100vw;
+				height: 100vh;
 				clip-path: polygon(
 					calc(var(--banner-over) + var(--banner-width)) 0%,
-					calc(1920px - var(--banner-over) - var(--banner-width)) 0%,
-					calc(1920px - var(--banner-over) - var(--banner-width)) 100%,
+					calc(100vw - var(--banner-over) - var(--banner-width)) 0%,
+					calc(100vw - var(--banner-over) - var(--banner-width)) 100%,
 					calc(var(--banner-over) + var(--banner-width)) 100%
 				);
 				animation: banner-in 500ms forwards;
@@ -79,7 +81,7 @@
 			#name2 {
 				position: absolute;
 				top: 0px;
-				font-size: calc(var(--banner-width) * 0.101); /* 32px; */
+				font-size: calc(var(--banner-width) * 0.101);
 				font-weight: 700;
 				text-shadow: 0px calc(var(--banner-width) * 0.003)
 					calc(var(--banner-width) * 0.028) rgba(0, 0, 0, 1);
@@ -88,19 +90,19 @@
 			}
 			#name1 {
 				right: calc(
-					1920px - var(--banner-over) - calc(var(--banner-width) * 0.876)
+					100vw - var(--banner-over) - calc(var(--banner-width) * 0.876)
 				);
 			}
 			#name2 {
 				left: calc(
-					1920px - var(--banner-over) - calc(var(--banner-width) * 0.876)
+					100vw - var(--banner-over) - calc(var(--banner-width) * 0.876)
 				);
 			}
 			#name-hide {
 				position: absolute;
 				left: 0;
 				top: calc(var(--top) + calc(var(--banner-width) * 0.345));
-				width: 1920px;
+				width: 100vw;
 				transform: scaleY(0);
 				animation: name-in 500ms forwards;
 			}
@@ -142,62 +144,57 @@
 				animation: score-in 200ms cubic-bezier(0.76, 0.18, 0.96, 1.39) forwards;
 			}
 			#score1.singles {
-				right: calc(1920px - var(--banner-over) - var(--banner-width) * 0.332);
+				right: calc(100vw - var(--banner-over) - var(--banner-width) * 0.332);
 			}
 			#score2.singles {
-				left: calc(1920px - var(--banner-over) - var(--banner-width) * 0.332);
+				left: calc(100vw - var(--banner-over) - var(--banner-width) * 0.332);
 			}
 			#score1.doubles {
-				right: calc(1920px - var(--banner-over) - var(--banner-width) * 0.2);
+				right: calc(100vw - var(--banner-over) - var(--banner-width) * 0.2);
 			}
 			#score2.doubles {
-				left: calc(1920px - var(--banner-over) - var(--banner-width) * 0.2);
+				left: calc(100vw - var(--banner-over) - var(--banner-width) * 0.2);
 			}
 			#player-name1,
 			#player-name2,
 			#player-name3,
 			#player-name4 {
-				width: 269px;
-				height: 24px;
+				width: 14.01vw;
+				height: 2.22vh;
 				position: absolute;
+        bottom: 4.72vh;
 				color: white;
 				background-color: black;
 				overflow: hidden;
 				text-align: center;
-				line-height: 23px;
-				font-size: 21px;
+				line-height: 2.13vh;
+				font-size: 1.94vh;
 				opacity: 0;
-				clip-path: polygon(0px 24px, 48px 0px, 235px 0px, 235px 24px);
+				clip-path: polygon(0px 2.22vh, 2.5vw 0px, 12.24vw 0px, 12.24vw 2.22vh);
 			}
 			#player-name1.singles {
-				left: 477px;
-				bottom: 51px;
+				left: 24.84vw;
 			}
 			#player-name2.singles {
-				left: 1217px;
-				bottom: 51px;
+				left: 63.39vw;
 			}
 			#player-name3.singles {
-				top: -50px;
+				top: -5vh;
 			}
 			#player-name4.singles {
-				top: -50px;
+				top: -5vh;
 			}
 			#player-name1.doubles {
-				left: 257px;
-				bottom: 51px;
+				left: 13.39vw;
 			}
 			#player-name2.doubles {
-				left: 665px;
-				bottom: 51px;
+				left: 34.64vw;
 			}
 			#player-name3.doubles {
-				left: 1073px;
-				bottom: 51px;
+				left: 55.89vw;
 			}
 			#player-name4.doubles {
-				left: 1481px;
-				bottom: 51px;
+				left: 77.14vw;
 			}
 			.fade-in {
 				animation: fade-in 1000ms forwards;
@@ -225,16 +222,16 @@
 				0% {
 					clip-path: polygon(
 						calc(var(--banner-over) + var(--banner-width)) 0%,
-						calc(1920px - var(--banner-over) - var(--banner-width)) 0%,
-						calc(1920px - var(--banner-over) - var(--banner-width)) 100%,
+						calc(100vw - var(--banner-over) - var(--banner-width)) 0%,
+						calc(100vw - var(--banner-over) - var(--banner-width)) 100%,
 						calc(var(--banner-over) + var(--banner-width)) 100%
 					);
 				}
 				100% {
 					clip-path: polygon(
 						var(--banner-over) 0%,
-						calc(1920px - var(--banner-over)) 0%,
-						calc(1920px - var(--banner-over)) 100%,
+						calc(100vw - var(--banner-over)) 0%,
+						calc(100vw - var(--banner-over)) 100%,
 						var(--banner-over) 100%
 					);
 				}
