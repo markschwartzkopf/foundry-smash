@@ -18,7 +18,7 @@ x32Socket.bind(52361, '0.0.0.0', () => {
 			send(subBuffer);
 		}, 9000);
 		x32Socket.on('message', (msg, rinfo) => {
-      console.log('yo:' + msg.toString())
+      //console.log('yo:' + msg.toString())
 			let index = msg.indexOf(0x00);
 			let command = msg.toString('utf-8', 0, index);
 			index = index + 4 - (index % 4);

@@ -14,25 +14,31 @@ if (playTypeRep.value == undefined)
     playTypeRep.value = 'singles';
 const cameraRep = nodecg.Replicant('camera');
 if (cameraRep.value == undefined) {
-    let basicCam = {
-        target: { x: 1, y: 1 },
-        source: { x: 1, y: 1 },
-        crop: { left: 0, right: 0, top: 0, bottom: 0 },
-        scale: 1,
-        width: 1,
+    const basicCam = {
+        targets: {
+            doubles: { positionX: 1, positionY: 1, width: 1, height: 1 },
+            singles: { positionX: 1, positionY: 1, width: 1, height: 1 },
+        },
+        source: {
+            sourceWidth: 1,
+            sourceHeight: 1,
+            scaleX: 1,
+            cropTop: 0,
+            cropBottom: 0,
+            cropLeft: 0,
+            cropRight: 0,
+        },
     };
-    let basicScene = {
-        player1: basicCam,
-        player2: basicCam,
-        team1: basicCam,
-        team2: basicCam,
+    const basicScene = {
+        cam1: basicCam,
+        cam2: JSON.parse(JSON.stringify(basicCam)),
     };
-    let starterValue = { game: basicScene, preGame: basicScene };
+    const starterValue = {
+        game: basicScene,
+        preGame: JSON.parse(JSON.stringify(basicScene)),
+    };
     cameraRep.value = JSON.parse(JSON.stringify(starterValue));
 }
-const mirrorRep = nodecg.Replicant('mirror');
-if (mirrorRep.value == undefined)
-    mirrorRep.value = { cam1: true, cam2: true };
 const switchPlayerRep = nodecg.Replicant('switchPlayer');
 if (switchPlayerRep.value == undefined)
     switchPlayerRep.value = [0, 1, 2, 3];
@@ -56,4 +62,12 @@ if (scoreRep.value == undefined)
     scoreRep.value = [0, 0];
 const x32replicant = nodecg.Replicant('x32');
 if (x32replicant.value == undefined)
-    x32replicant.value = { commentary: [{ on: false, level: 0 }, { on: false, level: 0 }] };
+    x32replicant.value = {
+        commentary: [
+            { on: false, level: 0 },
+            { on: false, level: 0 },
+        ],
+    };
+const eventInfoRep = nodecg.Replicant('event-info');
+if (eventInfoRep.value == undefined)
+    eventInfoRep.value = { name: '', url: '' };

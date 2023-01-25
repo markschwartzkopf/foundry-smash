@@ -8,91 +8,11 @@
 			body {
 				margin: 0;
 				overflow: hidden;
-				width: 1920px;
-				height: 1080px;
+				/* width: 1920px;
+				height: 1080px; */
 				height: 100vh;
 				font-family: Arial, Helvetica, sans-serif;
 				font-weight: 700;
-			}
-			#header {
-				background-color: #9f0e04;
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 1900px;
-				height: 90px;
-				clip-path: polygon(0% 100%, 0% 0%, 100% 0%, 97.7% 100%);
-			}
-			#header-main-text {
-				background-color: #b31310;
-				color: white;
-				font-style: italic;
-				text-align: center;
-				font-size: 56px;
-				line-height: 96px;
-				position: absolute;
-				top: 0;
-				left: 0;
-				height: 100%;
-				width: 1864px;
-				clip-path: polygon(
-					0% 100%,
-					0% 0%,
-					100% 0%,
-					99.2% 39%,
-					78.3% 39%,
-					76.9% 100%
-				);
-			}
-			#footer {
-				background-color: #dbdbdb;
-				position: absolute;
-				bottom: 0;
-				left: 0;
-				width: 1920px;
-				height: 132px;
-			}
-			.footer-text {
-				color: black;
-				font-size: 32px;
-			}
-			#category {
-				position: absolute;
-				right: 70px;
-				bottom: 0;
-				height: 43px;
-				width: 350px;
-				color: white;
-				font-size: 32px;
-				text-align: center;
-			}
-			#corner-logo {
-				border: 4px solid #850005;
-				background-color: #98000d;
-				position: absolute;
-				left: -13px;
-				top: -37px;
-				width: 120px;
-				height: 120px;
-				transform: rotate(20deg);
-				filter: drop-shadow(-3px -1px 3px black);
-			}
-			#dark-left {
-				background-color: #1c2223;
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 125px;
-				height: 100%;
-				clip-path: polygon(0% 100%, 0% 0%, 100% 0%, 65% 100%);
-			}
-			#corner-svg {
-        position: absolute;
-				height: 85px;
-				width: 85px;
-				left: 18px;
-				top: 6px;
-				filter: drop-shadow(5px 4px 2px rgba(0, 0, 0, 0.6));
 			}
       #block-div {
         position: absolute;
@@ -139,13 +59,6 @@
         transform: translate(-50%, -50%);
         height: 70%;
       }
-      #block-ground-bottom {
-        bottom: 0;
-        color: white;
-				font-size: 42px;
-				text-align: center;
-        line-height: 60px;
-      }
       @keyframes fade-in {
 				0% {
 					opacity: 0;
@@ -168,26 +81,10 @@
 	<body>
     <div id="block-div">
       <div id="block-ground">
-        <div id="smashcrew">
-          <img src="./break-assets/smashcrew.jpg" style="width: 100%; opacity: 0">
-          <div style="width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0"></div>
-          <div id="block-grid"></div>
-          <img src="./break-assets/smashfire2.gif" id="smashball">
-        </div>
-        <!-- <div id="block-ground-top" class="block-ground-banners" style="top: 0"></div> -->
-        <!-- <div id="block-ground-bottom" class="block-ground-banners" style="bottom: 0">smash.gg/wt16</div> -->
+        <div id="block-grid"></div>
+        <img src="./break-assets/smashfire2.gif" id="smashball">
       </div>
     </div>
-		<!-- <div id="header">
-			<div id="header-main-text">East Texas Smash Bros.</div>
-			<div id="dark-left"></div>
-			<div id="category">Singles</div>
-		</div>
-		<div id="corner-logo"></div>
-		<img id="corner-svg" src="foundry-logo.svg" /> -->
-		<!-- <div id="footer">
-			<div class="footer-text">Up Next: Kayak vs Dr. Pawnch</div>
-		</div> -->
 	</body>
 	<script>
 		var exports = {};

@@ -40,7 +40,7 @@ losersOnly.oninput = () => {
 rounds.onkeyup = (ev) => {
     if (ev.key == 'Enter') {
         let num = parseInt(rounds.value);
-        if (num == NaN) {
+        if (Number.isNaN(num)) {
             roundsRep.value = null;
         }
         else

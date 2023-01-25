@@ -13,29 +13,38 @@ type obsStatus = {
 type obj = { [key: string]: any };
 type cameras = { game: sceneCameras; preGame: sceneCameras };
 type sceneCameras = {
-	player1: camera;
-	player2: camera;
-	team1: camera;
-	team2: camera;
+	cam1: camera;
+	cam2: camera;
 };
 type camera = {
-	target: { x: number; y: number };
-	source: { x: number; y: number };
-	crop: { left: number; right: number; top: number; bottom: number };
-	scale: number;
-	width: number;
-};
-type preCamera = {
-	target?: { x: number; y: number };
-	source?: { x: number; y: number };
-	crop?: { left: number; right: number; top: number; bottom: number };
-	scale?: number;
-	width?: number;
+	targets: {
+		doubles: {
+			positionX: number;
+			positionY: number;
+			width: number;
+			height: number;
+		};
+		singles: {
+			positionX: number;
+			positionY: number;
+			width: number;
+			height: number;
+		};
+	};
+	source: {
+		sourceWidth: number;
+		sourceHeight: number;
+		scaleX: number;
+		cropTop: number;
+		cropRight: number;
+		cropBottom: number;
+		cropLeft: number;
+	};
 };
 type cameraChange = {
 	scene: 'game' | 'preGame';
-	item: 'player1' | 'player2' | 'team1' | 'team2';
-	camera: camera;
+	item: 'cam1' | 'cam2';
+	camera: camera['source'];
 };
 type switchAnimTrigger = '' | 'joyconsIn';
 type camMirrored = { cam1: boolean; cam2: boolean };
@@ -58,8 +67,22 @@ type bracketMatch = {
 };
 
 type losersRep = 'on' | 'off' | 'only';
-type bracketSource = 'challonge' | 'smashgg'
+type bracketSource = 'challonge' | 'smashgg';
 type scoreRep = [number, number];
 type x32settings = {
-  commentary: {on: boolean, level: number}[]
+	commentary: { on: boolean; level: number }[];
+};
+type EventInfo = {
+	name: string;
+	url: string;
+};
+
+type Asset = {
+	base: string;
+	namespace: string;
+	category: string;
+	ext: string;
+	name: string;
+	sum: string;
+	url: string;
 }

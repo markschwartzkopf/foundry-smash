@@ -54,6 +54,14 @@
 				"width": 2,
 				"file": "bracket.html",
 				"headerColor": "#525F78"
+			},
+			{
+				"name": "event-setup",
+				"title": "Event Setup",
+				"width": 2,
+				"file": "event-setup.html",
+				"workspace": "Setup",
+				"headerColor": "#525F78"
 			}
 		],
 		"graphics": [
@@ -89,6 +97,16 @@
 				"width": 1920,
 				"height": 1080
 			}
+		],
+		"assetCategories": [
+			{
+				"name": "event-logos",
+				"title": "Event Logos",
+				"allowedTypes": [
+					"png",
+          "svg"
+				]
+			}
 		]
 	},
 	"scripts": {
@@ -110,6 +128,6 @@
 	},
 	"dependencies": {
 		"node-fetch": "^2.6.1",
-		"obs-websocket-js": "^4.0.2"
+		"obs-websocket-js": "^5.0.2"
 	}
 }
