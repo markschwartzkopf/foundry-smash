@@ -1,5 +1,7 @@
 import { NodeCG } from '../../../../types/server';
 import obsWebsocketJs from 'obs-websocket-js';
+import { PNG } from 'pngjs';
+import fs from 'fs';
 
 const nodecg: NodeCG = require('./nodecg-api-context').get();
 const obsStatusRep = nodecg.Replicant<obsStatus>('obs-status');
@@ -8,8 +10,13 @@ const switchAnimTriggerRep =
 obsStatusRep.value = { status: 'disconnected', preview: null, program: null };
 const playTypeRep = nodecg.Replicant<playType>('playType');
 const cameraRep = nodecg.Replicant<cameras>('camera');
+const switchPlayerRep = nodecg.Replicant<switchPlayer>('switchPlayer');
+const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
+playerDamageRep.value = ['unknown', 'unknown'];
+const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
 const obsPassword = nodecg.bundleConfig.obsPassword;
 const obs = new obsWebsocketJs();
+let inGame = false;
 let obsAnimationQueue: {
 	count: number;
 	inAnimation: null | number;
@@ -111,19 +118,16 @@ let screenWidth = 1280;
 let switchInCenter: Partial<ObsSceneItemTransform> = {
 	positionY: 0.2813,
 };
-
 let bumpStart: Partial<ObsSceneItemTransform> = {
 	positionY: 0.289,
 };
 let bumpEnd: Partial<ObsSceneItemTransform> = {
 	positionY: 0.2813,
 };
-
 let switchFullScreen: Partial<ObsSceneItemTransform> = {
 	scaleX: 2.456481456756592,
 	scaleY: 2.456481456756592,
 };
-
 let switchPregameSingles: Partial<ObsSceneItemTransform> = {
 	positionX: 0.5,
 	positionY: 0.4344,
@@ -136,6 +140,65 @@ let switchPregameDoubles: Partial<ObsSceneItemTransform> = {
 	scaleX: 1,
 	scaleY: 1,
 };
+
+let p1LastWarning = 0;
+let p2LastWarning = 0;
+
+const SMOKE_THRESHOLD = 100;
+const FIRE_THRESHOLD = 140;
+setInterval(() => {
+	if (
+		obsAnimationQueue.inAnimation == null &&
+		obsStatusRep.value.status == 'connected' &&
+		playTypeRep.value === 'singles' &&
+		obsStatusRep.value.program === 'Game' &&
+		inGame &&
+		damageTracking.value
+	) {
+		obs
+			.call('GetSourceScreenshot', {
+				sourceName: 'GameCapture',
+				imageFormat: 'png',
+				imageWidth: 640,
+				imageHeight: 360,
+			})
+			.then((data) => {
+				const buf = Buffer.from(data.imageData.slice(22), 'base64'); //slice removes 'data:image/png;base64'
+				/* fs.writeFile(__dirname + '_test.png', buf, () => {
+					console.log(__dirname + '_test.png');
+				}); */
+				const png = PNG.sync.read(buf);
+				let p1Warning = getDamageFromTextColor(png, 176, 310, 213, 327);
+				let p2Warning = getDamageFromTextColor(png, 423, 310, 460, 327);
+				if (switchPlayerRep.value[0] === 1) {
+					const temp = p1Warning;
+					p1Warning = p2Warning;
+					p2Warning = temp;
+				}
+				if (Math.abs(p1Warning - p1LastWarning) < 0.05) {
+					if (p1Warning > FIRE_THRESHOLD) {
+						playerDamageRep.value[0] = 'deathsDoor';
+					} else if (p1Warning > SMOKE_THRESHOLD) {
+						playerDamageRep.value[0] = 'injured';
+					} else {
+						playerDamageRep.value[0] = 'healthy';
+					}
+				} else if (!p1LastWarning && !p1Warning)
+					playerDamageRep.value[0] = 'unknown';
+				if (Math.abs(p2Warning - p2LastWarning) < 0.05) {
+					if (p2Warning > FIRE_THRESHOLD) {
+						playerDamageRep.value[1] = 'deathsDoor';
+					} else if (p2Warning > SMOKE_THRESHOLD) {
+						playerDamageRep.value[1] = 'injured';
+					} else playerDamageRep.value[1] = 'healthy';
+				} else if (!p2LastWarning && !p2Warning)
+					playerDamageRep.value[1] = 'unknown';
+				p1LastWarning = p1Warning;
+				p2LastWarning = p2Warning;
+			})
+			.catch((err) => nodecg.log.error(err));
+	}
+}, 1000);
 
 connectObs();
 
@@ -191,6 +254,10 @@ function connectObs() {
 
 					obs.on('CurrentProgramSceneChanged', (res) => {
 						obsStatusRep.value.program = res.sceneName;
+						if (res.sceneName !== 'Game') {
+							inGame = false;
+							playerDamageRep.value = ['unknown', 'unknown'];
+						}
 					});
 					obs.on('CurrentPreviewSceneChanged', (res) => {
 						obsStatusRep.value.preview = res.sceneName;
@@ -358,6 +425,15 @@ nodecg.listenFor('gameStart', () => {
 				}, duration + delay);
 				setTimeout(() => {
 					nodecg.sendMessage('gameOverlayIn');
+					if (obsStatusRep.value.program === 'Game') {
+						inGame = true;
+						p1LastWarning = 0;
+						p2LastWarning = 0;
+						playerDamageRep.value =
+							damageTracking.value && playTypeRep.value === 'singles'
+								? ['healthy', 'healthy']
+								: ['unknown', 'unknown'];
+					}
 				}, duration + delay + duration);
 			})
 			.catch((err) => {
@@ -732,22 +808,6 @@ function createSeObject(
 	return rtn;
 }
 
-/* I think this is for nested properties that no longer exist in 5.0
-function extractAnimProp(input: object): animProp {
-	let rtn: animProp = {};
-	for (const [key, value] of Object.entries(input)) {
-		switch (typeof value) {
-			case 'number':
-				rtn[key] = value;
-				break;
-			case 'object':
-				rtn[key] = extractAnimProp(value);
-				break;
-		}
-	}
-	return rtn;
-} */
-
 function getCurrentProps(item: JsonObsItem): Promise<ObsSceneItemTransform> {
 	return new Promise((res, rej) => {
 		if (obsStatusRep.value.status == 'connected') {
@@ -963,4 +1023,96 @@ function percentToPixels(
 		} else rtn[key as keyof ObsSceneItemTransform] = value;
 	}
 	return rtn;
+}
+
+function getDamageFromTextColor(
+	png: PNG,
+	x1: number,
+	y1: number,
+	x2: number,
+	y2: number
+) {
+	//loses accuracy above damage levels of 175% or so
+	const DIFF_THRESHOLD = 3; //How different can neighbors be for pixel to still be considered
+	const RED_THRESHOLD = 210; //How much red must a pixel have in order to be considered
+	const DIMRED_THRESHOLD = 100; //At high damage levels, red starts to dim, and blue rises a bit
+	const DIMGREEN_THRESHOLD = 4; //However, green remains very very low
+	const PIXELS_USED_THRESHOLD = 6; //What percentage of pixels must be used in order to consider result valid
+	let total = 0;
+	let approved = 0;
+	const avgColor = [0, 0, 0];
+	for (let y = y1; y <= y2; y++) {
+		for (let x = x1; x <= x2; x++) {
+			total++;
+			const pixel = getPixel(png, x, y);
+			if (
+				pixel[0] > RED_THRESHOLD ||
+				(pixel[0] > DIMRED_THRESHOLD && pixel[1] < DIMGREEN_THRESHOLD)
+			) {
+				if (isLikeNeighbors(png, x, y) < DIFF_THRESHOLD) {
+					approved++;
+					avgColor[0] += pixel[0];
+					avgColor[1] += pixel[1];
+					avgColor[2] += pixel[2];
+				}
+			}
+		}
+	}
+	/* console.log(Math.round(100 * (approved / total)) + '%');
+	console.log(
+		`Average color: ${avgColor[0] / approved},${avgColor[1] / approved},${
+			avgColor[2] / approved
+		}`
+	); */
+	if (approved > 0 && 100 * (approved / total) > PIXELS_USED_THRESHOLD) {
+		avgColor[0] /= approved;
+		avgColor[1] /= approved;
+		avgColor[2] /= approved;
+		let rtn = (avgColor[0] - avgColor[1]) * 0.45 + 12;
+		if (avgColor[1] < DIMGREEN_THRESHOLD) {
+			rtn = (255 + (255 - avgColor[0]) + avgColor[2]) * 0.45 - 12;
+		}
+		return rtn;
+	} else return 0;
+}
+
+function getPixel(png: PNG, x: number, y: number): [number, number, number] {
+	const pixelOffset = (x + y * png.width) * 4;
+	return [
+		png.data.readUInt8(pixelOffset),
+		png.data.readUInt8(pixelOffset + 1),
+		png.data.readUInt8(pixelOffset + 2),
+	];
+}
+
+function isLikeNeighbors(png: PNG, x: number, y: number) {
+	let idx = (x + y * png.width) * 4;
+
+	let diff = Math.abs(
+		(png.data.readUInt8(idx - 4) +
+			png.data.readUInt8(idx + 4) +
+			png.data.readUInt8(idx - png.width * 4) +
+			png.data.readUInt8(idx + png.width * 4)) /
+			4 -
+			png.data.readUInt8(idx)
+	);
+	idx++;
+	diff += Math.abs(
+		(png.data.readUInt8(idx - 4) +
+			png.data.readUInt8(idx + 4) +
+			png.data.readUInt8(idx - png.width * 4) +
+			png.data.readUInt8(idx + png.width * 4)) /
+			4 -
+			png.data.readUInt8(idx)
+	);
+	idx++;
+	diff += Math.abs(
+		(png.data.readUInt8(idx - 4) +
+			png.data.readUInt8(idx + 4) +
+			png.data.readUInt8(idx - png.width * 4) +
+			png.data.readUInt8(idx + png.width * 4)) /
+			4 -
+			png.data.readUInt8(idx)
+	);
+	return diff;
 }

@@ -5,6 +5,50 @@ const playTypeRep = nodecg.Replicant<playType>('playType');
 const mirrorRep = nodecg.Replicant<camMirrored>('mirror');
 const switchPlayerRep = nodecg.Replicant<switchPlayer>('switchPlayer');
 const scoreRep = nodecg.Replicant<scoreRep>('score');
+const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
+
+playerDamageRep.on('change', (newVal, oldVal) => {
+	if (!oldVal || newVal[0] !== oldVal[0]) {
+		switch (newVal[0]) {
+			case 'healthy':
+				smokeOut('1');
+				fireOut('1');
+				break;
+			case 'injured':
+				smokeIn('1');
+				fireOut('1');
+				break;
+			case 'deathsDoor':
+				smokeOut('1');
+				fireIn('1');
+				break;
+			case 'unknown':
+				smokeOut('1');
+				fireOut('1');
+				break;
+		}
+	}
+	if (!oldVal || newVal[1] !== oldVal[1]) {
+		switch (newVal[1]) {
+			case 'healthy':
+				smokeOut('2');
+				fireOut('2');
+				break;
+			case 'injured':
+				smokeIn('2');
+				fireOut('2');
+				break;
+			case 'deathsDoor':
+				smokeOut('2');
+				fireIn('2');
+				break;
+			case 'unknown':
+				smokeOut('2');
+				fireOut('2');
+				break;
+		}
+	}
+});
 
 let oldSwitchArray: players = [
 	{ name: '', color: 0 },
@@ -36,9 +80,9 @@ function sColor(num: number) {
 }
 
 scoreRep.on('change', (newVal) => {
-  score1.innerHTML = newVal[0].toString()
-  score2.innerHTML = newVal[1].toString()
-})
+	score1.innerHTML = newVal[0].toString();
+	score2.innerHTML = newVal[1].toString();
+});
 
 mirrorRep.on('change', (newVal, oldVal) => {
 	NodeCG.waitForReplicants(
@@ -188,17 +232,127 @@ nodecg.listenFor('zeroGame', () => {
 nodecg.listenFor('gameOverlayIn', () => {
 	zeroGame();
 	bannersDiv.style.animation = 'banner-in 500ms forwards';
-  namesDiv.style.animation = 'name-in 500ms 500ms forwards';
-  score1.style.animation = 'score-in 200ms cubic-bezier(0.76, 0.18, 0.96, 1.39) 1000ms forwards';
-  score2.style.animation = 'score-in 200ms cubic-bezier(0.76, 0.18, 0.96, 1.39) 1000ms forwards';
-  player1.style.animation = 'fade-in 1000ms 1000ms forwards';
-  player2.style.animation = 'fade-in 1000ms 1000ms forwards';
-  player3.style.animation = 'fade-in 1000ms 1000ms forwards';
-  player4.style.animation = 'fade-in 1000ms 1000ms forwards';
+	namesDiv.style.animation = 'name-in 500ms 500ms forwards';
+	score1.style.animation =
+		'score-in 200ms cubic-bezier(0.76, 0.18, 0.96, 1.39) 1000ms forwards';
+	score2.style.animation =
+		'score-in 200ms cubic-bezier(0.76, 0.18, 0.96, 1.39) 1000ms forwards';
+	player1.style.animation = 'fade-in 1000ms 1000ms forwards';
+	player2.style.animation = 'fade-in 1000ms 1000ms forwards';
+	player3.style.animation = 'fade-in 1000ms 1000ms forwards';
+	player4.style.animation = 'fade-in 1000ms 1000ms forwards';
 });
 
 function zeroGame() {
-	[player1, player2, player3, player4, bannersDiv, namesDiv, score1, score2].forEach((element) => {
+	[
+		player1,
+		player2,
+		player3,
+		player4,
+		bannersDiv,
+		namesDiv,
+		score1,
+		score2,
+	].forEach((element) => {
 		element.style.animation = 'unset';
 	});
+}
+
+const smoke1 = document.createElement('video');
+smoke1.autoplay = true;
+smoke1.loop = true;
+smoke1.muted = true;
+smoke1.playsInline = true;
+smoke1.id = 'smoke-1';
+const src1 = document.createElement('source');
+src1.src = 'smoke.webm';
+src1.type = 'video/webm';
+smoke1.appendChild(src1);
+smoke1.style.opacity = '0';
+smoke1.style.animation = 'fade-in 5000ms forwards';
+const smoke2 = document.createElement('video');
+smoke2.autoplay = true;
+smoke2.loop = true;
+smoke2.muted = true;
+smoke2.playsInline = true;
+smoke2.id = 'smoke-2';
+const src2 = document.createElement('source');
+src2.src = 'smoke.webm';
+src2.type = 'video/webm';
+smoke2.appendChild(src2);
+smoke2.style.opacity = '0';
+smoke2.style.animation = 'fade-in 5000ms forwards';
+const fire1 = document.createElement('video');
+fire1.autoplay = true;
+fire1.loop = true;
+fire1.muted = true;
+fire1.playsInline = true;
+fire1.id = 'fire-1';
+const src3 = document.createElement('source');
+src3.src = 'fire.webm';
+src3.type = 'video/webm';
+fire1.appendChild(src3);
+fire1.style.opacity = '0';
+fire1.style.animation = 'fade-in 5000ms forwards';
+const fire2 = document.createElement('video');
+fire2.autoplay = true;
+fire2.loop = true;
+fire2.muted = true;
+fire2.playsInline = true;
+fire2.id = 'fire-2';
+const src4 = document.createElement('source');
+src4.src = 'fire.webm';
+src4.type = 'video/webm';
+fire2.appendChild(src4);
+fire2.style.opacity = '0';
+fire2.style.animation = 'fade-in 5000ms forwards';
+
+function smokeIn(num: '1' | '2') {
+	const smoke = document.getElementById('smoke-' + num);
+	let play = false;
+	if (smoke) {
+		smoke.remove();
+	} else play = true;
+	const newSmoke = num === '1' ? smoke1 : smoke2;
+	newSmoke.style.animation = 'fade-in 5000ms forwards';
+	document.getElementById(`cam${num}-reference`)!.appendChild(newSmoke);
+	if (play) newSmoke.play();
+}
+
+function smokeOut(num: '1' | '2') {
+	const FADE_TIME = 5000;
+	const smoke = document.getElementById('smoke-' + num);
+	if (smoke) {
+		smoke.style.animation = `fade-out ${FADE_TIME}ms 0ms forwards`;
+		setTimeout(() => {
+			if (getComputedStyle(smoke).opacity === '0') {
+				smoke.remove();
+			} else console.log('Interrupted smokeOut()');
+		}, FADE_TIME + 1000);
+	}
+}
+
+function fireIn(num: '1' | '2') {
+	const fire = document.getElementById('fire-' + num);
+	let play = false;
+	if (fire) {
+		fire.remove();
+	} else play = true;
+	const newfire = num === '1' ? fire1 : fire2;
+	newfire.style.animation = 'fade-in 5000ms forwards';
+	document.getElementById(`cam${num}-reference`)!.appendChild(newfire);
+	if (play) newfire.play();
+}
+
+function fireOut(num: '1' | '2') {
+	const FADE_TIME = 5000;
+	const fire = document.getElementById('fire-' + num);
+	if (fire) {
+		fire.style.animation = `fade-out ${FADE_TIME}ms 0ms forwards`;
+		setTimeout(() => {
+			if (getComputedStyle(fire).opacity === '0') {
+				fire.remove();
+			} else console.log('Interrupted fireOut()');
+		}, FADE_TIME + 1000);
+	}
 }

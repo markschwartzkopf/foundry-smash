@@ -85,4 +85,6 @@ type Asset = {
 	name: string;
 	sum: string;
 	url: string;
-}
+};
+type playerDamageLabel = 'unknown' | 'healthy' | 'injured' | 'deathsDoor';
+type playerDamageRep = [playerDamageLabel, playerDamageLabel];

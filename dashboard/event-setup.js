@@ -1,8 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const eventInfoRep = nodecg.Replicant('event-info');
+const damageTracking = nodecg.Replicant('damage-tracking');
+const playerDamageRep = nodecg.Replicant('player-damage-rep');
 let url = document.getElementById('url');
 let name = document.getElementById('name');
+let damage = document.getElementById('damage-tracking');
+damage.oninput = () => {
+    NodeCG.waitForReplicants(damageTracking).then(() => {
+        if (damage.checked) {
+            damageTracking.value = true;
+        }
+        else {
+            damageTracking.value = false;
+        }
+    });
+};
+damageTracking.on('change', (newVal) => {
+    if (newVal) {
+        damage.checked = true;
+    }
+    else {
+        damage.checked = false;
+        NodeCG.waitForReplicants(playerDamageRep).then(() => {
+            playerDamageRep.value = ['unknown', 'unknown'];
+        });
+    }
+});
+/* playerDamageRep.on('change', (newVal) => {
+    console.log(JSON.stringify(newVal));
+}); */
 url.onkeyup = (ev) => {
     if (ev.key == 'Enter') {
         NodeCG.waitForReplicants(eventInfoRep).then(() => {

@@ -22,7 +22,7 @@
 				overflow: hidden;
 				/* width: 1920px;
 				height: 1080px; */
-        width: 100vw;
+				width: 100vw;
 				height: 100vh;
 				font-family: Arial, Helvetica, sans-serif;
 				font-weight: 700;
@@ -63,13 +63,21 @@
 				);
 				animation: banner-in 500ms forwards;
 			}
+			video {
+				position: absolute;
+				left: 50%;
+				transform: translateX(-50%);
+				height: 100%;
+			}
 			#cam1-reference,
 			#cam2-reference {
 				position: absolute;
 				top: var(--top);
-				background-color: red;
+				/* background-color: red; */
 				width: calc(var(--banner-width) * 0.367);
 				height: calc(var(--banner-width) * 0.397);
+				z-index: -1;
+				overflow: hidden;
 			}
 			#cam1-reference {
 				left: calc(var(--banner-over) + var(--banner-width) * 0.522);
@@ -162,7 +170,7 @@
 				width: 14.01vw;
 				height: 2.22vh;
 				position: absolute;
-        bottom: 4.72vh;
+				bottom: 4.72vh;
 				color: white;
 				background-color: black;
 				overflow: hidden;
@@ -261,8 +269,8 @@
 	</head>
 
 	<body>
-		<!-- <div id="cam1-reference"></div>
-    <div id="cam2-reference"></div> -->
+		<div id="cam1-reference"></div>
+		<div id="cam2-reference"></div>
 		<div id="banner-shadow-hide">
 			<div id="banner1"></div>
 			<div id="banner2"></div>
@@ -278,6 +286,8 @@
 		<div id="player-name3" class="singles"></div>
 		<div id="player-name4" class="singles"></div>
 	</body>
-  <script>var exports = {};</script>
+	<script>
+		var exports = {};
+	</script>
 	<script src="game.js"></script>
 </html>

@@ -71,3 +71,6 @@ if (x32replicant.value == undefined)
 const eventInfoRep = nodecg.Replicant('event-info');
 if (eventInfoRep.value == undefined)
     eventInfoRep.value = { name: '', url: '' };
+const damageTracking = nodecg.Replicant('damage-tracking');
+if (damageTracking.value == undefined)
+    damageTracking.value = false;

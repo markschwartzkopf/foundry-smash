@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Event Setup</title>
+    <link rel="stylesheet" type="text/css" href="slider.css" />
 		<style>
 		</style>
 	</head>
@@ -11,7 +12,13 @@
 		<label for="name">Event Name:</label>
 		<input id="name" /></br>
     <label for="url">Event URL:</label>
-		<input id="url" />
+		<input id="url" /></br>
+    </br>
+    Damage indicators on cameras:</br>
+    <label class="switch">
+			<input id="damage-tracking" type="checkbox" />
+			<span class="slider"></span>
+		</label>
 	</body>
 	<script>
 		var exports = {};

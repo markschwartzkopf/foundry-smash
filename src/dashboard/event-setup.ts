@@ -2,9 +2,37 @@
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 const eventInfoRep = nodecg.Replicant<EventInfo>('event-info');
+const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
+const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
 
 let url = document.getElementById('url')! as HTMLInputElement;
 let name = document.getElementById('name')! as HTMLInputElement;
+let damage = document.getElementById('damage-tracking')! as HTMLInputElement;
+
+damage.oninput = () => {
+	NodeCG.waitForReplicants(damageTracking).then(() => {
+		if (damage.checked) {
+			damageTracking.value = true;
+		} else {
+			damageTracking.value = false;
+		}
+	});
+};
+
+damageTracking.on('change', (newVal) => {
+	if (newVal) {
+		damage.checked = true;
+	} else {
+		damage.checked = false;
+		NodeCG.waitForReplicants(playerDamageRep).then(() => {
+			playerDamageRep.value = ['unknown', 'unknown'];
+		});
+	}
+});
+
+/* playerDamageRep.on('change', (newVal) => {
+	console.log(JSON.stringify(newVal));
+}); */
 
 url.onkeyup = (ev) => {
 	if (ev.key == 'Enter') {
