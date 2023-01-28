@@ -4,9 +4,11 @@ export {}; //This is a hack to make TypeScript work. It is paired with "<script>
 const eventInfoRep = nodecg.Replicant<EventInfo>('event-info');
 const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
 const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
+const twitchChannel = nodecg.Replicant<string>('twitch-channel');
 
 let url = document.getElementById('url')! as HTMLInputElement;
 let name = document.getElementById('name')! as HTMLInputElement;
+let channel = document.getElementById('channel')! as HTMLInputElement;
 let damage = document.getElementById('damage-tracking')! as HTMLInputElement;
 
 damage.oninput = () => {
@@ -48,6 +50,17 @@ name.onkeyup = (ev) => {
 		});
 	}
 };
+channel.onkeyup = (ev) => {
+	if (ev.key == 'Enter') {
+		NodeCG.waitForReplicants(twitchChannel).then(() => {
+			twitchChannel.value! = channel.value;
+		});
+	}
+};
+
+twitchChannel.on('change', (newVal) => {
+	channel.value = newVal;
+});
 
 eventInfoRep.on('change', (newVal) => {
 	url.value = newVal.url;

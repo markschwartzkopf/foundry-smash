@@ -45,7 +45,7 @@ type challongeMatch = {
 	score?: { p1: number; p2: number } /* retreived from match.score_csv */;
 };
 type smashggMatch = {
-	id: number;
+	id: number | string;
 	player1_id: number | null;
 	player1_name?: string;
 	player2_id: number | null;
@@ -57,7 +57,7 @@ type smashggMatch = {
 	score: { p1: number; p2: number };
 };
 type smashggApiMatch = {
-	id: number;
+	id: number | string;
 	round: number;
 	winnerId: number | null;
 	slots: {

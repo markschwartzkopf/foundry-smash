@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const eventInfoRep = nodecg.Replicant('event-info');
 const damageTracking = nodecg.Replicant('damage-tracking');
 const playerDamageRep = nodecg.Replicant('player-damage-rep');
+const twitchChannel = nodecg.Replicant('twitch-channel');
 let url = document.getElementById('url');
 let name = document.getElementById('name');
+let channel = document.getElementById('channel');
 let damage = document.getElementById('damage-tracking');
 damage.oninput = () => {
     NodeCG.waitForReplicants(damageTracking).then(() => {
@@ -44,6 +46,16 @@ name.onkeyup = (ev) => {
         });
     }
 };
+channel.onkeyup = (ev) => {
+    if (ev.key == 'Enter') {
+        NodeCG.waitForReplicants(twitchChannel).then(() => {
+            twitchChannel.value = channel.value;
+        });
+    }
+};
+twitchChannel.on('change', (newVal) => {
+    channel.value = newVal;
+});
 eventInfoRep.on('change', (newVal) => {
     url.value = newVal.url;
     name.value = newVal.name;

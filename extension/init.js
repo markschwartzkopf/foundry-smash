@@ -74,3 +74,6 @@ if (eventInfoRep.value == undefined)
 const damageTracking = nodecg.Replicant('damage-tracking');
 if (damageTracking.value == undefined)
     damageTracking.value = false;
+const twitchChannel = nodecg.Replicant('twitch-channel');
+if (twitchChannel.value == undefined)
+    twitchChannel.value = 'thefoundrycoffeehouse';

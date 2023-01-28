@@ -35,7 +35,7 @@ x32Socket.bind(52361, '0.0.0.0', () => {
                     //assume command is a leaf from /xremote subscription
                     let x32Address = command.slice(1);
                     if (x32Address[0] == '-') {
-                        console.log('From X32:' + command + ' | ' + msg2.toString('utf-8'));
+                        //console.log('From X32:' + command + ' | ' + msg2.toString('utf-8'));
                     }
                     else {
                         index = msg2.indexOf(0x00);
@@ -49,7 +49,7 @@ x32Socket.bind(52361, '0.0.0.0', () => {
                                 }
                                 else {
                                     let value = msg2.readInt32BE();
-                                    console.log(msg2.length);
+                                    //console.log(msg2.length);
                                     x32replicant.value.commentary[0].on = Boolean(value);
                                 }
                                 break;

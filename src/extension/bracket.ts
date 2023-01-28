@@ -314,8 +314,8 @@ function getSmashggMatches(existingArray?: any[], nextPage?: number) {
 									score2 = x.slots[1].standing.stats.score.value;
 								let match: smashggMatch = {
 									id: x.id,
-									player1_id: x.slots[0].entrant.id,
-									player2_id: x.slots[1].entrant.id,
+									player1_id: x.slots[0].entrant? x.slots[0].entrant.id : null,
+									player2_id: x.slots[1].entrant? x.slots[1].entrant.id : null,
 									player1_prereq_match_id: x.slots[0].prereqId,
 									player2_prereq_match_id: x.slots[1].prereqId,
 									winner_id: x.winnerId,
@@ -412,7 +412,7 @@ function myError(err: any) {
 function isSmashggApiMatch(x: unknown): x is smashggApiMatch {
 	if (
 		!!x &&
-		typeof (x as smashggApiMatch).id == 'number' &&
+		(typeof (x as smashggApiMatch).id == 'number' || typeof (x as smashggApiMatch).id == 'string') &&
 		typeof (x as smashggApiMatch).round == 'number' &&
 		(typeof (x as smashggApiMatch).winnerId == 'number' ||
 			(x as smashggApiMatch).winnerId == null) &&
