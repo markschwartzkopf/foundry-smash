@@ -145,7 +145,7 @@ let p1LastWarning = 0;
 let p2LastWarning = 0;
 
 const SMOKE_THRESHOLD = 100;
-const FIRE_THRESHOLD = 140;
+const FIRE_THRESHOLD = 130;
 setInterval(() => {
 	if (
 		obsAnimationQueue.inAnimation == null &&
