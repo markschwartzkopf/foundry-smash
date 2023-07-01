@@ -2,12 +2,14 @@
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 const eventInfoRep = nodecg.Replicant<EventInfo>('event-info');
+const eventRep = nodecg.Replicant<string>('event');
 const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
 const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
 const twitchChannel = nodecg.Replicant<string>('twitch-channel');
 
 let url = document.getElementById('url')! as HTMLInputElement;
 let name = document.getElementById('name')! as HTMLInputElement;
+let event = document.getElementById('event')! as HTMLInputElement;
 let channel = document.getElementById('channel')! as HTMLInputElement;
 let damage = document.getElementById('damage-tracking')! as HTMLInputElement;
 
@@ -50,6 +52,13 @@ name.onkeyup = (ev) => {
 		});
 	}
 };
+event.onkeyup = (ev) => {
+	if (ev.key == 'Enter') {
+		NodeCG.waitForReplicants(eventRep).then(() => {
+			eventRep.value = event.value;
+		});
+	}
+};
 channel.onkeyup = (ev) => {
 	if (ev.key == 'Enter') {
 		NodeCG.waitForReplicants(twitchChannel).then(() => {
@@ -65,4 +74,8 @@ twitchChannel.on('change', (newVal) => {
 eventInfoRep.on('change', (newVal) => {
 	url.value = newVal.url;
 	name.value = newVal.name;
+});
+
+eventRep.on('change', (newVal) => {
+	event.value = newVal;
 });

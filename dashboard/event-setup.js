@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const eventInfoRep = nodecg.Replicant('event-info');
+const eventRep = nodecg.Replicant('event');
 const damageTracking = nodecg.Replicant('damage-tracking');
 const playerDamageRep = nodecg.Replicant('player-damage-rep');
 const twitchChannel = nodecg.Replicant('twitch-channel');
 let url = document.getElementById('url');
 let name = document.getElementById('name');
+let event = document.getElementById('event');
 let channel = document.getElementById('channel');
 let damage = document.getElementById('damage-tracking');
 damage.oninput = () => {
@@ -46,6 +48,13 @@ name.onkeyup = (ev) => {
         });
     }
 };
+event.onkeyup = (ev) => {
+    if (ev.key == 'Enter') {
+        NodeCG.waitForReplicants(eventRep).then(() => {
+            eventRep.value = event.value;
+        });
+    }
+};
 channel.onkeyup = (ev) => {
     if (ev.key == 'Enter') {
         NodeCG.waitForReplicants(twitchChannel).then(() => {
@@ -59,4 +68,7 @@ twitchChannel.on('change', (newVal) => {
 eventInfoRep.on('change', (newVal) => {
     url.value = newVal.url;
     name.value = newVal.name;
+});
+eventRep.on('change', (newVal) => {
+    event.value = newVal;
 });
