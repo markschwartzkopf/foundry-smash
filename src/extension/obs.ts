@@ -3,6 +3,9 @@ import obsWebsocketJs from 'obs-websocket-js';
 import { PNG } from 'pngjs';
 import fs from 'fs';
 
+/* let APPROVED_PIXELS = 0;
+let AVG_COLOR: [number, number, number] = [0, 0, 0]; */
+
 const nodecg: NodeCG = require('./nodecg-api-context').get();
 const obsStatusRep = nodecg.Replicant<obsStatus>('obs-status');
 const switchAnimTriggerRep =
@@ -14,6 +17,11 @@ const switchPlayerRep = nodecg.Replicant<switchPlayer>('switchPlayer');
 const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
 playerDamageRep.value = ['unknown', 'unknown'];
 const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
+/* const debug = nodecg.Replicant<{
+	app: number;
+	avg: [number, number, number];
+	d: number;
+}>('debug', { defaultValue: { app: 0, avg: [0, 0, 0], d: -1 } }); */
 const obsPassword = nodecg.bundleConfig.obsPassword;
 const obs = new obsWebsocketJs();
 let inGame = false;
@@ -141,8 +149,8 @@ let switchPregameDoubles: Partial<ObsSceneItemTransform> = {
 	scaleY: 1,
 };
 
-let p1LastWarning = 0;
-let p2LastWarning = 0;
+let p1LastWarnings = [-1, -1];
+let p2LastWarnings = [-1, -1];
 
 const SMOKE_THRESHOLD = 100;
 const FIRE_THRESHOLD = 130;
@@ -170,35 +178,58 @@ setInterval(() => {
 				const png = PNG.sync.read(buf);
 				let p1Warning = getDamageFromTextColor(png, 176, 310, 213, 327);
 				let p2Warning = getDamageFromTextColor(png, 423, 310, 460, 327);
+				/* debug.value = {
+					app: APPROVED_PIXELS,
+					avg: AVG_COLOR,
+					d: Math.round(p2Warning),
+				}; */
 				if (switchPlayerRep.value[0] === 1) {
 					const temp = p1Warning;
 					p1Warning = p2Warning;
 					p2Warning = temp;
 				}
-				if (Math.abs(p1Warning - p1LastWarning) < 0.05) {
-					if (p1Warning > FIRE_THRESHOLD) {
+				if (hasContinuity(3, [...p1LastWarnings, p1Warning])) {
+					if (isUnknown([...p1LastWarnings, p1Warning])) {
+						playerDamageRep.value[0] = 'unknown';
+					} else if (p1Warning > FIRE_THRESHOLD) {
 						playerDamageRep.value[0] = 'deathsDoor';
 					} else if (p1Warning > SMOKE_THRESHOLD) {
 						playerDamageRep.value[0] = 'injured';
-					} else {
-						playerDamageRep.value[0] = 'healthy';
-					}
-				} else if (!p1LastWarning && !p1Warning)
-					playerDamageRep.value[0] = 'unknown';
-				if (Math.abs(p2Warning - p2LastWarning) < 0.05) {
-					if (p2Warning > FIRE_THRESHOLD) {
+					} else playerDamageRep.value[0] = 'healthy';
+				}
+				if (hasContinuity(3, [...p2LastWarnings, p2Warning])) {
+					if (isUnknown([...p2LastWarnings, p2Warning])) {
+						playerDamageRep.value[1] = 'unknown';
+					} else if (p2Warning > FIRE_THRESHOLD) {
 						playerDamageRep.value[1] = 'deathsDoor';
 					} else if (p2Warning > SMOKE_THRESHOLD) {
 						playerDamageRep.value[1] = 'injured';
 					} else playerDamageRep.value[1] = 'healthy';
-				} else if (!p2LastWarning && !p2Warning)
-					playerDamageRep.value[1] = 'unknown';
-				p1LastWarning = p1Warning;
-				p2LastWarning = p2Warning;
+				}
+				p1LastWarnings.shift();
+				p1LastWarnings.push(p1Warning);
+				p2LastWarnings.shift();
+				p2LastWarnings.push(p2Warning);
 			})
 			.catch((err) => nodecg.log.error(err));
 	}
 }, 1000);
+
+function hasContinuity(threshold: number, elements: number[]) {
+	let rtn = true;
+	for (let i = 1; i < elements.length; i++) {
+		if (Math.abs(elements[i - 1] - elements[i]) > threshold) rtn = false;
+	}
+	return rtn;
+}
+
+function isUnknown(elements: number[]) {
+	let rtn = true;
+	for (let i = 0; i < elements.length; i++) {
+		if (elements[i] !== -1) rtn = false;
+	}
+	return rtn;
+}
 
 connectObs();
 
@@ -427,8 +458,8 @@ nodecg.listenFor('gameStart', () => {
 					nodecg.sendMessage('gameOverlayIn');
 					if (obsStatusRep.value.program === 'Game') {
 						inGame = true;
-						p1LastWarning = 0;
-						p2LastWarning = 0;
+						p1LastWarnings = [-1, -1];
+						p2LastWarnings = [-1, -1];
 						playerDamageRep.value =
 							damageTracking.value && playTypeRep.value === 'singles'
 								? ['healthy', 'healthy']
@@ -1033,14 +1064,14 @@ function getDamageFromTextColor(
 	y2: number
 ) {
 	//loses accuracy above damage levels of 175% or so
-	const DIFF_THRESHOLD = 3; //How different can neighbors be for pixel to still be considered
+	const DIFF_THRESHOLD = 5; //3? How different can neighbors be for pixel to still be considered
 	const RED_THRESHOLD = 210; //How much red must a pixel have in order to be considered
 	const DIMRED_THRESHOLD = 100; //At high damage levels, red starts to dim, and blue rises a bit
 	const DIMGREEN_THRESHOLD = 4; //However, green remains very very low
-	const PIXELS_USED_THRESHOLD = 6; //What percentage of pixels must be used in order to consider result valid
+	const PIXELS_USED_THRESHOLD = 5; //What percentage of pixels must be used in order to consider result valid
 	let total = 0;
 	let approved = 0;
-	const avgColor = [0, 0, 0];
+	const avgColor: [number, number, number] = [0, 0, 0];
 	for (let y = y1; y <= y2; y++) {
 		for (let x = x1; x <= x2; x++) {
 			total++;
@@ -1064,6 +1095,13 @@ function getDamageFromTextColor(
 			avgColor[2] / approved
 		}`
 	); */
+	/* APPROVED_PIXELS = Math.round(100 * (approved / total));
+	AVG_COLOR = [
+		Math.round(avgColor[0] / (25.5 * approved)),
+		Math.round(avgColor[1] / (25.5 * approved)),
+		Math.round(avgColor[2] / (25.5 * approved)),
+	]; */
+	//AVG_COLOR = avgColor;
 	if (approved > 0 && 100 * (approved / total) > PIXELS_USED_THRESHOLD) {
 		avgColor[0] /= approved;
 		avgColor[1] /= approved;
@@ -1073,7 +1111,7 @@ function getDamageFromTextColor(
 			rtn = (255 + (255 - avgColor[0]) + avgColor[2]) * 0.45 - 12;
 		}
 		return rtn;
-	} else return 0;
+	} else return -1;
 }
 
 function getPixel(png: PNG, x: number, y: number): [number, number, number] {

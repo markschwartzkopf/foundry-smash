@@ -6,8 +6,19 @@ const mirrorRep = nodecg.Replicant<camMirrored>('mirror');
 const switchPlayerRep = nodecg.Replicant<switchPlayer>('switchPlayer');
 const scoreRep = nodecg.Replicant<scoreRep>('score');
 const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
+/* const debug = nodecg.Replicant<{ app: number; avg: [number, number, number] }>(
+	'debug',
+	{ defaultValue: { app: 0, avg: [0, 0, 0] } }
+); */
+//const debugDiv = document.getElementById('debug') as HTMLDivElement;
+//const debug2Div = document.getElementById('debug2') as HTMLDivElement;
+/* debug.on('change', (newVal) => {
+	debugDiv.innerHTML = JSON.stringify(newVal, null, 2);
+	console.log(newVal);
+}); */
 
 playerDamageRep.on('change', (newVal, oldVal) => {
+	//debug2Div.innerHTML = newVal[1];
 	if (!oldVal || newVal[0] !== oldVal[0]) {
 		switch (newVal[0]) {
 			case 'healthy':
@@ -268,6 +279,7 @@ const src1 = document.createElement('source');
 src1.src = 'smoke.webm';
 src1.type = 'video/webm';
 smoke1.appendChild(src1);
+smoke1.style.filter = 'url(#filter)'
 smoke1.style.opacity = '0';
 smoke1.style.animation = 'fade-in 5000ms forwards';
 const smoke2 = document.createElement('video');
@@ -280,6 +292,7 @@ const src2 = document.createElement('source');
 src2.src = 'smoke.webm';
 src2.type = 'video/webm';
 smoke2.appendChild(src2);
+smoke2.style.filter = 'url(#filter)'
 smoke2.style.opacity = '0';
 smoke2.style.animation = 'fade-in 5000ms forwards';
 const fire1 = document.createElement('video');
