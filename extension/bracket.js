@@ -53,9 +53,14 @@ function smashggFetch(query, slug) {
             return resp.json();
         })
             .then((resp) => {
-            if (resp.errors)
+            if (resp.errors) {
                 rej(resp.errors);
-            res(resp.data);
+            }
+            else if (resp.errorId !== undefined) {
+                rej({ message: resp.message, errorId: resp.errorId });
+            }
+            else
+                res(resp.data);
         })
             .catch((err) => {
             rej(err);
@@ -122,6 +127,7 @@ function getSmashggParticipants() {
                 res(rtn);
             }
             else {
+                nodecg.log.info(JSON.stringify(resp, null, 2));
                 rej('Bad participant data from smash.gg');
             }
         })
@@ -400,7 +406,8 @@ function myError(err) {
 }
 function isSmashggApiMatch(x) {
     if (!!x &&
-        (typeof x.id == 'number' || typeof x.id == 'string') &&
+        (typeof x.id == 'number' ||
+            typeof x.id == 'string') &&
         typeof x.round == 'number' &&
         (typeof x.winnerId == 'number' ||
             x.winnerId == null) &&
