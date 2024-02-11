@@ -147,7 +147,7 @@ let switchPregameDoubles = {
 let p1LastWarnings = [-1, -1];
 let p2LastWarnings = [-1, -1];
 const SMOKE_THRESHOLD = 100;
-const FIRE_THRESHOLD = 130;
+const FIRE_THRESHOLD = 124;
 setInterval(() => {
     if (obsAnimationQueue.inAnimation == null &&
         obsStatusRep.value.status == 'connected' &&
@@ -212,6 +212,10 @@ setInterval(() => {
             p2LastWarnings.push(p2Warning);
         })
             .catch((err) => nodecg.log.error(err));
+    }
+    else {
+        playerDamageRep.value[0] = 'unknown';
+        playerDamageRep.value[1] = 'unknown';
     }
 }, 1000);
 function hasContinuity(threshold, elements) {
