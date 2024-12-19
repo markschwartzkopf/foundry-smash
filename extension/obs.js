@@ -8,13 +8,13 @@ const pngjs_1 = require("pngjs");
 /* let APPROVED_PIXELS = 0;
 let AVG_COLOR: [number, number, number] = [0, 0, 0]; */
 const nodecg = require('./nodecg-api-context').get();
-const obsStatusRep = nodecg.Replicant('obs-status');
-const switchAnimTriggerRep = nodecg.Replicant('switch-trigger');
+const obsStatusRep = nodecg.Replicant('obs-status', { defaultValue: { status: 'disconnected', preview: null, program: null } });
 obsStatusRep.value = { status: 'disconnected', preview: null, program: null };
+const switchAnimTriggerRep = nodecg.Replicant('switch-trigger');
 const playTypeRep = nodecg.Replicant('playType');
 const cameraRep = nodecg.Replicant('camera');
 const switchPlayerRep = nodecg.Replicant('switchPlayer');
-const playerDamageRep = nodecg.Replicant('player-damage-rep');
+const playerDamageRep = nodecg.Replicant('player-damage-rep', { defaultValue: ['unknown', 'unknown'] });
 playerDamageRep.value = ['unknown', 'unknown'];
 const damageTracking = nodecg.Replicant('damage-tracking');
 /* const debug = nodecg.Replicant<{
@@ -22,7 +22,11 @@ const damageTracking = nodecg.Replicant('damage-tracking');
     avg: [number, number, number];
     d: number;
 }>('debug', { defaultValue: { app: 0, avg: [0, 0, 0], d: -1 } }); */
-const obsPassword = nodecg.bundleConfig.obsPassword;
+function hasObsPassword(bundleConfig) {
+    const bc = bundleConfig;
+    return typeof bc && bc.obsPassword === 'string';
+}
+const obsPassword = hasObsPassword(nodecg.bundleConfig) ? nodecg.bundleConfig.obsPassword : '';
 const obs = new obs_websocket_js_1.default();
 let inGame = false;
 let obsAnimationQueue = { count: 0, inAnimation: 0, functionQueue: [] };

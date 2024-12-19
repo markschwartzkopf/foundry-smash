@@ -1,4 +1,6 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { bracketMatch, losersRep } from "../shared-types/shared";
+import { browserBracketMatch } from "./types/browser";
+
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 const bracketRep = nodecg.Replicant<bracketMatch>('bracket');
@@ -23,18 +25,21 @@ const ro = new ResizeObserver((entries) => {
 });
 
 bracketRep.on('change', (newVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
 		drawBracket(newVal, losersRep.value!, roundsRep.value!);
 	});
 });
 
 losersRep.on('change', (newVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
 		drawBracket(bracketRep.value!, newVal, roundsRep.value!);
 	});
 });
 
 roundsRep.on('change', (newVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
 		drawBracket(bracketRep.value!, losersRep.value!, newVal);
 	});

@@ -1,4 +1,5 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { EventInfo, playerDamageRep } from "../shared-types/shared";
+
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 const eventInfoRep = nodecg.Replicant<EventInfo>('event-info');
@@ -68,14 +69,17 @@ channel.onkeyup = (ev) => {
 };
 
 twitchChannel.on('change', (newVal) => {
+  if (!newVal) return;
 	channel.value = newVal;
 });
 
 eventInfoRep.on('change', (newVal) => {
+  if (!newVal) return;
 	url.value = newVal.url;
 	name.value = newVal.name;
 });
 
 eventRep.on('change', (newVal) => {
+  if (!newVal) return;
 	event.value = newVal;
 });

@@ -8,6 +8,8 @@ const comm2On = document.getElementById('comm2-on');
 const comm2Level = document.getElementById('comm2-level') as HTMLInputElement; */
 const chatIframe = document.getElementById('twitch-chat-embed');
 x32replicant.on('change', (newValue, oldValue) => {
+    if (!newValue)
+        return;
     comm1On.checked = newValue.commentary[0].on;
     comm2On.checked = newValue.commentary[1].on;
     /* comm1Level.value = Math.round(newValue.commentary[0].level * 100).toString();

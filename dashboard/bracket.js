@@ -79,6 +79,8 @@ roundsRep.on('change', (newVal) => {
         rounds.value = '';
 });
 tournamentRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     url.value = newVal;
 });
 bracketSourceRep.on('change', (newVal) => {

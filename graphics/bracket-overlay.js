@@ -13,13 +13,19 @@ let logo = document.getElementById('corner-svg');
     if (newValue == 'doubles') playTypeDiv.innerHTML = 'Doubles';
 }); */
 eventInfoRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     eventUrl.innerHTML = newVal.url;
     eventName.innerHTML = newVal.name;
 });
 eventRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     playTypeDiv.innerHTML = newVal;
 });
 logosRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     if (newVal.length > 0) {
         logo.src = newVal[0].url;
     }

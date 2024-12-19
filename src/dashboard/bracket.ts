@@ -1,4 +1,6 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { bracketSource, losersRep } from "../shared-types/shared";
+
+//import NodeCG from '@nodecg/types';
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 const losersRep = nodecg.Replicant<losersRep>('losers');
@@ -82,6 +84,7 @@ roundsRep.on('change', (newVal) => {
 });
 
 tournamentRep.on('change', (newVal) => {
+  if (!newVal) return;
 	url.value = newVal;
 });
 

@@ -9,8 +9,16 @@ const tournamentRep = nodecg.Replicant('tournamentUrl'); //ie 'tournament/whos-t
 const bracketRep = nodecg.Replicant('bracket');
 const bracketSourceRep = nodecg.Replicant('bracketSource');
 let playerIds = {};
-const challongeApiKey = nodecg.bundleConfig.keys.challongeKey;
-const smashggApiKey = nodecg.bundleConfig.keys.smashggKey;
+function hasChallongeKey(bundleConfig) {
+    const bc = bundleConfig;
+    return bc.keys && bc.keys.challongeKey && typeof bc.keys.challongeKey === 'string';
+}
+function hasSmashggKey(bundleConfig) {
+    const bc = bundleConfig;
+    return bc.keys && bc.keys.smashggKey && typeof bc.keys.smashggKey === 'string';
+}
+const challongeApiKey = hasChallongeKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.challongeKey : '';
+const smashggApiKey = hasSmashggKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.smashggKey : '';
 const challongeApiUrl = 'https://api.challonge.com/v1/';
 const smashggApiUrl = 'https://api.start.gg/gql/alpha';
 function ChallongeMethodUrl(method) {
@@ -40,7 +48,7 @@ function smashggFetch(query, slug) {
         query: '{event(slug: "' + slug + '")' + query + '}',
     });
     return new Promise((res, rej) => {
-        node_fetch_1.default(smashggApiUrl, {
+        (0, node_fetch_1.default)(smashggApiUrl, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -139,7 +147,7 @@ function getSmashggParticipants() {
 function getChallongeParticipants() {
     return new Promise((res, rej) => {
         let rtn = {};
-        node_fetch_1.default(ChallongeMethodUrl('participants'), { method: 'GET' })
+        (0, node_fetch_1.default)(ChallongeMethodUrl('participants'), { method: 'GET' })
             .then((resp) => {
             return resp.json();
         })
@@ -168,7 +176,7 @@ function getChallongeParticipants() {
 }
 function getChallongeMatches() {
     return new Promise((res, rej) => {
-        node_fetch_1.default(ChallongeMethodUrl('matches'), { method: 'GET' })
+        (0, node_fetch_1.default)(ChallongeMethodUrl('matches'), { method: 'GET' })
             .then((resp) => {
             return resp.json();
         })

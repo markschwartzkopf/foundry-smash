@@ -1,4 +1,4 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { switchAnimTrigger } from "../shared-types/shared";
 
 console.log(window.innerWidth);
 document.body.style.transform = `scale(${window.innerWidth / 1920})`;

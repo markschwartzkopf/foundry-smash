@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.set = exports.get = void 0;
+exports.get = get;
+exports.set = set;
 let context;
 function get() {
     return context;
 }
-exports.get = get;
 function set(ctx) {
     context = ctx;
 }
-exports.set = set;

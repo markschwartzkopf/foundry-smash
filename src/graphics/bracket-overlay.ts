@@ -1,4 +1,5 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { Asset, EventInfo, playType } from "../shared-types/shared";
+
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 const playTypeRep = nodecg.Replicant<playType>('playType');
@@ -16,15 +17,18 @@ let logo = document.getElementById('corner-svg') as HTMLImageElement;
 }); */
 
 eventInfoRep.on('change', (newVal) => {
+  if (!newVal) return;
 	eventUrl.innerHTML = newVal.url;
 	eventName.innerHTML = newVal.name;
 });
 
 eventRep.on('change', (newVal) => {
+  if (!newVal) return;
 	playTypeDiv.innerHTML = newVal;
 })
 
 logosRep.on('change', (newVal) => {
+  if (!newVal) return;
 	if (newVal.length > 0) {
 		logo.src = newVal[0].url;
 	} else logo.src = 'foundry-logo.svg'

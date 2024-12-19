@@ -1,22 +1,22 @@
-type players = [
+export type players = [
 	{ name: string; color: number },
 	{ name: string; color: number },
 	{ name: string; color: number },
 	{ name: string; color: number }
 ];
-type playType = 'doubles' | 'singles';
-type obsStatus = {
+export type playType = 'doubles' | 'singles';
+export type obsStatus = {
 	status: 'connecting' | 'connected' | 'disconnected';
 	preview: string | null;
 	program: string | null;
 };
-type obj = { [key: string]: any };
-type cameras = { game: sceneCameras; preGame: sceneCameras };
-type sceneCameras = {
+export type obj = { [key: string]: any };
+export type cameras = { game: sceneCameras; preGame: sceneCameras };
+export type sceneCameras = {
 	cam1: camera;
 	cam2: camera;
 };
-type camera = {
+export type camera = {
 	targets: {
 		doubles: {
 			positionX: number;
@@ -41,22 +41,22 @@ type camera = {
 		cropLeft: number;
 	};
 };
-type cameraChange = {
+export type cameraChange = {
 	scene: 'game' | 'preGame';
 	item: 'cam1' | 'cam2';
 	camera: camera['source'];
 };
-type switchAnimTrigger = '' | 'joyconsIn';
-type camMirrored = { cam1: boolean; cam2: boolean };
-type switchPlayer = [
+export type switchAnimTrigger = '' | 'joyconsIn';
+export type camMirrored = { cam1: boolean; cam2: boolean };
+export type switchPlayer = [
 	0 | 1 | 2 | 3,
 	0 | 1 | 2 | 3,
 	0 | 1 | 2 | 3,
 	0 | 1 | 2 | 3
 ];
-type playerIds = { [id: string]: string }; //id is an integer, always, but js requires string keys
+export type playerIds = { [id: string]: string }; //id is an integer, always, but js requires string keys
 
-type bracketMatch = {
+export type bracketMatch = {
 	p1name: string;
 	p2name: string;
 	p1match?: bracketMatch;
@@ -66,18 +66,18 @@ type bracketMatch = {
 	losers?: true;
 };
 
-type losersRep = 'on' | 'off' | 'only';
-type bracketSource = 'challonge' | 'smashgg';
-type scoreRep = [number, number];
-type x32settings = {
+export type losersRep = 'on' | 'off' | 'only';
+export type bracketSource = 'challonge' | 'smashgg';
+export type scoreRep = [number, number];
+export type x32settings = {
 	commentary: { on: boolean; level: number }[];
 };
-type EventInfo = {
+export type EventInfo = {
 	name: string;
 	url: string;
 };
 
-type Asset = {
+export type Asset = {
 	base: string;
 	namespace: string;
 	category: string;
@@ -86,5 +86,5 @@ type Asset = {
 	sum: string;
 	url: string;
 };
-type playerDamageLabel = 'unknown' | 'healthy' | 'injured' | 'deathsDoor';
-type playerDamageRep = [playerDamageLabel, playerDamageLabel];
+export type playerDamageLabel = 'unknown' | 'healthy' | 'injured' | 'deathsDoor';
+export type playerDamageRep = [playerDamageLabel, playerDamageLabel];

@@ -5,7 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dgram_1 = __importDefault(require("dgram"));
 const nodecg = require('./nodecg-api-context').get();
-const x32replicant = nodecg.Replicant('x32');
+const x32replicant = nodecg.Replicant('x32', {
+    defaultValue: {
+        commentary: [
+            { on: false, level: 0 },
+            { on: false, level: 0 },
+        ],
+    },
+});
 const commentaryChannels = ['03', '04'];
 const commentaryBusses = ['09', '11'];
 let connected = false;
@@ -138,7 +145,7 @@ function send(msg) {
         });
     }
     else
-        console.error('Can\'t send data to X32 unless connected');
+        console.error("Can't send data to X32 unless connected");
 }
 function strToBuf(str) {
     let buf = Buffer.from(str);

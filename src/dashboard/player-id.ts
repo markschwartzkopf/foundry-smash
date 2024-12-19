@@ -1,4 +1,4 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { players, playType, scoreRep, switchPlayer } from "../shared-types/shared";
 
 const playersRep = nodecg.Replicant<players>('players');
 const playTypeRep = nodecg.Replicant<playType>('playType');
@@ -175,6 +175,7 @@ function drawInputArea(players: players, type: playType) {
 }
 
 playTypeRep.on('change', (newVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(playersRep, switchPlayerRep).then(() => {
 		drawInputArea(playersRep.value!, newVal);
 		drawSwitchPlayers(playersRep.value!, newVal, switchPlayerRep.value!);
@@ -182,6 +183,7 @@ playTypeRep.on('change', (newVal) => {
 });
 
 playersRep.on('change', (newVal) => {
+  if (!newVal) return;
 	for (let x = 0; x < newVal.length; x++) {
 		for (let y = 0; y < smashColors.length; y++) {
 			let checkbox = document.getElementById(
@@ -211,12 +213,14 @@ playersRep.on('change', (newVal) => {
 });
 
 switchPlayerRep.on('change', (newVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(playersRep, playTypeRep).then(() => {
 		drawSwitchPlayers(playersRep.value!, playTypeRep.value!, newVal);
 	});
 });
 
 scoreRep.on('change', (newVal) => {
+  if (!newVal) return;
   score1.innerHTML = newVal[0].toString()
   score2.innerHTML = newVal[1].toString()
 })

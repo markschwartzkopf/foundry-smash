@@ -1,13 +1,23 @@
-import { NodeCG } from '../../../../types/server';
+import NodeCG from '@nodecg/types';
 import fetch from 'node-fetch';
-const nodecg: NodeCG = require('./nodecg-api-context').get();
+import { bracketMatch, bracketSource, playerIds } from '../shared-types/shared';
+import { challongeMatch, smashggApiMatch, smashggMatch } from './types/server';
+const nodecg: NodeCG.ServerAPI = require('./nodecg-api-context').get();
 
 const tournamentRep = nodecg.Replicant<string>('tournamentUrl'); //ie 'tournament/whos-tyler-11-100-pot-bonus/event/ultimate-singles' for smash.gg or 'wt15' for challonge
 const bracketRep = nodecg.Replicant<bracketMatch>('bracket');
 const bracketSourceRep = nodecg.Replicant<bracketSource>('bracketSource');
 let playerIds: playerIds = {};
-const challongeApiKey = nodecg.bundleConfig.keys.challongeKey;
-const smashggApiKey = nodecg.bundleConfig.keys.smashggKey;
+function hasChallongeKey(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { keys: { challongeKey: string } } {
+  const bc = bundleConfig as any;
+  return bc.keys && bc.keys.challongeKey && typeof bc.keys.challongeKey === 'string';
+}
+function hasSmashggKey(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { keys: { smashggKey: string } } {
+  const bc = bundleConfig as any;
+  return bc.keys && bc.keys.smashggKey && typeof bc.keys.smashggKey === 'string';
+}
+const challongeApiKey = hasChallongeKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.challongeKey : '';
+const smashggApiKey = hasSmashggKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.smashggKey : '';
 const challongeApiUrl = 'https://api.challonge.com/v1/';
 const smashggApiUrl = 'https://api.start.gg/gql/alpha';
 
@@ -98,7 +108,7 @@ function getSmashggParticipants() {
 		let rtn: playerIds = {};
 		let smashParticipantQuery =
 			'{entrants(query: {perPage: 500}){nodes{id name participants{gamerTag}}}}';
-		smashggFetch(smashParticipantQuery, tournamentRep.value)
+		smashggFetch(smashParticipantQuery, tournamentRep.value!)
 			.then((resp) => {
 				if (
 					resp &&
@@ -266,7 +276,7 @@ function getSmashggMatches(existingArray?: any[], nextPage?: number) {
 		}
 		//let smashMatchQuery =
 		if (!nextPage) nextPage = 1;
-		smashggFetch(smashMatchQuery(nextPage), tournamentRep.value)
+		smashggFetch(smashMatchQuery(nextPage), tournamentRep.value!)
 			.then((resp) => {
 				let rtn: bracketMatch;
 				if (

@@ -17,6 +17,8 @@ const playerDamageRep = nodecg.Replicant('player-damage-rep');
     console.log(newVal);
 }); */
 playerDamageRep.on('change', (newVal, oldVal) => {
+    if (!newVal)
+        return;
     //debug2Div.innerHTML = newVal[1];
     if (!oldVal || newVal[0] !== oldVal[0]) {
         switch (newVal[0]) {
@@ -85,20 +87,28 @@ function sColor(num) {
     return 'var(' + smashColors[num] + ')';
 }
 scoreRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     score1.innerHTML = newVal[0].toString();
     score2.innerHTML = newVal[1].toString();
 });
 mirrorRep.on('change', (newVal, oldVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(playersRep, switchPlayerRep, playTypeRep, mirrorRep).then(() => {
         setNamesAndColors(playersRep.value, switchPlayerRep.value, playTypeRep.value, newVal);
     });
 });
 playersRep.on('change', (newVal, oldVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(switchPlayerRep, playTypeRep, mirrorRep).then(() => {
         setNamesAndColors(newVal, switchPlayerRep.value, playTypeRep.value, mirrorRep.value);
     });
 });
 switchPlayerRep.on('change', (newVal, oldVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(playersRep).then(() => {
         setNamesAndColors(playersRep.value, newVal, playTypeRep.value, mirrorRep.value);
     });
@@ -182,6 +192,8 @@ function setNamesAndColors(players, switchPlayers, type, mirror) {
     }
 }
 playTypeRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     if (newVal == 'singles') {
         let elements = Array.from(document.getElementsByClassName('doubles'));
         elements.forEach((x) => {

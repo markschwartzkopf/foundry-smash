@@ -1,4 +1,5 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { camMirrored, playerDamageRep, players, playType, scoreRep, switchPlayer } from "../shared-types/shared";
+
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 const playersRep = nodecg.Replicant<players>('players');
 const playTypeRep = nodecg.Replicant<playType>('playType');
@@ -18,6 +19,7 @@ const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
 }); */
 
 playerDamageRep.on('change', (newVal, oldVal) => {
+  if (!newVal) return;
 	//debug2Div.innerHTML = newVal[1];
 	if (!oldVal || newVal[0] !== oldVal[0]) {
 		switch (newVal[0]) {
@@ -91,11 +93,13 @@ function sColor(num: number) {
 }
 
 scoreRep.on('change', (newVal) => {
+  if (!newVal) return;
 	score1.innerHTML = newVal[0].toString();
 	score2.innerHTML = newVal[1].toString();
 });
 
 mirrorRep.on('change', (newVal, oldVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(
 		playersRep,
 		switchPlayerRep,
@@ -112,6 +116,7 @@ mirrorRep.on('change', (newVal, oldVal) => {
 });
 
 playersRep.on('change', (newVal, oldVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(switchPlayerRep, playTypeRep, mirrorRep).then(() => {
 		setNamesAndColors(
 			newVal,
@@ -123,6 +128,7 @@ playersRep.on('change', (newVal, oldVal) => {
 });
 
 switchPlayerRep.on('change', (newVal, oldVal) => {
+  if (!newVal) return;
 	NodeCG.waitForReplicants(playersRep).then(() => {
 		setNamesAndColors(
 			playersRep.value!,
@@ -215,6 +221,7 @@ function setNamesAndColors(
 }
 
 playTypeRep.on('change', (newVal) => {
+  if (!newVal) return;
 	if (newVal == 'singles') {
 		let elements = Array.from(document.getElementsByClassName('doubles'));
 		elements.forEach((x) => {

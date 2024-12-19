@@ -1,26 +1,26 @@
 // se object is an object that describes the starting and ending of OBS scene item properties to be animated
-type se = { start: number; end: number };
-type seObject = {
+export type se = { start: number; end: number };
+export type seObject = {
 	[prop in keyof ObsSceneItemTransform]?: se;
 };
 
 
 //animProp is an OBS scene item properties object to be sent to OBS during an animation
 
-type gameInDurations = { up: number; joyconsIn: number };
+export type gameInDurations = { up: number; joyconsIn: number };
 
 
 /* JSON types */
-type JsonObsItem = {
+export type JsonObsItem = {
   sourceName: string;
   sceneName: string;
   sceneItemId: number;
 }
-type JsonCamera = {
+export type JsonCamera = {
   targets: {doubles: JsonObsItem, singles: JsonObsItem}
   source: JsonObsItem
 }
-type JsonCamInfo = {
+export type JsonCamInfo = {
 	game: {
     cam1: JsonCamera;
     cam2: JsonCamera;}
@@ -29,7 +29,7 @@ type JsonCamInfo = {
     cam2: JsonCamera;};
 };
 
-type challongeMatch = {
+export type challongeMatch = {
 	id: number;
 	player1_id: number | null;
 	player1_name?: string;
@@ -44,7 +44,7 @@ type challongeMatch = {
 	round: number /* 0 is valid but Rare. (Third place game) */;
 	score?: { p1: number; p2: number } /* retreived from match.score_csv */;
 };
-type smashggMatch = {
+export type smashggMatch = {
 	id: number | string;
 	player1_id: number | null;
 	player1_name?: string;
@@ -56,7 +56,7 @@ type smashggMatch = {
 	round: number /* 0 is valid but Rare. (Third place game) */;
 	score: { p1: number; p2: number };
 };
-type smashggApiMatch = {
+export type smashggApiMatch = {
 	id: number | string;
 	round: number;
 	winnerId: number | null;
@@ -66,14 +66,13 @@ type smashggApiMatch = {
 		standing?: { stats?: { score?: { value?: number } } };
 	}[];
 };
-type sceneItemRef = {
+export type sceneItemRef = {
 	sceneName: string;
 	sceneItemId: number;
 };
-type ObsSceneItemTransform = {
+export type ObsSceneItemTransform = {
 	positionX: number;
 	positionY: number;
-	alignment: ObsAlignment;
 	rotation: number;
 	scaleX: number;
 	scaleY: number;
@@ -81,8 +80,6 @@ type ObsSceneItemTransform = {
 	cropRight: number;
 	cropBottom: number;
 	cropLeft: number;
-	boundsType: ObsBoundsType;
-	boundsAlignment: ObsAlignment;
 	boundsWidth: number;
 	boundsHeight: number;
 	sourceWidth: number;

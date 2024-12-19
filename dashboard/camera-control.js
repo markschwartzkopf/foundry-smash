@@ -1,5 +1,5 @@
 "use strict";
-/// <reference path="../../../../types/browser.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const playTypeRep2 = nodecg.Replicant('playType');
 const cameraRep = nodecg.Replicant('camera');
 let updateCameras = document.getElementById('update-cameras');
@@ -83,14 +83,18 @@ mirrorSwitch.oninput = () => {
     nodecg.sendMessage('cameraChange', cameraChange);
 };
 speed.oninput = () => {
-    step = Math.pow(parseFloat(speed.value), 2);
+    step = parseFloat(speed.value) ** 2;
     calcStep();
 };
 cameraRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     currentCamera = JSON.parse(JSON.stringify(newVal[scene][camNo]));
     calcStep();
 });
 playTypeRep2.on('change', (newVal) => {
+    if (!newVal)
+        return;
     type = newVal;
 });
 left.onclick = () => {
@@ -145,8 +149,7 @@ zoomadd.onclick = () => {
     camChange();
 };
 zoomdec.onclick = () => {
-    if ((currentCamera.source.cropLeft == 0 &&
-        currentCamera.source.cropRight == 0) ||
+    if ((currentCamera.source.cropLeft == 0 && currentCamera.source.cropRight == 0) ||
         (currentCamera.source.cropTop == 0 && currentCamera.source.cropBottom == 0)) {
         bump();
     }
@@ -201,10 +204,8 @@ function correctCam() {
     };
     if (horizTotalCrop > 0) {
         const horizCropCorrection = newHorizCrop / horizTotalCrop;
-        newCrop.cropLeft =
-            Math.round(currentCamera.source.cropLeft * horizCropCorrection * 2) / 2;
-        newCrop.cropRight =
-            Math.round(currentCamera.source.cropRight * horizCropCorrection * 2) / 2;
+        newCrop.cropLeft = Math.round(currentCamera.source.cropLeft * horizCropCorrection * 2) / 2;
+        newCrop.cropRight = Math.round(currentCamera.source.cropRight * horizCropCorrection * 2) / 2;
     }
     else {
         newCrop.cropLeft = Math.round(newHorizCrop) / 2;
@@ -212,10 +213,8 @@ function correctCam() {
     }
     if (vertTotalCrop > 0) {
         const vertCropCorrection = newVertCrop / vertTotalCrop;
-        newCrop.cropTop =
-            Math.round(currentCamera.source.cropTop * vertCropCorrection * 2) / 2;
-        newCrop.cropBottom =
-            Math.round(currentCamera.source.cropBottom * vertCropCorrection * 2) / 2;
+        newCrop.cropTop = Math.round(currentCamera.source.cropTop * vertCropCorrection * 2) / 2;
+        newCrop.cropBottom = Math.round(currentCamera.source.cropBottom * vertCropCorrection * 2) / 2;
     }
     else {
         newCrop.cropTop = Math.round(newVertCrop) / 2;

@@ -1,19 +1,25 @@
 {
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig.json to read more about this file */
-    "target": "ES6" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
+    "target": "ESNext" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
     "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
-    // "declaration": false /* Generates corresponding '.d.ts' file. */,
+    "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+    "declaration": false /* Generates corresponding '.d.ts' file. */,
     "strict": true /* Enable all strict type-checking options. */,
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/shared-types"],                       /* List of folders to include type definitions from. */
+    "types": [] /* No idea why this is necessary */,
+    "noEmitOnError": true,
+    "typeRoots": ["./node_modules/@types"] /* List of folders to include type definitions from. */,
     "tsBuildInfoFile": ".tsbuildinfo",
     "incremental": true,
+    "lib": ["esnext", "dom"], // Ensure "dom" is included for `window` global
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
+    "outDir": "." /* Redirect output structure to the directory. */,
+    "rootDir": "src" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
 
     /* Advanced Options */
-    // "skipLibCheck": true /* Skip type checking of declaration files. */,
+    "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  //"files": ["test.ts"]
+  "include": ["src/**/*.ts", "node_modules/@nodecg/types/augment-window.d.ts"],
+  "exclude": ["node_modules"]
 }

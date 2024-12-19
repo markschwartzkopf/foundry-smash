@@ -63,7 +63,7 @@ function initGrid() {
             row.appendChild(cell);
             let xDist = Math.abs(x - (gridWidth / 2 - 0.5));
             let yDist = Math.abs(y - (gridHeight / 2 - 0.5));
-            let centerDistance = Math.pow((Math.pow(xDist, 2) + Math.pow(yDist, 2)), 0.5);
+            let centerDistance = (xDist ** 2 + yDist ** 2) ** 0.5;
             let cellObj = {
                 centerDistance: centerDistance,
                 score: 0,
@@ -223,9 +223,9 @@ function getNextSquare() {
         let chess = 1;
         if (cell.chessIndex || (!cell.chessIndex && maybeImage))
             chess = favorChessSquares;
-        cell.score = Math.pow(cell.centerDistance, avoidCenter) * neighborWeight * chess;
+        cell.score = cell.centerDistance ** avoidCenter * neighborWeight * chess;
         /* cell.element.innerHTML = Math.round(cell.score * 10).toString(); */
-        let finalScore = Math.pow(Math.random(), rngWeight) * cell.score * ruleOut;
+        let finalScore = Math.random() ** rngWeight * cell.score * ruleOut;
         if (finalScore > highScore) {
             highScore = finalScore;
             selectedCellNeighborColors = neighborColors;

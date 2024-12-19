@@ -1,6 +1,6 @@
-import { json } from 'body-parser';
-import { NodeCG } from '../../../../types/server';
-const nodecg: NodeCG = require('./nodecg-api-context').get();
+import NodeCG from '@nodecg/types';
+import { bracketMatch, bracketSource, camera, cameras, EventInfo, losersRep, players, playType, sceneCameras, scoreRep, switchPlayer, x32settings } from '../shared-types/shared';
+const nodecg: NodeCG.ServerAPI = require('./nodecg-api-context').get();
 
 const playersRep = nodecg.Replicant<players>('players');
 if (playersRep.value == undefined)

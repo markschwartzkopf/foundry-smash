@@ -1,5 +1,5 @@
 "use strict";
-/// <reference path="../../../../types/browser.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 console.log(window.innerWidth);
 document.body.style.transform = `scale(${window.innerWidth / 1920})`;
 const switchAnimTriggerRep = nodecg.Replicant('switch-trigger');

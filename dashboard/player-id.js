@@ -1,5 +1,5 @@
 "use strict";
-/// <reference path="../../../../types/browser.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const playersRep = nodecg.Replicant('players');
 const playTypeRep = nodecg.Replicant('playType');
 const switchPlayerRep = nodecg.Replicant('switchPlayer');
@@ -166,12 +166,16 @@ function drawInputArea(players, type) {
     inputArea.appendChild(buttonDiv);
 }
 playTypeRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(playersRep, switchPlayerRep).then(() => {
         drawInputArea(playersRep.value, newVal);
         drawSwitchPlayers(playersRep.value, newVal, switchPlayerRep.value);
     });
 });
 playersRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     for (let x = 0; x < newVal.length; x++) {
         for (let y = 0; y < smashColors.length; y++) {
             let checkbox = document.getElementById('color-' + x + '-' + y);
@@ -196,11 +200,15 @@ playersRep.on('change', (newVal) => {
     }
 });
 switchPlayerRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(playersRep, playTypeRep).then(() => {
         drawSwitchPlayers(playersRep.value, playTypeRep.value, newVal);
     });
 });
 scoreRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     score1.innerHTML = newVal[0].toString();
     score2.innerHTML = newVal[1].toString();
 });

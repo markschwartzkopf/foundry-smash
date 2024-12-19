@@ -1,4 +1,6 @@
-/// <reference path="../../../../types/browser.d.ts" />
+/// <reference path="../../node_modules/@nodecg/types/augment-window.d.ts" />
+
+import { obsStatus } from "../shared-types/shared";
 
 document.body.style.backgroundColor = 'red';
 const obsStatusRep = nodecg.Replicant<obsStatus>('obs-status');
@@ -33,6 +35,7 @@ updateBracket.onclick = () => {
 
 
 obsStatusRep.on('change', (newVal) => {
+  if (!newVal) return;
   if (newVal.status == 'connected') {
     document.body.style.backgroundColor = '';
   } else {

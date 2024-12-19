@@ -11,7 +11,7 @@
 		"extension"
 	],
 	"nodecg": {
-		"compatibleRange": "^1.8.1",
+		"compatibleRange": "^2.1.0",
 		"dashboardPanels": [
 			{
 				"name": "player-id",
@@ -112,20 +112,20 @@
 	"scripts": {
 		"start:NodeCG": "node ../../index.js",
 		"watch": "npm-run-all -p watch:*",
-		"watch:extension": "node ./node_modules/typescript/bin/tsc -p ./src/extension --diagnostics --watch",
-		"watch:dashboard": "node ./node_modules/typescript/bin/tsc -p ./src/dashboard --diagnostics --watch",
-		"watch:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics --watch",
+		"watch:server": "node ./node_modules/typescript/bin/tsc -p ./tsconfig.server.json --diagnostics --watch",
+		"watch:browser": "node ./node_modules/typescript/bin/tsc -p ./tsconfig.browser.json --diagnostics --watch",
 		"build": "npm-run-all -s build:*",
-		"build:extension": "node ./node_modules/typescript/bin/tsc -p ./src/extension --diagnostics",
-		"build:dashboard": "node ./node_modules/typescript/bin/tsc -p ./src/dashboard --diagnostics",
-		"build:graphics": "node ./node_modules/typescript/bin/tsc -p ./src/graphics --diagnostics"
+		"build:server": "node ./node_modules/typescript/bin/tsc -p ./tsconfig.server.json --diagnostics",
+		"build:browser": "node ./node_modules/typescript/bin/tsc -p ./tsconfig.browser.json --diagnostics"
 	},
 	"devDependencies": {
+		"@nodecg/types": "^2.1.12",
+		"@types/node": "^18.19.68",
 		"@types/node-fetch": "^2.5.10",
 		"@types/pngjs": "^6.0.1",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.3.1",
-		"typescript": "^4.3.2"
+		"typescript": "^5.7.2"
 	},
 	"dependencies": {
 		"node-fetch": "^2.6.1",

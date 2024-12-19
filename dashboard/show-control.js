@@ -1,5 +1,6 @@
 "use strict";
-/// <reference path="../../../../types/browser.d.ts" />
+/// <reference path="../../node_modules/@nodecg/types/augment-window.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 document.body.style.backgroundColor = 'red';
 const obsStatusRep = nodecg.Replicant('obs-status');
 let toGame = document.getElementById('to-game');
@@ -29,6 +30,8 @@ updateBracket.onclick = () => {
     nodecg.sendMessage('updateBracket');
 };
 obsStatusRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     if (newVal.status == 'connected') {
         document.body.style.backgroundColor = '';
     }

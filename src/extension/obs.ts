@@ -1,20 +1,22 @@
-import { NodeCG } from '../../../../types/server';
+import NodeCG from '@nodecg/types';
 import obsWebsocketJs from 'obs-websocket-js';
 import { PNG } from 'pngjs';
 import fs from 'fs';
+import { camera, cameraChange, cameras, obsStatus, playerDamageRep, playType, switchAnimTrigger, switchPlayer } from '../shared-types/shared';
+import { JsonCamInfo, JsonObsItem, ObsSceneItemTransform, seObject } from './types/server';
 
 /* let APPROVED_PIXELS = 0;
 let AVG_COLOR: [number, number, number] = [0, 0, 0]; */
 
-const nodecg: NodeCG = require('./nodecg-api-context').get();
-const obsStatusRep = nodecg.Replicant<obsStatus>('obs-status');
+const nodecg: NodeCG.ServerAPI = require('./nodecg-api-context').get();
+const obsStatusRep = nodecg.Replicant<obsStatus>('obs-status', {defaultValue: {status: 'disconnected', preview: null, program: null}});
+obsStatusRep.value = {status: 'disconnected', preview: null, program: null};
 const switchAnimTriggerRep =
 	nodecg.Replicant<switchAnimTrigger>('switch-trigger');
-obsStatusRep.value = { status: 'disconnected', preview: null, program: null };
 const playTypeRep = nodecg.Replicant<playType>('playType');
 const cameraRep = nodecg.Replicant<cameras>('camera');
 const switchPlayerRep = nodecg.Replicant<switchPlayer>('switchPlayer');
-const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep');
+const playerDamageRep = nodecg.Replicant<playerDamageRep>('player-damage-rep', {defaultValue: ['unknown', 'unknown']});
 playerDamageRep.value = ['unknown', 'unknown'];
 const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
 /* const debug = nodecg.Replicant<{
@@ -22,7 +24,11 @@ const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
 	avg: [number, number, number];
 	d: number;
 }>('debug', { defaultValue: { app: 0, avg: [0, 0, 0], d: -1 } }); */
-const obsPassword = nodecg.bundleConfig.obsPassword;
+function hasObsPassword(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { obsPassword: string } {
+  const bc = bundleConfig as any;
+  return typeof bc && bc.obsPassword === 'string';
+}
+const obsPassword = hasObsPassword(nodecg.bundleConfig) ? nodecg.bundleConfig.obsPassword : '';
 const obs = new obsWebsocketJs();
 let inGame = false;
 let obsAnimationQueue: {
@@ -183,28 +189,28 @@ setInterval(() => {
 					avg: AVG_COLOR,
 					d: Math.round(p2Warning),
 				}; */
-				if (switchPlayerRep.value[0] === 1) {
+				if (switchPlayerRep.value![0] === 1) {
 					const temp = p1Warning;
 					p1Warning = p2Warning;
 					p2Warning = temp;
 				}
 				if (hasContinuity(3, [...p1LastWarnings, p1Warning])) {
 					if (isUnknown([...p1LastWarnings, p1Warning])) {
-						playerDamageRep.value[0] = 'unknown';
+						playerDamageRep.value![0] = 'unknown';
 					} else if (p1Warning > FIRE_THRESHOLD) {
-						playerDamageRep.value[0] = 'deathsDoor';
+						playerDamageRep.value![0] = 'deathsDoor';
 					} else if (p1Warning > SMOKE_THRESHOLD) {
-						playerDamageRep.value[0] = 'injured';
-					} else playerDamageRep.value[0] = 'healthy';
+						playerDamageRep.value![0] = 'injured';
+					} else playerDamageRep.value![0] = 'healthy';
 				}
 				if (hasContinuity(3, [...p2LastWarnings, p2Warning])) {
 					if (isUnknown([...p2LastWarnings, p2Warning])) {
-						playerDamageRep.value[1] = 'unknown';
+						playerDamageRep.value![1] = 'unknown';
 					} else if (p2Warning > FIRE_THRESHOLD) {
-						playerDamageRep.value[1] = 'deathsDoor';
+						playerDamageRep.value![1] = 'deathsDoor';
 					} else if (p2Warning > SMOKE_THRESHOLD) {
-						playerDamageRep.value[1] = 'injured';
-					} else playerDamageRep.value[1] = 'healthy';
+						playerDamageRep.value![1] = 'injured';
+					} else playerDamageRep.value![1] = 'healthy';
 				}
 				p1LastWarnings.shift();
 				p1LastWarnings.push(p1Warning);
@@ -213,8 +219,8 @@ setInterval(() => {
 			})
 			.catch((err) => nodecg.log.error(err));
 	} else {
-		playerDamageRep.value[0] = 'unknown';
-		playerDamageRep.value[1] = 'unknown';
+		playerDamageRep.value![0] = 'unknown';
+		playerDamageRep.value![1] = 'unknown';
 	}
 }, 1000);
 
@@ -398,11 +404,11 @@ nodecg.listenFor('gameStart', () => {
 		const growIn: seObject = {
 			boundsWidth: {
 				start: 1,
-				end: cameraRep.value.game.cam1.targets[playTypeRep.value].width,
+				end: cameraRep.value!.game.cam1.targets[playTypeRep.value!].width,
 			},
 			boundsHeight: {
 				start: 1,
-				end: cameraRep.value.game.cam1.targets[playTypeRep.value].height,
+				end: cameraRep.value!.game.cam1.targets[playTypeRep.value!].height,
 			},
 		};
 		const shrunk: Partial<ObsSceneItemTransform> = {
@@ -499,7 +505,7 @@ nodecg.listenFor('cameraChange', (change: cameraChange) => {
 				sceneItemTransform: transform,
 			})
 			.then(() => {
-				cameraRep.value[change.scene][change.item].source = change.camera;
+				cameraRep.value![change.scene][change.item].source = change.camera;
 			})
 			.catch((err) => {
 				myError(err);
@@ -624,14 +630,14 @@ function refreshCameraLocations() {
 					sceneItemId: cameraInfo[scene][cam].source.sceneItemId,
 					sceneItemTransform: {
 						positionX:
-							cameraRep.value[scene][cam].targets[playTypeRep.value].positionX,
+							cameraRep.value![scene][cam].targets[playTypeRep.value!].positionX,
 						positionY:
-							cameraRep.value[scene][cam].targets[playTypeRep.value].positionY,
+							cameraRep.value![scene][cam].targets[playTypeRep.value!].positionY,
 						boundsWidth:
-							cameraRep.value[scene][cam].targets[playTypeRep.value].width,
+							cameraRep.value![scene][cam].targets[playTypeRep.value!].width,
 						boundsHeight:
-							cameraRep.value[scene][cam].targets[playTypeRep.value].height,
-						...refreshedAspectRatioCrop(cameraRep.value[scene][cam]),
+							cameraRep.value![scene][cam].targets[playTypeRep.value!].height,
+						...refreshedAspectRatioCrop(cameraRep.value![scene][cam]),
 					},
 				};
 			}
@@ -671,8 +677,8 @@ function refreshedAspectRatioCrop(cam: camera): {
 	let cropY = rtn.cropTop + rtn.cropBottom;
 	let height = cam.source.sourceHeight - cropY;
 	const targetRatio =
-		cam.targets[playTypeRep.value].width /
-		cam.targets[playTypeRep.value].height;
+		cam.targets[playTypeRep.value!].width /
+		cam.targets[playTypeRep.value!].height;
 	let currentRatio = width / height;
 	let additionalCroppingNeeded = false;
 	//uncrop:
@@ -926,7 +932,7 @@ function populateCameraRep() {
 			cameraInfo.game.cam1.source
 		)
 			.then((cam) => {
-				cameraRep.value.game.cam1 = cam;
+				cameraRep.value!.game.cam1 = cam;
 				return getCameraInfo(
 					cameraInfo.game.cam2.targets.doubles,
 					cameraInfo.game.cam2.targets.singles,
@@ -934,7 +940,7 @@ function populateCameraRep() {
 				);
 			})
 			.then((cam) => {
-				cameraRep.value.game.cam2 = cam;
+				cameraRep.value!.game.cam2 = cam;
 				return getCameraInfo(
 					cameraInfo.preGame.cam1.targets.doubles,
 					cameraInfo.preGame.cam1.targets.singles,
@@ -942,7 +948,7 @@ function populateCameraRep() {
 				);
 			})
 			.then((cam) => {
-				cameraRep.value.preGame.cam1 = cam;
+				cameraRep.value!.preGame.cam1 = cam;
 				return getCameraInfo(
 					cameraInfo.preGame.cam2.targets.doubles,
 					cameraInfo.preGame.cam2.targets.singles,
@@ -950,7 +956,7 @@ function populateCameraRep() {
 				);
 			})
 			.then((cam) => {
-				cameraRep.value.preGame.cam2 = cam;
+				cameraRep.value!.preGame.cam2 = cam;
 				res();
 			})
 			.catch((err) => {
@@ -1028,7 +1034,7 @@ function getCameraInfo(
 						cropRight: src.cropRight,
 						scaleX: src.scaleX,
 					};
-					let currentReference = rtn.targets[playTypeRep.value];
+					let currentReference = rtn.targets[playTypeRep.value!];
 					res(rtn);
 				})
 				.catch((err) => {

@@ -1,4 +1,4 @@
-type browserBracketMatch = {
+export type browserBracketMatch = {
 	p1name: string;
 	p2name: string;
 	p1match?: browserBracketMatch;

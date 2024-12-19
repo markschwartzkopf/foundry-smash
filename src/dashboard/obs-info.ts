@@ -1,4 +1,5 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { obsStatus } from "../shared-types/shared";
+
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 document.body.style.backgroundColor = 'red';
@@ -17,6 +18,7 @@ getProps.onclick = () => {
   });
 };
 obsStatusRep2.on('change', (newVal) => {
+  if (!newVal) return;
   if (newVal.status == 'connected') {
     document.body.style.backgroundColor = '';
   } else {

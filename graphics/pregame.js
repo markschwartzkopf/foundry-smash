@@ -1,5 +1,5 @@
 "use strict";
-/// <reference path="../../../../types/browser.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const playersRep = nodecg.Replicant('players');
 const playTypeRep = nodecg.Replicant('playType');
 const mirrorRep = nodecg.Replicant('mirror');
@@ -18,6 +18,8 @@ let player2 = document.getElementById('player-name2');
 let player3 = document.getElementById('player-name3');
 let player4 = document.getElementById('player-name4');
 playersRep.on('change', (newVal, oldVal) => {
+    if (!newVal)
+        return;
     player1.innerHTML = newVal[0].name;
     player1.style.backgroundColor = sColor(newVal[0].color);
     player2.innerHTML = newVal[1].name;
@@ -58,6 +60,8 @@ playTypeRep.on('change', (newVal) => {
     }
 });
 mirrorRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     if (newVal.cam1) {
         player1.classList.add('mirror');
         player2.classList.add('mirror');

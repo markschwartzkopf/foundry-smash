@@ -15,6 +15,8 @@ getProps.onclick = () => {
     });
 };
 obsStatusRep2.on('change', (newVal) => {
+    if (!newVal)
+        return;
     if (newVal.status == 'connected') {
         document.body.style.backgroundColor = '';
     }

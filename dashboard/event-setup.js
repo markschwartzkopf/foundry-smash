@@ -63,12 +63,18 @@ channel.onkeyup = (ev) => {
     }
 };
 twitchChannel.on('change', (newVal) => {
+    if (!newVal)
+        return;
     channel.value = newVal;
 });
 eventInfoRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     url.value = newVal.url;
     name.value = newVal.name;
 });
 eventRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     event.value = newVal;
 });

@@ -20,16 +20,22 @@ const ro = new ResizeObserver((entries) => {
     }
 });
 bracketRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
         drawBracket(newVal, losersRep.value, roundsRep.value);
     });
 });
 losersRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
         drawBracket(bracketRep.value, newVal, roundsRep.value);
     });
 });
 roundsRep.on('change', (newVal) => {
+    if (!newVal)
+        return;
     NodeCG.waitForReplicants(losersRep, roundsRep).then(() => {
         drawBracket(bracketRep.value, losersRep.value, newVal);
     });

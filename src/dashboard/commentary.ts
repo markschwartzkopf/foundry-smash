@@ -1,4 +1,5 @@
-/// <reference path="../../../../types/browser.d.ts" />
+import { x32settings } from "../shared-types/shared";
+
 export {}; //This is a hack to make TypeScript work. It is paired with "<script>var exports = {};</script>" in the HTML
 
 const x32replicant = nodecg.Replicant<x32settings>('x32');
@@ -12,6 +13,7 @@ const chatIframe = document.getElementById(
 ) as HTMLIFrameElement;
 
 x32replicant.on('change', (newValue, oldValue) => {
+  if (!newValue) return;
 	comm1On.checked = newValue.commentary[0].on;
 	comm2On.checked = newValue.commentary[1].on;
 	/* comm1Level.value = Math.round(newValue.commentary[0].level * 100).toString();
