@@ -277,6 +277,8 @@ function getSmashggMatches(existingArray, nextPage) {
             nextPage = 1;
         smashggFetch(smashMatchQuery(nextPage), tournamentRep.value)
             .then((resp) => {
+            console.log('smashggMatches');
+            console.log(tournamentRep.value);
             let rtn;
             if (resp &&
                 resp.event &&

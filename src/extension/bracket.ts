@@ -278,6 +278,8 @@ function getSmashggMatches(existingArray?: any[], nextPage?: number) {
 		if (!nextPage) nextPage = 1;
 		smashggFetch(smashMatchQuery(nextPage), tournamentRep.value!)
 			.then((resp) => {
+        console.log('smashggMatches');
+        console.log(tournamentRep.value);
 				let rtn: bracketMatch;
 				if (
 					resp &&

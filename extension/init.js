@@ -13,6 +13,7 @@ const playTypeRep = nodecg.Replicant('playType');
 if (playTypeRep.value == undefined)
     playTypeRep.value = 'singles';
 const cameraRep = nodecg.Replicant('camera');
+const mirrorRep = nodecg.Replicant('mirror', { defaultValue: { cam1: false, cam2: false } });
 if (cameraRep.value == undefined) {
     const basicCam = {
         targets: {

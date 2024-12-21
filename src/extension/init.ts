@@ -1,5 +1,5 @@
 import NodeCG from '@nodecg/types';
-import { bracketMatch, bracketSource, camera, cameras, EventInfo, losersRep, players, playType, sceneCameras, scoreRep, switchPlayer, x32settings } from '../shared-types/shared';
+import { bracketMatch, bracketSource, camera, cameras, camMirrored, EventInfo, losersRep, players, playType, sceneCameras, scoreRep, switchPlayer, x32settings } from '../shared-types/shared';
 const nodecg: NodeCG.ServerAPI = require('./nodecg-api-context').get();
 
 const playersRep = nodecg.Replicant<players>('players');
@@ -13,6 +13,7 @@ if (playersRep.value == undefined)
 const playTypeRep = nodecg.Replicant<playType>('playType');
 if (playTypeRep.value == undefined) playTypeRep.value = 'singles';
 const cameraRep = nodecg.Replicant<cameras>('camera');
+const mirrorRep = nodecg.Replicant<camMirrored>('mirror', { defaultValue: { cam1: false, cam2: false } });
 if (cameraRep.value == undefined) {
 	const basicCam: camera = {
 		targets: {
