@@ -1,104 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Switch</title>
-		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
-		<style>
-			body {
-				margin: 0;
-				overflow: hidden;
-				height: 100vh;
-			}
-			#left-joycon,
-			#right-joycon {
-				position: absolute;
-				top: 49.722%;
-				height: 575px;
-				margin: 0;
-				padding: 0;
-				animation: joycon-down 200ms forwards ease-out;
-			}
-			#left-joycon {
-				background-image: url('leftJoyCon.png');
-				background-repeat: no-repeat;
-				width: 198px;
-				transform: translate(0%, -200%);
-				right: calc(50% + 487px);
-			}
-			#right-joycon {
-				background-image: url('rightJoyCon.png');
-				background-repeat: no-repeat;
-				width: 198px;
-				transform: translate(0%, -200%);
-				left: calc(50% + 487px);
-				animation-delay: 1000ms;
-			}
-			#switch-body {
-				background-image: url('switchBody.png');
-				background-repeat: no-repeat;
-				background-position: center;
-				width: 731px;
-				height: 431px;
-				margin: 0;
-				padding: 0;
-				position: absolute;
-				transform: translate(-50%, -50%);
-				/* opacity: 0; */
-				left: 50%;
-				top: 49.722%;
-				animation: switch-in 1100ms forwards ease-out;
-			}
-			#switch-border {
-				border: 5px solid black;
-				background-color: var(--smash-light-gray);
-				width: 784px;
-				height: 440px;
-				position: absolute;
-				transform: translate(-50%, -50%);
-				left: 50%;
-				top: 50%;
-				z-index: -1;
-			}
-			@keyframes joycon-down {
-				0% {
-					transform: translateY(-200%);
-				}
-				100% {
-					transform: translateY(-50%);
-				}
-			}
-			@keyframes switch-in {
-				0% {
-					/* opacity: 0; */
-					/* transform: translate(-50%, -50%) scale(.75); */
-					width: 731px;
-					height: 431px;
-				}
-				100% {
-					/* transform: translate(-50%, -50%) scale(1);; */
-					/* opacity: 1; */
-					width: 975px;
-					height: 575px;
-				}
-			}
-		</style>
-	</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Switch</title>
+    <link rel="stylesheet" type="text/css" href="smashcolors.css" />
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+      }
+      #left-joycon,
+      #right-joycon {
+        position: absolute;
+        top: 49.722%;
+        height: 575px;
+        margin: 0;
+        padding: 0;
+        animation: joycon-down 200ms forwards ease-out;
+      }
+      #left-joycon {
+        background-image: url('leftJoyCon.png');
+        background-repeat: no-repeat;
+        width: 198px;
+        transform: translate(0%, -200%);
+        right: calc(50% + 487px);
+      }
+      #right-joycon {
+        background-image: url('rightJoyCon.png');
+        background-repeat: no-repeat;
+        width: 198px;
+        transform: translate(0%, -200%);
+        left: calc(50% + 487px);
+        animation-delay: 1000ms;
+      }
+      #switch-body {
+        background-image: url('switchBody.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 731px;
+        height: 431px;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        /* opacity: 0; */
+        left: 50%;
+        top: 49.722%;
+        animation: switch-in 1100ms forwards ease-out;
+      }
+      #switch-border {
+        border: 5px solid black;
+        background-color: var(--smash-light-gray);
+        width: 784px;
+        height: 440px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+        z-index: -1;
+      }
+      @keyframes joycon-down {
+        0% {
+          transform: translateY(-200%);
+        }
+        100% {
+          transform: translateY(-50%);
+        }
+      }
+      @keyframes switch-in {
+        0% {
+          /* opacity: 0; */
+          /* transform: translate(-50%, -50%) scale(.75); */
+          width: 731px;
+          height: 431px;
+        }
+        100% {
+          /* transform: translate(-50%, -50%) scale(1);; */
+          /* opacity: 1; */
+          width: 975px;
+          height: 575px;
+        }
+      }
+    </style>
+  </head>
 
-	<body>
-		<div id="switch-border">
-			<img
-				src="../dashboard/logo.png"
-				style="
-					object-fit: cover;
-					width: 100%;
-					transform: translateY(-50%);
-					top: 50%;
-					position: absolute;
-					filter: invert();
-				"
-			/>
-		</div>
-	</body>
-	<script src="switch.js"></script>
+  <body>
+    <div id="switch-border">
+      <img
+        src="../dashboard/logo.png"
+        style="
+          object-fit: cover;
+          width: 100%;
+          transform: translateY(-50%);
+          top: 50%;
+          position: absolute;
+          filter: invert();
+        "
+      />
+    </div>
+  </body>
+  <script>
+    var exports = {};
+  </script>
+  <script src="switch.js"></script>
 </html>

@@ -11,14 +11,14 @@ const bracketSourceRep = nodecg.Replicant('bracketSource');
 let playerIds = {};
 function hasChallongeKey(bundleConfig) {
     const bc = bundleConfig;
-    return bc.keys && bc.keys.challongeKey && typeof bc.keys.challongeKey === 'string';
+    return !!bc && typeof bc.challongeKey === 'string';
 }
 function hasSmashggKey(bundleConfig) {
     const bc = bundleConfig;
-    return bc.keys && bc.keys.smashggKey && typeof bc.keys.smashggKey === 'string';
+    return !!bc && typeof bc.smashggKey === 'string';
 }
-const challongeApiKey = hasChallongeKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.challongeKey : '';
-const smashggApiKey = hasSmashggKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.smashggKey : '';
+const challongeApiKey = hasChallongeKey(nodecg.bundleConfig) ? nodecg.bundleConfig.challongeKey : '';
+const smashggApiKey = hasSmashggKey(nodecg.bundleConfig) ? nodecg.bundleConfig.smashggKey : '';
 const challongeApiUrl = 'https://api.challonge.com/v1/';
 const smashggApiUrl = 'https://api.start.gg/gql/alpha';
 function ChallongeMethodUrl(method) {

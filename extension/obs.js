@@ -24,7 +24,7 @@ const damageTracking = nodecg.Replicant('damage-tracking');
 }>('debug', { defaultValue: { app: 0, avg: [0, 0, 0], d: -1 } }); */
 function hasObsPassword(bundleConfig) {
     const bc = bundleConfig;
-    return typeof bc && bc.obsPassword === 'string';
+    return typeof bc && typeof bc.obsPassword === 'string';
 }
 const obsPassword = hasObsPassword(nodecg.bundleConfig) ? nodecg.bundleConfig.obsPassword : '';
 const obs = new obs_websocket_js_1.default();
@@ -468,6 +468,7 @@ nodecg.listenFor('updateCameras', () => {
     });
 });
 nodecg.listenFor('cameraChange', (change) => {
+    console.log('cameraChange', change);
     let cam = cameraInfo[change.scene][change.item].source;
     let transform = change.camera;
     obsDo(() => {

@@ -26,7 +26,7 @@ const damageTracking = nodecg.Replicant<boolean>('damage-tracking');
 }>('debug', { defaultValue: { app: 0, avg: [0, 0, 0], d: -1 } }); */
 function hasObsPassword(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { obsPassword: string } {
   const bc = bundleConfig as any;
-  return typeof bc && bc.obsPassword === 'string';
+  return typeof bc && typeof bc.obsPassword === 'string';
 }
 const obsPassword = hasObsPassword(nodecg.bundleConfig) ? nodecg.bundleConfig.obsPassword : '';
 const obs = new obsWebsocketJs();
@@ -495,6 +495,7 @@ nodecg.listenFor('updateCameras', () => {
 });
 
 nodecg.listenFor('cameraChange', (change: cameraChange) => {
+  console.log('cameraChange', change);
 	let cam = cameraInfo[change.scene][change.item].source;
 	let transform: Partial<ObsSceneItemTransform> = change.camera;
 	obsDo(() => {

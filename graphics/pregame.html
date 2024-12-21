@@ -1,209 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Pregame</title>
-		<link rel="stylesheet" type="text/css" href="smashcolors.css" />
-		<link rel="stylesheet" type="text/css" href="shootingstars.css" />
-		<style>
-			body {
-				margin: 0;
-				overflow: hidden;
-				font-family: Arial, Helvetica, sans-serif;
-				font-weight: 700;
-			}
-			#gradient {
-				z-index: -2;
-				height: 100%;
-				width: 100%;
-				position: absolute;
-				background-image: linear-gradient(
-					to right top,
-					#6a4690,
-					#402b94,
-					#59cfed,
-					#fff5e5
-				);
-			}
-			#gradient.singles {
-				clip-path: polygon(
-					0% 100%,
-					0% 0%,
-					100% 0%,
-					100% 100%,
-					99.063% 100%,
-					99.063% 2%,
-					54.5% 2%,
-					50.313% 9.4%,
-					50.313% 100%,
-					49.688% 100%,
-					49.688% 2%,
-					5% 2%,
-					0.88542% 9.4%,
-					0.88542% 100%
-				);
-			}
-			#gradient.doubles {
-				clip-path: polygon(
-					0% 100%,
-					0% 0%,
-					100% 0%,
-					100% 100%,
-					0.885% 100%,
-					0.885% 94.259%,
-					99.063% 94.259%,
-					99.063% 43.55%,
-					54.5% 43.55%,
-					50.313% 51%,
-					50.313% 100%,
-					49.688% 100%,
-					49.688% 43.55%,
-					5.1% 43.55%,
-					0.8854% 51%,
-					0.8854% 100%
-				);
-			}
-			#player-border-left-singles,
-			#player-border-right-singles,
-			#player-border-left-doubles,
-			#player-border-right-doubles {
-				position: absolute;
-				width: 48.906%;
-			}
-			#player-border-left-singles,
-			#player-border-right-singles {
-				height: 98.52%;
-				top: 1.48%;
-			}
-			#player-border-left-doubles,
-			#player-border-right-doubles {
-				height: 98.52%;
-				top: 43.06%;
-			}
-			#player-border-left-singles,
-			#player-border-left-doubles {
-				left: 0.83%;
-			}
-			#player-border-right-singles,
-			#player-border-right-doubles {
-				left: 50.26%;
-			}
-			#player-border-left-singles.doubles,
-			#player-border-right-singles.doubles {
-				opacity: 0;
-			}
-			#player-border-left-doubles.singles,
-			#player-border-right-doubles.singles {
-				opacity: 0;
-			}
-			#player-name1,
-			#player-name2,
-			#player-name3,
-			#player-name4 {
-				border: 3px solid black;
-				width: 18.54%;
-				height: 5.19%;
-				position: absolute;
-				background-color: var(--smash-light-gray);
-				overflow: hidden;
-				text-align: center;
-				line-height: 5.19vh;
-				font-size: 3.8vh;
-				opacity: 0;
-			}
-			#player-name1.singles {
-				left: 4.69%;
-				bottom: 6.85%;
-			}
-			#player-name2.singles {
-				right: 4.69%;
-				bottom: 6.85%;
-			}
-			#player-name3.singles,
-			#player-name4.singles {
-				top: -7.41%;
-			}
-			#player-name1.doubles {
-				left: 27.08%;
-				bottom: 0.926%;
-			}
-			#player-name1.doubles.mirror {
-				left: 4.38%;
-			}
-			#player-name2.doubles {
-				left: 4.38%;
-				bottom: 0.926%;
-			}
-			#player-name2.doubles.mirror {
-				left: 27.08%;
-				bottom: 0.926%;
-			}
-			#player-name3.doubles {
-				right: 4.38%;
-				bottom: 0.926%;
-			}
-			#player-name3.doubles.mirror {
-				right: 27.08%;
-			}
-			#player-name4.doubles {
-				right: 27.08%;
-				bottom: 0.926%;
-			}
-			#player-name4.doubles.mirror {
-				right: 4.38%;
-				bottom: 0.926%;
-			}
-			.fade-in {
-				animation: fade-in 1000ms forwards;
-			}
-			.fade-out {
-				animation: fade-out 1000ms forwards;
-			}
-			@keyframes fade-in {
-				0% {
-					opacity: 0;
-				}
-				100% {
-					opacity: 1;
-				}
-			}
-			@keyframes fade-out {
-				0% {
-					opacity: 1;
-				}
-				100% {
-					opacity: 0;
-				}
-			}
-		</style>
-	</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pregame</title>
+    <link rel="stylesheet" type="text/css" href="smashcolors.css" />
+    <link rel="stylesheet" type="text/css" href="shootingstars.css" />
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 700;
+      }
+      #gradient {
+        z-index: -2;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background-image: linear-gradient(to right top, #6a4690, #402b94, #59cfed, #fff5e5);
+      }
+      #gradient.singles {
+        clip-path: polygon(
+          0% 100%,
+          0% 0%,
+          100% 0%,
+          100% 100%,
+          99.063% 100%,
+          99.063% 2%,
+          54.5% 2%,
+          50.313% 9.4%,
+          50.313% 100%,
+          49.688% 100%,
+          49.688% 2%,
+          5% 2%,
+          0.88542% 9.4%,
+          0.88542% 100%
+        );
+      }
+      #gradient.doubles {
+        clip-path: polygon(
+          0% 100%,
+          0% 0%,
+          100% 0%,
+          100% 100%,
+          0.885% 100%,
+          0.885% 94.259%,
+          99.063% 94.259%,
+          99.063% 43.55%,
+          54.5% 43.55%,
+          50.313% 51%,
+          50.313% 100%,
+          49.688% 100%,
+          49.688% 43.55%,
+          5.1% 43.55%,
+          0.8854% 51%,
+          0.8854% 100%
+        );
+      }
+      #player-border-left-singles,
+      #player-border-right-singles,
+      #player-border-left-doubles,
+      #player-border-right-doubles {
+        position: absolute;
+        width: 48.906%;
+      }
+      #player-border-left-singles,
+      #player-border-right-singles {
+        height: 98.52%;
+        top: 1.48%;
+      }
+      #player-border-left-doubles,
+      #player-border-right-doubles {
+        height: 98.52%;
+        top: 43.06%;
+      }
+      #player-border-left-singles,
+      #player-border-left-doubles {
+        left: 0.83%;
+      }
+      #player-border-right-singles,
+      #player-border-right-doubles {
+        left: 50.26%;
+      }
+      #player-border-left-singles.doubles,
+      #player-border-right-singles.doubles {
+        opacity: 0;
+      }
+      #player-border-left-doubles.singles,
+      #player-border-right-doubles.singles {
+        opacity: 0;
+      }
+      #player-name1,
+      #player-name2,
+      #player-name3,
+      #player-name4 {
+        border: 3px solid black;
+        width: 18.54%;
+        height: 5.19%;
+        position: absolute;
+        background-color: var(--smash-light-gray);
+        overflow: hidden;
+        text-align: center;
+        line-height: 5.19vh;
+        font-size: 3.8vh;
+        opacity: 0;
+      }
+      #player-name1.singles {
+        left: 4.69%;
+        bottom: 6.85%;
+      }
+      #player-name2.singles {
+        right: 4.69%;
+        bottom: 6.85%;
+      }
+      #player-name3.singles,
+      #player-name4.singles {
+        top: -7.41%;
+      }
+      #player-name1.doubles {
+        left: 27.08%;
+        bottom: 0.926%;
+      }
+      #player-name1.doubles.mirror {
+        left: 4.38%;
+      }
+      #player-name2.doubles {
+        left: 4.38%;
+        bottom: 0.926%;
+      }
+      #player-name2.doubles.mirror {
+        left: 27.08%;
+        bottom: 0.926%;
+      }
+      #player-name3.doubles {
+        right: 4.38%;
+        bottom: 0.926%;
+      }
+      #player-name3.doubles.mirror {
+        right: 27.08%;
+      }
+      #player-name4.doubles {
+        right: 27.08%;
+        bottom: 0.926%;
+      }
+      #player-name4.doubles.mirror {
+        right: 4.38%;
+        bottom: 0.926%;
+      }
+      .fade-in {
+        animation: fade-in 1000ms forwards;
+      }
+      .fade-out {
+        animation: fade-out 1000ms forwards;
+      }
+      @keyframes fade-in {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      @keyframes fade-out {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
 
-	<body>
-		<div id="gradient" class="singles"></div>
-		<img
-			id="player-border-left-singles"
-			src="player-border-singles.svg"
-			class="singles"
-		/>
-		<img
-			id="player-border-right-singles"
-			src="player-border-singles.svg"
-			class="singles"
-		/>
-		<img
-			id="player-border-left-doubles"
-			src="player-border-doubles.svg"
-			class="singles"
-		/>
-		<img
-			id="player-border-right-doubles"
-			src="player-border-doubles.svg"
-			class="singles"
-		/>
-		<div id="player-name1" class="singles"></div>
-		<div id="player-name2" class="singles"></div>
-		<div id="player-name3" class="singles"></div>
-		<div id="player-name4" class="singles"></div>
-	</body>
-	<script src="pregame.js"></script>
+  <body>
+    <div id="gradient" class="singles"></div>
+    <img id="player-border-left-singles" src="player-border-singles.svg" class="singles" />
+    <img id="player-border-right-singles" src="player-border-singles.svg" class="singles" />
+    <img id="player-border-left-doubles" src="player-border-doubles.svg" class="singles" />
+    <img id="player-border-right-doubles" src="player-border-doubles.svg" class="singles" />
+    <div id="player-name1" class="singles"></div>
+    <div id="player-name2" class="singles"></div>
+    <div id="player-name3" class="singles"></div>
+    <div id="player-name4" class="singles"></div>
+  </body>
+  <script>
+    var exports = {};
+  </script>
+  <script src="pregame.js"></script>
 </html>

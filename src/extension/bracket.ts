@@ -8,16 +8,16 @@ const tournamentRep = nodecg.Replicant<string>('tournamentUrl'); //ie 'tournamen
 const bracketRep = nodecg.Replicant<bracketMatch>('bracket');
 const bracketSourceRep = nodecg.Replicant<bracketSource>('bracketSource');
 let playerIds: playerIds = {};
-function hasChallongeKey(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { keys: { challongeKey: string } } {
+function hasChallongeKey(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { challongeKey: string } {
   const bc = bundleConfig as any;
-  return bc.keys && bc.keys.challongeKey && typeof bc.keys.challongeKey === 'string';
+  return !!bc && typeof bc.challongeKey === 'string';
 }
-function hasSmashggKey(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { keys: { smashggKey: string } } {
+function hasSmashggKey(bundleConfig: NodeCG.ServerAPI['bundleConfig']): bundleConfig is { smashggKey: string } {
   const bc = bundleConfig as any;
-  return bc.keys && bc.keys.smashggKey && typeof bc.keys.smashggKey === 'string';
+  return !!bc && typeof bc.smashggKey === 'string';
 }
-const challongeApiKey = hasChallongeKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.challongeKey : '';
-const smashggApiKey = hasSmashggKey(nodecg.bundleConfig) ? nodecg.bundleConfig.keys.smashggKey : '';
+const challongeApiKey = hasChallongeKey(nodecg.bundleConfig) ? nodecg.bundleConfig.challongeKey : '';
+const smashggApiKey = hasSmashggKey(nodecg.bundleConfig) ? nodecg.bundleConfig.smashggKey : '';
 const challongeApiUrl = 'https://api.challonge.com/v1/';
 const smashggApiUrl = 'https://api.start.gg/gql/alpha';
 
